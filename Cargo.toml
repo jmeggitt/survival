@@ -1,0 +1,49 @@
+[package]
+name = "survival"
+version = "0.1.0"
+authors = ["Walter Pearce <jaynus@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+amethyst = { path = "dep/amethyst" }
+specs-static = { path = "specs-static" }
+
+gfx = { version = "0.17.1", features = ["serialize"] }
+gfx_core = { version = "0.9.0", features = ["serialize"] }
+glsl-layout = "*"
+
+specs-derive = "*"
+derivative = "*"
+hibitset = "*"
+nalgebra = "*"
+rayon = "*"
+
+# Logging
+slog = "*"
+slog-async = "*"
+slog-term = "*"
+
+# For Mapgen/procedural
+voronoi = { path = "dep/voronoi" }
+delaunay2d = { path = "dep/delaunay2d" }
+noise = "*"
+rand = "*"
+ordered-float = "*"
+num-traits = "*"
+itertools = "*"
+tiled = "*"
+
+# Serialization
+serde = { version = "*", features = ["derive"] }
+ron = "*"
+genmesh = "*"
+
+[dev-dependencies]
+# For test runs of mapgen
+image = "0.21.0"
+imageproc = "0.18.0"
+
+[build-dependencies]
+image = "0.21.0"
+serde = { version = "*", features = ["derive"] }
+ron = "*"

@@ -107,23 +107,42 @@ impl SimpleState for Example {
         world.register_tile_comp::<crate::components::FlaggedSpriteRender, TileId>();
         world.register_tile_comp::<amethyst::renderer::Flipped, TileId>();
         world.register_tile_comp::<amethyst::renderer::Rgba, TileId>();
+        world.register_tile_comp::<amethyst::core::transform::GlobalTransform, TileId>();
 
         world.add_resource(Tiles::new(100, 100));
 
+        let game_settings = crate::settings::GameSettings::load(application_root_dir().unwrap().join("resources").join("game_settings.ron"));
         {
             let tiles = world.read_resource::<Tiles>();
             let mut sprites: WriteTiles<crate::components::FlaggedSpriteRender> = SystemData::fetch(&world.res);
+            let mut transforms: WriteTiles<amethyst::core::transform::GlobalTransform> = SystemData::fetch(&world.res);
             for tile_id in tiles.iter_all() {
                 sprites.insert(tile_id, crate::components::FlaggedSpriteRender {
                     sprite_sheet: map_sprite_sheet_handle.clone(),
                     sprite_number: 3,
                 });
+
+                let coords = tile_id.coords(tiles.dimensions());
+                let mut transform = Transform::default();
+
+                let width = 20.;
+                let height = 20.;
+                transform.set_xyz((coords.0 * width * game_settings.graphics.scale),
+                                  -1. * (coords.1 * height * game_settings.graphics.scale),
+                                  0.);
+                transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 0.);
+
+                //println!("Setting at: {}, {}: coord={},width={},scale={}", (coords.0 * width * game_settings.graphics.scale),
+                //         (coords.1 * height * game_settings.graphics.scale), coords.1, width, game_settings.graphics.scale);
+
+                let mut global = amethyst::core::transform::GlobalTransform::default();
+                global.0 = transform.matrix();
+                transforms.insert(tile_id, global);
             }
         }
         println!("World generated");
 
-        let game_config = crate::settings::GameSettings::load(application_root_dir().unwrap().join("resources").join("game_settings.ron"));
-        world.add_resource(game_config);
+        world.add_resource(game_settings);
 
         let display_config = amethyst::renderer::DisplayConfig::load(application_root_dir().unwrap().join("resources").join("display_config.ron"));
         world.add_resource(display_config);

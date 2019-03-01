@@ -105,6 +105,7 @@ impl<'a> PassData<'a> for DrawFlat2D {
         ReadTiles<'a, FlaggedSpriteRender>,
         ReadTiles<'a, Flipped>,
         ReadTiles<'a, Rgba>,
+        ReadTiles<'a, GlobalTransform>
 
     );
 }
@@ -152,6 +153,7 @@ impl Pass for DrawFlat2D {
             tiles_sprites,
             tiles_flipped,
             tiles_rgba,
+            tile_globals
         ): <Self as PassData<'a>>::Data,
     ) {
         let camera_g = get_camera(active, &camera, &global);
@@ -193,28 +195,7 @@ impl Pass for DrawFlat2D {
             let flipped = tiles_flipped.get(tile_id).unwrap_or(&Flipped::None);
             let rgba = tiles_rgba.get(tile_id).unwrap_or(&Rgba::WHITE);
 
-            let sprite_sheet = sprite_sheet_storage
-                .get(&sprite_render.sprite_sheet);
-            if sprite_sheet.is_none() {
-                continue;
-            }
-            let sprite_sheet = sprite_sheet.as_ref().unwrap();
-
-            let coords = tile_id.coords(tiles.dimensions());
-            let mut transform = Transform::default();
-
-            let width = sprite_sheet.sprites[sprite_render.sprite_number].width;
-            let height = sprite_sheet.sprites[sprite_render.sprite_number].height;
-            transform.set_xyz((coords.0 * width * game_settings.graphics.scale),
-                              -1. * (coords.1 * height * game_settings.graphics.scale),
-                              0.);
-            transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 0.);
-
-            //println!("Setting at: {}, {}: coord={},width={},scale={}", (coords.0 * width * game_settings.graphics.scale),
-            //         (coords.1 * height * game_settings.graphics.scale), coords.1, width, game_settings.graphics.scale);
-
-            let mut global = GlobalTransform::default();
-            global.0 = transform.matrix();
+            let global = tile_globals.get(tile_id).unwrap();
 
             self.batch.add_sprite(
                 sprite_render,

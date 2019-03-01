@@ -1,0 +1,9 @@
+[submodule "dep/amethyst"]
+	path = dep/amethyst
+	url = git@github.com:jaynus/amethyst.git
+[submodule "dep/voronoi"]
+	path = dep/voronoi
+	url = git@github.com:jaynus/rust_voronoi.git
+[submodule "dep/delaunay2d"]
+	path = dep/delaunay2d
+	url = git@github.com:jaynus/delaunay2d.git

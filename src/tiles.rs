@@ -1,5 +1,5 @@
 use amethyst::ecs::{Component, Read, Write};
-use nalgebra::{Vector2, Vector4};
+use nalgebra::{Vector2, Vector4, Vector3};
 use specs_static::{Id, Storage};
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -42,6 +42,11 @@ impl Tiles {
 
     pub fn id_from_vector(self, vector: Vector2<u32>) -> TileId {
         TileId(vector.y * self.dimensions.y + vector.x)
+    }
+
+    pub fn world_to_tile(self, vector: &Vector3<f32>, game_settings: &crate::settings::GameSettings, ) -> Vector2<u32> {
+        Vector2::new((vector.x / 20. / game_settings.graphics.scale) as u32,
+        (vector.y / 20. / game_settings.graphics.scale).abs() as u32)
     }
 
     pub fn iter_all(self) -> impl Iterator<Item = TileId> {

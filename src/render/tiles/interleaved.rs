@@ -8,7 +8,7 @@ use glsl_layout::Uniform;
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::{
     nalgebra::Vector4,
-    specs::prelude::{Read, ReadStorage, ReadExpect},
+    specs::prelude::{Join, Read, ReadStorage, ReadExpect},
     transform::{Transform, GlobalTransform},
 };
 use amethyst::error::Error;
@@ -21,16 +21,18 @@ use amethyst::renderer::{
         pass::{Pass, PassData},
         DepthMode, Effect, NewEffect,
     },
-    Flipped, SpriteRender, SpriteSheet,
+    Flipped, SpriteSheet,
     SpriteVisibility,
     Texture, TextureHandle,
     Encoder, Factory,
     Attributes, Query, VertexFormat,
+    DisplayConfig,
     Color, Rgba,
     Resources,
 };
 
 use crate::settings::GameSettings;
+use crate::components::FlaggedSpriteRender;
 
 use super::*;
 use super::util::{setup_textures, ViewArgs, set_view_args, add_texture, default_transparency,};
@@ -93,14 +95,15 @@ where
 impl<'a> PassData<'a> for DrawFlat2D {
     type Data = (
         Read<'a, GameSettings>,
+        Read<'a, DisplayConfig>,
         Read<'a, ActiveCamera>,
         ReadStorage<'a, Camera>,
         Read<'a, AssetStorage<SpriteSheet>>,
         Read<'a, AssetStorage<Texture>>,
         ReadStorage<'a, GlobalTransform>,
-
+        ReadStorage<'a, Transform>,
         ReadExpect<'a, Tiles>,
-        ReadTiles<'a, SpriteRender>,
+        ReadTiles<'a, FlaggedSpriteRender>,
         ReadTiles<'a, Flipped>,
         ReadTiles<'a, Rgba>,
 
@@ -138,21 +141,49 @@ impl Pass for DrawFlat2D {
         mut factory: Factory,
         (
             game_settings,
+            display_config,
             active,
             camera,
             sprite_sheet_storage,
             tex_storage,
             global,
+            local,
             tiles,
             tiles_sprites,
             tiles_flipped,
             tiles_rgba,
         ): <Self as PassData<'a>>::Data,
     ) {
-        let camera = get_camera(active, &camera, &global);
+        let camera_g = get_camera(active, &camera, &global);
+
+        let camera_d = (&camera, &local).join().next();
+        let camera_position;
+        {
+            let matrix = (camera_g.as_ref().unwrap().1).0;
+            camera_position = nalgebra::Vector2::new(*(matrix.get(12).unwrap()), *(matrix.get(13).unwrap()));
+        }
+        // Calculate the scale of how much we can view...from...what?
+        // this should be resolution / (tile width * scale(
+        // TODO: dont hardcode the tileset size multiplier, this should be stored in Tiles
+        let view_tiles = display_config.dimensions.unwrap().0 as f32 / (20. * 2.0); // Hardcoded for now, these should be out of the sprites and into the Tiles object
+        let mut camera_tile_x = (camera_position.x / 20. / game_settings.graphics.scale) + (tiles.dimensions().x as f32 / 2.);
+        let mut camera_tile_y = ( (camera_position.y / 20. / game_settings.graphics.scale) + (tiles.dimensions().x as f32 / 2.) );
+
+        let view_x = (camera_tile_x - view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
+        let view_y = (camera_tile_y - view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
+
+        let view_e_x = (camera_tile_x + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
+        let view_e_y = (camera_tile_y + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
+
+        //trace!("Viewing: camera=({}, {}), {}, {}, {}, {}", camera_tile_x, camera_tile_y, view_x, view_y, view_e_x, view_e_y);
 
         // TODO: we should scale this to viewport from teh camera
-        for tile_id in tiles.iter_all() {
+        for tile_id in tiles.iter_region(
+            Vector4::new(view_x,
+            view_y,
+            view_e_x,
+            view_e_y)
+        ) {
             let sprite_render = tiles_sprites.get(tile_id);
             if sprite_render.is_none() {
                 continue;
@@ -190,14 +221,14 @@ impl Pass for DrawFlat2D {
                 &sprite_sheet_storage,
                 &tex_storage,
             );
-
+            //self.batch.sort();
         }
 
         self.batch.encode(
             encoder,
             &mut factory,
             effect,
-            camera,
+            camera_g,
             &sprite_sheet_storage,
             &tex_storage,
         );
@@ -209,7 +240,7 @@ impl Pass for DrawFlat2D {
 enum TextureDrawData {
     Sprite {
         texture_handle: Handle<Texture>,
-        render: SpriteRender,
+        render: FlaggedSpriteRender,
         flipped: Option<Flipped>,
         rgba: Option<Rgba>,
         transform: GlobalTransform,
@@ -287,7 +318,7 @@ impl TextureBatch {
 
     pub fn add_sprite(
         &mut self,
-        sprite_render: &SpriteRender,
+        sprite_render: &FlaggedSpriteRender,
         global: Option<&GlobalTransform>,
         flipped: Option<&Flipped>,
         rgba: Option<&Rgba>,

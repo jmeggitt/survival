@@ -104,25 +104,28 @@ impl SimpleState for Example {
 
         let map_sprite_sheet_handle = load_sprite_sheet(world, "spritesheets/Bisasam_24x24.png", "spritesheets/Bisasam_24x24.ron");
 
-        world.register_tile_comp::<amethyst::renderer::SpriteRender, TileId>();
+        world.register_tile_comp::<crate::components::FlaggedSpriteRender, TileId>();
         world.register_tile_comp::<amethyst::renderer::Flipped, TileId>();
         world.register_tile_comp::<amethyst::renderer::Rgba, TileId>();
 
-        world.add_resource(Tiles::new(12, 12));
+        world.add_resource(Tiles::new(4096, 4096));
 
         {
             let tiles = world.read_resource::<Tiles>();
-            let mut sprites: WriteTiles<SpriteRender> = SystemData::fetch(&world.res);
+            let mut sprites: WriteTiles<crate::components::FlaggedSpriteRender> = SystemData::fetch(&world.res);
             for tile_id in tiles.iter_all() {
-                sprites.insert(tile_id, SpriteRender {
+                sprites.insert(tile_id, crate::components::FlaggedSpriteRender {
                     sprite_sheet: map_sprite_sheet_handle.clone(),
-                    sprite_number: 4,
+                    sprite_number: 3,
                 });
             }
         }
+        println!("World generated");
 
         let game_config = crate::settings::GameSettings::load(application_root_dir().unwrap().join("resources").join("game_settings.ron"));
         world.add_resource(game_config);
 
+        let display_config = amethyst::renderer::DisplayConfig::load(application_root_dir().unwrap().join("resources").join("display_config.ron"));
+        world.add_resource(display_config);
     }
 }

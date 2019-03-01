@@ -7,3 +7,6 @@
 [submodule "dep/delaunay2d"]
 	path = dep/delaunay2d
 	url = git@github.com:jaynus/delaunay2d.git
+[submodule "dep/termpix"]
+	path = dep/termpix
+	url = https://github.com/hopey-dishwasher/termpix.git

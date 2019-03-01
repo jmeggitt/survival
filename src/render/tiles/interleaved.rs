@@ -159,8 +159,7 @@ impl Pass for DrawFlat2D {
         let camera_g = get_camera(active, &camera, &global);
 
         let camera_position;
-        {        let view_e_y = (camera_tile_position.y as f32 + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
-
+        {
             let matrix = (camera_g.as_ref().unwrap().1).0;
             camera_position = nalgebra::Vector3::new(*(matrix.get(12).unwrap()), *(matrix.get(13).unwrap()), 0.);
         }

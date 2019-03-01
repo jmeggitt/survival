@@ -34,7 +34,7 @@ fn get_tile_size(filepart: &str) -> usize {
 
 fn main() {
     use std::io::Write;
-    use std::fs::{self, DirEntry};
+    use std::fs::{self};
     use std::path::Path;
     use image::GenericImageView;
 
@@ -65,7 +65,7 @@ fn main() {
                                 }
                             }
 
-                            let mut sheet = SerializedSpriteSheet {
+                            let sheet = SerializedSpriteSheet {
                                 spritesheet_width: img.dimensions().0,
                                 spritesheet_height: img.dimensions().1,
                                 sprites,
@@ -80,7 +80,7 @@ fn main() {
                             };
                             let s = ron::ser::to_string_pretty(&sheet, pretty).expect("Serialization failed");
 
-                            let mut output_path = input_path.as_path().with_extension("ron");
+                            let output_path = input_path.as_path().with_extension("ron");
                             let mut file = std::fs::File::create(output_path.as_path()).unwrap();
 
                             file.write_all(s.as_bytes()).unwrap();

@@ -108,7 +108,7 @@ impl SimpleState for Example {
         world.register_tile_comp::<amethyst::renderer::Flipped, TileId>();
         world.register_tile_comp::<amethyst::renderer::Rgba, TileId>();
 
-        world.add_resource(Tiles::new(4096, 4096));
+        world.add_resource(Tiles::new(100, 100));
 
         {
             let tiles = world.read_resource::<Tiles>();

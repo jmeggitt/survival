@@ -320,13 +320,14 @@ pub fn set_view_args(
         .unwrap_or_else(|| {
             let identity: [[f32; 4]; 4] = Matrix4::identity().into();
             ViewArgs {
-                proj: identity.clone().into(),
+                proj: identity.into(),
                 view: identity.into(),
             }
         });
     effect.update_constant_buffer("ViewArgs", &view_args.std140(), encoder);
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn draw_mesh(
     encoder: &mut Encoder,
     effect: &mut Effect,

@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-use nalgebra::Vector2;
 
 #[derive(Clone, Default, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(default)]

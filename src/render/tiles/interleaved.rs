@@ -8,21 +8,19 @@ use glsl_layout::Uniform;
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::{
     nalgebra::Vector4,
-    specs::prelude::{Join, Read, ReadStorage, ReadExpect},
+    specs::prelude::{Read, ReadStorage, ReadExpect},
     transform::{Transform, GlobalTransform},
 };
 use amethyst::error::Error;
 
 use amethyst::renderer::{
-    ActiveCamera, Camera, Hidden, HiddenPropagate,
-    MeshHandle,
+    ActiveCamera, Camera,
     get_camera,
     pipe::{
         pass::{Pass, PassData},
         DepthMode, Effect, NewEffect,
     },
     Flipped, SpriteSheet,
-    SpriteVisibility,
     Texture, TextureHandle,
     Encoder, Factory,
     Attributes, Query, VertexFormat,
@@ -92,6 +90,7 @@ where
     }
 }
 
+#[allow(clippy::type_complexity)]
 impl<'a> PassData<'a> for DrawFlat2D {
     type Data = (
         Read<'a, GameSettings>,
@@ -134,6 +133,7 @@ impl Pass for DrawFlat2D {
         builder.build()
     }
 
+    #[allow(clippy::extra_unused_lifetimes)]
     fn apply<'a, 'b: 'a>(
         &'a mut self,
         encoder: &mut Encoder,
@@ -147,7 +147,7 @@ impl Pass for DrawFlat2D {
             sprite_sheet_storage,
             tex_storage,
             global,
-            local,
+            _local,
             tiles,
             tiles_sprites,
             tiles_flipped,
@@ -156,7 +156,6 @@ impl Pass for DrawFlat2D {
     ) {
         let camera_g = get_camera(active, &camera, &global);
 
-        let camera_d = (&camera, &local).join().next();
         let camera_position;
         {
             let matrix = (camera_g.as_ref().unwrap().1).0;
@@ -166,8 +165,8 @@ impl Pass for DrawFlat2D {
         // this should be resolution / (tile width * scale(
         // TODO: dont hardcode the tileset size multiplier, this should be stored in Tiles
         let view_tiles = display_config.dimensions.unwrap().0 as f32 / (20. * 2.0); // Hardcoded for now, these should be out of the sprites and into the Tiles object
-        let mut camera_tile_x = (camera_position.x / 20. / game_settings.graphics.scale) + (tiles.dimensions().x as f32 / 2.);
-        let mut camera_tile_y = ( (camera_position.y / 20. / game_settings.graphics.scale) + (tiles.dimensions().x as f32 / 2.) );
+        let camera_tile_x = (camera_position.x / 20. / game_settings.graphics.scale);
+        let camera_tile_y = (camera_position.y / 20. / game_settings.graphics.scale).abs();
 
         let view_x = (camera_tile_x - view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
         let view_y = (camera_tile_y - view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
@@ -175,14 +174,15 @@ impl Pass for DrawFlat2D {
         let view_e_x = (camera_tile_x + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
         let view_e_y = (camera_tile_y + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
 
-        //trace!("Viewing: camera=({}, {}), {}, {}, {}, {}", camera_tile_x, camera_tile_y, view_x, view_y, view_e_x, view_e_y);
+        //println!("Viewing: real={:?}, camera=({}, {}), {}, {}, {}, {}", camera_position, camera_tile_x, camera_tile_y, view_x, view_y, view_e_x, view_e_y);
 
         // TODO: we should scale this to viewport from teh camera
         for tile_id in tiles.iter_region(
-            Vector4::new(view_x,
-            view_y,
-            view_e_x,
-            view_e_y)
+            Vector4::new(
+                view_x,
+                view_y,
+                view_e_x,
+                view_e_y)
         ) {
             let sprite_render = tiles_sprites.get(tile_id);
             if sprite_render.is_none() {
@@ -205,10 +205,13 @@ impl Pass for DrawFlat2D {
 
             let width = sprite_sheet.sprites[sprite_render.sprite_number].width;
             let height = sprite_sheet.sprites[sprite_render.sprite_number].height;
-            transform.set_xyz((coords.0 * width * game_settings.graphics.scale) - ((tiles.dimensions().x as f32 / 2.) * width * game_settings.graphics.scale ),
-                              (coords.1 * height * game_settings.graphics.scale) - ((tiles.dimensions().y as f32 / 2.) * height * game_settings.graphics.scale ),
+            transform.set_xyz((coords.0 * width * game_settings.graphics.scale),
+                              -1. * (coords.1 * height * game_settings.graphics.scale),
                               0.);
             transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 0.);
+
+            //println!("Setting at: {}, {}: coord={},width={},scale={}", (coords.0 * width * game_settings.graphics.scale),
+            //         (coords.1 * height * game_settings.graphics.scale), coords.1, width, game_settings.graphics.scale);
 
             let mut global = GlobalTransform::default();
             global.0 = transform.matrix();

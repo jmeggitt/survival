@@ -59,8 +59,8 @@ fn init_reference_sprite(world: &mut World, sprite_sheet: &SpriteSheetHandle) ->
 
 fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle) -> Entity {
     let mut transform = Transform::default();
-    transform.set_x(0.0);
-    transform.set_y(0.0);
+    transform.set_x(50.0);
+    transform.set_y(50.0);
     let sprite = SpriteRender {
         sprite_sheet: sprite_sheet.clone(),
         sprite_number: 1,

@@ -164,17 +164,17 @@ impl Pass for DrawFlat2D {
         // Calculate the scale of how much we can view...from...what?
         // this should be resolution / (tile width * scale(
         // TODO: dont hardcode the tileset size multiplier, this should be stored in Tiles
-        let view_tiles = display_config.dimensions.unwrap().0 as f32 / (20. * 2.0); // Hardcoded for now, these should be out of the sprites and into the Tiles object
+        let view_tiles = display_config.dimensions.unwrap().0 as f32 / (20. * game_settings.graphics.scale); // Hardcoded for now, these should be out of the sprites and into the Tiles object
         let camera_tile_x = (camera_position.x / 20. / game_settings.graphics.scale);
         let camera_tile_y = (camera_position.y / 20. / game_settings.graphics.scale).abs();
 
-        let view_x = (camera_tile_x - view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
-        let view_y = (camera_tile_y - view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
+        let view_x = (camera_tile_x - view_tiles - 20.).max(0.).min(tiles.dimensions().x as f32) as u32;
+        let view_y = (camera_tile_y - view_tiles - 20.).max(0.).min(tiles.dimensions().y as f32) as u32;
 
         let view_e_x = (camera_tile_x + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
         let view_e_y = (camera_tile_y + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
 
-        //println!("Viewing: real={:?}, camera=({}, {}), {}, {}, {}, {}", camera_position, camera_tile_x, camera_tile_y, view_x, view_y, view_e_x, view_e_y);
+        println!("Viewing: real={:?}, camera=({}, {}), {}, {}, {}, {}", camera_position, camera_tile_x, camera_tile_y, view_x, view_y, view_e_x, view_e_y);
 
         // TODO: we should scale this to viewport from teh camera
         for tile_id in tiles.iter_region(

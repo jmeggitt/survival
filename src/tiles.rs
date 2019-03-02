@@ -1,5 +1,5 @@
 use amethyst::ecs::{Component, Read, Write};
-use nalgebra::{Vector2, Vector4, Vector3};
+use amethyst::core::nalgebra::{Vector2, Vector4, Vector3};
 use specs_static::{Id, Storage};
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]

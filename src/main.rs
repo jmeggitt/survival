@@ -1,18 +1,25 @@
-#![feature(custom_attribute)]
+#![warn(clippy::pedantic, clippy::all)]
+#![allow(non_upper_case_globals)]
+
+#![feature(custom_attribute, concat_idents)]
 #![allow(dead_code)]
 
+
+#[macro_use] pub mod bitflags_serial;
+
+pub mod assets;
 pub mod tiles;
 pub mod render;
 pub mod states;
 pub mod components;
 pub mod settings;
+pub mod systems;
 
 pub mod mapgen;
 
 use amethyst::{
-    core::{Transform, TransformBundle},
-    ecs::{Component, Join, NullStorage, Read, ReadStorage, System, WriteStorage},
-    input::{InputBundle, InputHandler},
+    core::{TransformBundle},
+    input::{InputBundle},
     prelude::*,
     renderer::{
         DrawFlat2D, DisplayConfig, Pipeline, RenderBundle, Stage,
@@ -20,32 +27,6 @@ use amethyst::{
     utils::application_root_dir,
 };
 
-#[derive(Default)]
-struct Player;
-
-impl Component for Player {
-    type Storage = NullStorage<Self>;
-}
-
-struct MovementSystem;
-
-impl<'s> System<'s> for MovementSystem {
-    type SystemData = (
-        ReadStorage<'s, Player>,
-        WriteStorage<'s, Transform>,
-        Read<'s, InputHandler<String, String>>,
-    );
-
-    fn run(&mut self, (players, mut transforms, input): Self::SystemData) {
-        let x_move = input.axis_value("entity_x").unwrap();
-        let y_move = input.axis_value("entity_y").unwrap();
-
-        for (_, transform) in (&players, &mut transforms).join() {
-            transform.translate_x(x_move as f32 * 20.0);
-            transform.translate_y(y_move as f32 * 20.0);
-        }
-    }
-}
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -58,7 +39,8 @@ fn main() -> amethyst::Result<()> {
         Stage::with_backbuffer()
             .clear_target([0.1, 0.1, 0.1, 1.0], 1.0)
             .with_pass(crate::render::tiles::Pass::new())
-            .with_pass(DrawFlat2D::new()),
+            .with_pass(DrawFlat2D::new())
+            .with_pass(amethyst_imgui::DrawUi::default()),
     );
 
     let game_data = GameDataBuilder::default()
@@ -66,15 +48,16 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(
             InputBundle::<String, String>::new().with_bindings_from_file(root.join("input.ron"))?,
         )?
-        .with(MovementSystem, "movement", &[])
+        .with(systems::PlayerInputSystem::default(), "player_input", &[])
+        .with(systems::ActionSystem::default(), "action", &[])
+        .with_thread_local(systems::TimeSystem::default())
         .with_bundle(
             RenderBundle::new(pipe, Some(display_config))
                 .with_sprite_sheet_processor()
                 .with_sprite_visibility_sorting(&[]), // Let's us use the `Transparent` component
         )?;
 
-    let mut game = Application::build(root, crate::states::Example)?.build(game_data)?;
-
+    let mut game = Application::build(root, crate::states::Example::new())?.build(game_data)?;
 
     game.run();
     Ok(())

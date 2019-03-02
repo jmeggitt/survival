@@ -1,5 +1,5 @@
 use amethyst::{
-    assets::{AssetStorage, Loader},
+    assets::{AssetStorage, Loader, ProgressCounter},
     core::{Parent, Transform},
     ecs::{Entity, SystemData},
     prelude::*,
@@ -15,7 +15,7 @@ use amethyst::{
 use specs_static::WorldExt;
 
 use crate::tiles::{Tiles, TileId, WriteTiles};
-use crate::Player;
+use crate::components::Player;
 
 fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> SpriteSheetHandle {
     let texture_handle = {
@@ -87,9 +87,49 @@ fn init_camera(world: &mut World, parent: Entity) {
         .build();
 }
 
-pub struct Example;
-
+pub struct Example {
+    progress_counter: ProgressCounter,
+}
+impl Example {
+    pub fn new() -> Self {
+        Self {
+            progress_counter: ProgressCounter::default(),
+        }
+    }
+}
 impl SimpleState for Example {
+    fn handle_event(
+        &mut self,
+        data: StateData<'_, GameData<'_, '_>>,
+        event: StateEvent,
+    ) -> SimpleTrans {
+        amethyst_imgui::handle_imgui_events(data.world, &event);
+
+        if let StateEvent::Window(event) = &event {
+            if amethyst::input::is_close_requested(&event) {
+                Trans::Quit
+            } else {
+                Trans::None
+            }
+        } else {
+            Trans::None
+        }
+    }
+
+    /// Executed on every frame immediately, as fast as the engine will allow (taking into account the frame rate limit).
+    fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
+        // TODO: move this to an ImguiSystem
+        let ui = amethyst_imgui::open_frame(data.world);
+        if let Some(ui) = ui {
+            ui.show_demo_window(&mut true);
+        }
+
+        // Do shit here?
+
+        if let Some(ui) = ui { amethyst_imgui::close_frame(ui) }
+        Trans::None
+    }
+
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
         let circle_sprite_sheet_handle =
@@ -127,7 +167,7 @@ impl SimpleState for Example {
 
                 let width = 20.;
                 let height = 20.;
-                transform.set_xyz((coords.0 * width * game_settings.graphics.scale),
+                transform.set_xyz(coords.0 * width * game_settings.graphics.scale,
                                   -1. * (coords.1 * height * game_settings.graphics.scale),
                                   0.);
                 transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 0.);
@@ -140,11 +180,22 @@ impl SimpleState for Example {
                 transforms.insert(tile_id, global);
             }
         }
-        println!("World generated");
 
-        world.add_resource(game_settings);
+        // Load items
+        world.add_resource(AssetStorage::<crate::assets::ItemStorage>::default());
+        {
+            let loader = &world.read_resource::<Loader>();
+            let _handle = loader.load(
+                "resources/data/items.ron",
+                amethyst::assets::RonFormat,
+                (),
+                &mut self.progress_counter,
+                &world.read_resource::<AssetStorage<crate::assets::ItemStorage>>(),
+            );
+        }
 
         let display_config = amethyst::renderer::DisplayConfig::load(application_root_dir().unwrap().join("resources").join("display_config.ron"));
         world.add_resource(display_config);
+        world.add_resource(game_settings);
     }
 }

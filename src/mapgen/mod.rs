@@ -103,7 +103,7 @@ impl<T: Copy + Float> Bound<T> for OrderedFloat<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nalgebra::Point2;
+    use amethyst::core::nalgebra::Point2;
     use rand::SeedableRng;
 
     #[test]

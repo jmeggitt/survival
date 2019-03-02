@@ -161,7 +161,7 @@ impl Pass for DrawFlat2D {
         let camera_position;
         {
             let matrix = (camera_g.as_ref().unwrap().1).0;
-            camera_position = nalgebra::Vector3::new(*(matrix.get(12).unwrap()), *(matrix.get(13).unwrap()), 0.);
+            camera_position = amethyst::core::nalgebra::Vector3::new(*(matrix.get(12).unwrap()), *(matrix.get(13).unwrap()), 0.);
         }
         // Calculate the scale of how much we can view...from...what?
         // this should be resolution / (tile width * scale(

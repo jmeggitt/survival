@@ -10,3 +10,6 @@
 [submodule "dep/termpix"]
 	path = dep/termpix
 	url = https://github.com/hopey-dishwasher/termpix.git
+[submodule "dep/amethyst-imgui"]
+	path = dep/amethyst-imgui
+	url = git@github.com:jaynus/amethyst-imgui.git

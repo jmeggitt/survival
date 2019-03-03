@@ -80,7 +80,7 @@ trait Bound<T> {
     fn bound(self, min: T, max: T) -> Self;
 }
 impl<T: Ord + Copy> Bound<T> for T {
-    fn bound(self, min: T, max: T) -> Self {
+    fn bound(self, min: Self, max: Self) -> Self {
         self.min(max).max(min)
     }
 }
@@ -94,7 +94,7 @@ impl<T: Ord + Copy + Bound<T>> Bound<T> for (T, T)
 
 impl<T: Copy + Float> Bound<T> for OrderedFloat<T> {
     fn bound(self, min: T, max: T) -> Self {
-        self.min(OrderedFloat(max)).max(OrderedFloat(min))
+        self.min(Self(max)).max(Self(min))
     }
 }
 

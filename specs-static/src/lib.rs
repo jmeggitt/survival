@@ -30,7 +30,7 @@ type Index = u32;
 ///     }
 /// }
 /// ```
-pub trait Id: Copy + Eq + Hash + Ord + Send + Sync + Sized + 'static {
+pub trait Id: Copy + Eq + Hash + Ord + Send + Sync + Sized + std::fmt::Debug + 'static {
     /// Creates an idea from a `u32`.
     fn from_u32(value: u32) -> Self;
 

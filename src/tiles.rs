@@ -16,7 +16,7 @@ impl TileId {
 
 impl Id for TileId {
     fn from_u32(value: u32) -> Self {
-        TileId(value)
+        Self(value)
     }
 
     fn id(&self) -> u32 {
@@ -44,7 +44,7 @@ impl Tiles {
         TileId(vector.y * self.dimensions.y + vector.x)
     }
 
-    pub fn world_to_tile(self, vector: &Vector3<f32>, game_settings: &crate::settings::GameSettings, ) -> Vector2<u32> {
+    pub fn world_to_tile(self, vector: &Vector3<f32>, game_settings: &crate::settings::Config, ) -> Vector2<u32> {
         Vector2::new((vector.x / 20. / game_settings.graphics.scale) as u32,
         (vector.y / 20. / game_settings.graphics.scale).abs() as u32)
     }
@@ -97,5 +97,7 @@ impl Iterator for RegionIter {
     }
 }
 
+#[allow(clippy::module_name_repetitions)]
 pub type ReadTiles<'a, C> = Read<'a, Storage<C, <C as Component>::Storage, TileId>>;
+#[allow(clippy::module_name_repetitions)]
 pub type WriteTiles<'a, C> = Write<'a, Storage<C, <C as Component>::Storage, TileId>>;

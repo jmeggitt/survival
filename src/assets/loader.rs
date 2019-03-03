@@ -2,7 +2,6 @@ use amethyst::assets::{Handle, AssetStorage, Asset, Format, Loader};
 use std::collections::HashMap;
 use std::path::Path;
 use std::fs;
-use log::*;
 
 /// Loads asset from the so-called asset packs
 /// It caches assets which you can manually load or unload on demand.
@@ -16,9 +15,11 @@ use log::*;
 /// /assets/mod1/sounds/click.ogg
 /// /assets/mod2/sounds/click.ogg
 ///
-/// resolve_path("sprites/player.png") -> /assets/mod1/sprites/player.png
-/// resolve_path("models/cube.obj") -> /assets/base/models/cube.obj
-/// resolve_path("sounds/click.ogg") -> Unknown.
+/// `resolve_path("sprites/player.png")` -> /assets/mod1/sprites/player.png
+/// `resolve_path("models/cube.obj")` -> /assets/base/models/cube.obj
+/// `resolve_path("sounds/click.ogg")` -> Unknown.
+///
+#[allow(clippy::module_name_repetitions)]
 pub struct AssetLoader {
     base_path: String,
     default_pack: String,
@@ -27,9 +28,9 @@ pub struct AssetLoader {
 
 impl AssetLoader {
     pub fn new(base_path: &str, default_pack: &str) -> Self {
-        let mut al = AssetLoader {
-            base_path: AssetLoader::sanitize_path_trail_only(&base_path),
-            default_pack: AssetLoader::sanitize_path(&default_pack),
+        let mut al = Self {
+            base_path: Self::sanitize_path_trail_only(&base_path),
+            default_pack: Self::sanitize_path(&default_pack),
             asset_packs: Vec::new(),
         };
         al.get_asset_packs();
@@ -56,7 +57,7 @@ impl AssetLoader {
         if first == '/' {
             out.remove(0);
         }
-        if out.chars().next().unwrap() == '?' {
+        if out.starts_with('?') {
             out.remove(0);
             out.remove(0);
         }
@@ -89,33 +90,30 @@ impl AssetLoader {
             abs = abs.replace("/", "\\").replace("\\\\?\\", "");
         }
 
-        let path = Path::new(&abs);
-        if path.exists() {
+        let final_path = Path::new(&abs);
+        if final_path.exists() {
             Some(abs.clone())
         } else {
-            warn!("Failed to find file at path: {}", abs);
+            // TODO: slog switch warn!("Failed to find file at path: {}", abs);
             None
         }
     }
 
     pub fn get_asset_packs(&mut self) -> &Vec<String> {
         let mut buf: Option<Vec<String>> = None;
-        if self.asset_packs.len() == 0 {
+        if self.asset_packs.is_empty() {
             if let Ok(elems) = fs::read_dir(&self.base_path) {
                 buf = Some(
                     elems
                         .map(|e| {
                             let path = &e.unwrap().path();
                             let tmp = &path.to_str().unwrap()[self.base_path.len()..];
-                            AssetLoader::sanitize_path(&tmp)
+                            Self::sanitize_path(&tmp)
                         })
                         .collect(),
                 );
             } else {
-                error!(
-                    "Failed to find base_path directory for asset loading: {}",
-                    self.base_path
-                );
+                // TODO: slog switch error!("Failed to find base_path directory for asset loading: {}",self.base_path);
             }
         }
 
@@ -138,7 +136,7 @@ impl AssetLoader {
         where
             T: Asset,
     {
-        if let Some(h) = AssetLoader::get_asset_handle::<T>(path, ali) {
+        if let Some(h) = Self::get_asset_handle::<T>(path, ali) {
             storage.get(&h)
         } else {
             None
@@ -158,7 +156,7 @@ impl AssetLoader {
             T: Asset,
             F: Format<T> + 'static,
     {
-        if let Some(h) = AssetLoader::get_asset_handle::<T>(path, ali) {
+        if let Some(h) = Self::get_asset_handle::<T>(path, ali) {
             return storage.get(&h);
             //return Some(a);
         }
@@ -181,7 +179,7 @@ impl AssetLoader {
             T: Asset,
             F: Format<T> + 'static,
     {
-        if let Some(handle) = AssetLoader::get_asset_handle(path, ali) {
+        if let Some(handle) = Self::get_asset_handle(path, ali) {
             return Some(handle);
         }
         if let Some(p) = self.resolve_path(path) {
@@ -230,7 +228,7 @@ impl<T> Default for AssetLoaderInternal<T> {
 
 impl<T> AssetLoaderInternal<T> {
     pub fn new() -> Self {
-        AssetLoaderInternal {
+        Self {
             assets: HashMap::new(),
         }
     }
@@ -242,7 +240,7 @@ mod test {
 
     fn load_asset_loader() -> AssetLoader {
         AssetLoader::new(
-            &format!("{}/test/assets", env!("CARGO_MANIFEST_DIR")),
+            &format!("{}/tests/assets", env!("CARGO_MANIFEST_DIR")),
             "main",
         )
     }
@@ -250,7 +248,7 @@ mod test {
     #[test]
     fn path_sanitisation() {
         AssetLoader::new(
-            &format!("{}/test/assets/", env!("CARGO_MANIFEST_DIR")),
+            &format!("{}/tests/assets/", env!("CARGO_MANIFEST_DIR")),
             "/base/",
         );
     }
@@ -262,7 +260,7 @@ mod test {
             asset_loader.resolve_path("config/uniqueother"),
             Some(
                 format!(
-                    "{}/test/assets/mod1/config/uniqueother",
+                    "{}/tests/assets/mod1/config/uniqueother",
                     env!("CARGO_MANIFEST_DIR")
                 )
                     .to_string()
@@ -275,7 +273,7 @@ mod test {
         let asset_loader = load_asset_loader();
         assert_eq!(
             asset_loader.resolve_path("config/ov1"),
-            Some(format!("{}/test/assets/mod1/config/ov1", env!("CARGO_MANIFEST_DIR")).to_string())
+            Some(format!("{}/tests/assets/mod1/config/ov1", env!("CARGO_MANIFEST_DIR")).to_string())
         )
     }
 
@@ -287,7 +285,7 @@ mod test {
             asset_loader.resolve_path("config/ovall"),
             Some(
                 format!(
-                    "{}/test/assets/mod2/config/ovall",
+                    "{}/tests/assets/mod2/config/ovall",
                     env!("CARGO_MANIFEST_DIR")
                 )
                     .to_string()

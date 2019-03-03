@@ -13,17 +13,18 @@ mod loader;
 use loader::AssetLoader as AssetLoader;
 
 bitflags_serial! {
-    pub struct ItemFlags: u64 {
-        const None = 1 << 0;
-        const Container = 1 << 1;
+    pub struct ItemFlag: u64 {
+        const None = 0;
+        const Container = 1 << 2;
+        const Tool = 1 << 3;
     }
 }
 
 bitflags_serial! {
     pub struct ContainerCanHold: u8 {
-        const Liquid = 1 << 0;
-        const Solid  = 1 << 1;
-        const Nothing = 1 << 2;
+        const Nothing = 0;
+        const Liquid = 1 << 1;
+        const Solid  = 1 << 2;
     }
 }
 
@@ -33,8 +34,12 @@ pub enum ItemProperty {
     Container {
         can_hold: ContainerCanHold,
     },
-    Chopping(u32),
-    Cutting(u32),
+    Chopping(f32),
+    Cutting(f32),
+    Hitting(f32),
+    Hammering(f32),
+    Cooking(f32),
+    Boiling(f32),
     None,
 }
 
@@ -43,7 +48,7 @@ pub struct ItemDetails {
     // general information
     pub size: (f32, f32, f32),
     pub weight: f32,
-    pub flags: ItemFlags,
+    pub flags: ItemFlag,
 
     // UI information
     pub name: String,
@@ -53,8 +58,9 @@ pub struct ItemDetails {
     pub sprite_number: u32,
 
     pub properties: Vec<ItemProperty>,
+    pub interactions: crate::components::InteractionType,
 }
-impl PartialEq for ItemDetails { fn eq(&self, other: &ItemDetails) -> bool { self.name == other.name } }
+impl PartialEq for ItemDetails { fn eq(&self, other: &Self) -> bool { self.name == other.name } }
 
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
 pub struct ItemStorage {
@@ -85,7 +91,7 @@ pub fn write_test_collection() {
         name: "Test Collection Item 2".to_owned(),
         short_description: "Test Collection Item 2".to_owned(),
         long_description: "Test Collection Item 2".to_owned(),
-        flags: ItemFlags::Container,
+        flags: ItemFlag::Container,
         properties: vec![ItemProperty::Container { can_hold: ContainerCanHold::Solid }],
         ..Default::default()
     }));

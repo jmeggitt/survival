@@ -55,7 +55,7 @@ pub(crate) struct TextureOffsetPod {
 
 impl TextureOffsetPod {
     pub(crate) fn from_offset(offset: &TextureOffset) -> Self {
-        TextureOffsetPod {
+        Self {
             u_offset: [offset.u.0, offset.u.1].into(),
             v_offset: [offset.v.0, offset.v.1].into(),
         }
@@ -70,16 +70,10 @@ pub(crate) fn set_attribute_buffers(
     #[cfg(feature = "profiler")]
     profile_scope!("render_setattributebuffers");
     for attr in attributes.iter() {
-        match mesh.buffer(attr) {
-            Some(vbuf) => effect.data.vertex_bufs.push(vbuf.clone()),
-            None => {
-                //error!(
-                //    "Required vertex attribute buffer with format {:?} missing in mesh",
-                //    attr
-                //);
-                // TODO: slog
-                return false;
-            }
+        if let Some(vbuf) = mesh.buffer(attr) {
+            effect.data.vertex_bufs.push(vbuf.clone());
+        } else {
+            return false;
         }
     }
     true
@@ -264,6 +258,7 @@ pub fn set_vertex_args(
     global: &GlobalTransform,
     rgba: Rgba,
 ) {
+    #[allow(clippy::option_map_unwrap_or_else)]
     let vertex_args = camera
         .as_ref()
         .map(|&(ref cam, ref transform)| {
@@ -303,6 +298,7 @@ pub fn set_view_args(
     #[cfg(feature = "profiler")]
     profile_scope!("render_setviewargs");
 
+    #[allow(clippy::option_map_unwrap_or_else)]
     let view_args = camera
         .as_ref()
         .map(|&(ref cam, ref transform)| {
@@ -389,7 +385,7 @@ pub(crate) fn draw_mesh(
 
 /// Returns the main camera and its `GlobalTransform`
 pub fn get_camera<'a>(
-    active: Read<'a, ActiveCamera>,
+    active: &Read<'a, ActiveCamera>,
     camera: &'a ReadStorage<'a, Camera>,
     global: &'a ReadStorage<'a, GlobalTransform>,
 ) -> Option<(&'a Camera, &'a GlobalTransform)> {

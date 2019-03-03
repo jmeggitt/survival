@@ -22,7 +22,7 @@ impl<'de, T> _serde::Deserialize<'de> for _SingleBit<T>
     {
         deserializer
             .deserialize_identifier(T::default())
-            .map(_SingleBit)
+            .map(Self)
     }
 }
 
@@ -50,7 +50,7 @@ macro_rules! bitflags_serial {
 
         impl Default for $BitFlags {
             fn default() -> Self {
-                $BitFlags { bits: 0 }
+                Self { bits: 0 }
             }
         }
 
@@ -67,7 +67,7 @@ macro_rules! bitflags_serial {
                 while let Some(single) = seq.next_element::<$crate::bitflags_serial::_SingleBit<Self>>()? {
                     bits |= single.0.bits;
                 }
-                Ok($BitFlags { bits })
+                Ok(Self { bits })
             }
             fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
             where
@@ -75,7 +75,7 @@ macro_rules! bitflags_serial {
             {
                 match $crate::bitflags_serial::_core::str::from_utf8(v).unwrap() {
                     $(
-                        stringify!($Flag) => Ok($BitFlags { bits: $value } ),
+                        stringify!($Flag) => Ok(Self { bits: $value } ),
                     )+
                     other => Err(E::unknown_variant(other, &[]))
                 }
@@ -87,7 +87,7 @@ macro_rules! bitflags_serial {
             where
                 D: $crate::bitflags_serial::_serde::Deserializer<'de>
             {
-                deserializer.deserialize_seq($BitFlags { bits: 0 })
+                deserializer.deserialize_seq(Self { bits: 0 })
             }
         }
 
@@ -138,7 +138,7 @@ macro_rules! bitflags_serial {
 
                 let mut seq = serializer.serialize_seq(std::option::Option::None)?;
                 $(
-                    if <$BitFlags as __BitFlags>::$Flag(self) {
+                    if <Self as __BitFlags>::$Flag(self) {
                         seq.serialize_element(&$Flag)?;
                     }
                 )+

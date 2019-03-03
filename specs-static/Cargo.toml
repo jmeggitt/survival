@@ -5,4 +5,4 @@ authors = ["Walter Pearce <jaynus@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-amethyst = { path = "../dep/amethyst" }
+amethyst = { git = "https://github.com/jaynus/amethyst.git" }

@@ -5,22 +5,22 @@ authors = ["Walter Pearce <jaynus@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-amethyst = { path = "dep/amethyst" }
+amethyst = { git = "https://github.com/jaynus/amethyst.git", features = ["nightly", "saveload"] }
 amethyst-imgui = { path = "dep/amethyst-imgui" }
 specs-static = { path = "specs-static" }
+specs-derive = "*"
+
+rayon = "*"
 
 gfx = { version = "0.17.1", features = ["serialize"] }
 gfx_core = { version = "0.9.0", features = ["serialize"] }
 glsl-layout = { version = "0.1.1", features = ["gfx"] }
 derivative = "*"
 bitflags = "1.0"
-
-specs-derive = "*"
-rayon = "*"
+hibitset = { version = "*", features = ["parallel"] }
 
 # Logging
-log = "*"
-slog = "*"
+slog = { version = "2", features = ["max_level_trace"] }
 slog-async = "*"
 slog-term = "*"
 
@@ -33,14 +33,27 @@ ordered-float = "*"
 num-traits = "*"
 tiled = "*"
 
+# Game Related
+rhai = { path = "dep/rhai" }
+pathfinding = "*"
+
 # Serialization
 serde = { version = "*", features = ["derive", "rc"] }
 ron = "*"
+
+[[bin]]
+name = "survival_game"
+path = "src/main.rs"
+
+[lib]
+name = "survival"
+path = "src/lib.rs"
 
 [dev-dependencies]
 # For test runs of mapgen
 image = "0.21.0"
 imageproc = "0.18.0"
+amethyst_test = { path = "dep/amethyst/amethyst_test" }
 
 [build-dependencies]
 image = "0.21.0"

@@ -8,7 +8,7 @@ use glsl_layout::Uniform;
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::{
     nalgebra::Vector4,
-    specs::prelude::{Read, ReadStorage, ReadExpect},
+    specs::prelude::{Read, ReadStorage, ReadExpect, Join},
     transform::{Transform, GlobalTransform},
 };
 use amethyst::error::Error;
@@ -29,8 +29,8 @@ use amethyst::renderer::{
     Resources,
 };
 
-use crate::settings::GameSettings;
-use crate::components::FlaggedSpriteRender;
+use crate::settings::Config;
+use crate::components::{FlaggedSpriteRender, TilePosition};
 
 use super::*;
 use super::util::{setup_textures, ViewArgs, set_view_args, add_texture, default_transparency,};
@@ -93,10 +93,11 @@ where
 #[allow(clippy::type_complexity)]
 impl<'a> PassData<'a> for DrawFlat2D {
     type Data = (
-        Read<'a, GameSettings>,
+        Read<'a, Config>,
         Read<'a, DisplayConfig>,
         Read<'a, ActiveCamera>,
         ReadStorage<'a, Camera>,
+        ReadStorage<'a, TilePosition>,
         Read<'a, AssetStorage<SpriteSheet>>,
         Read<'a, AssetStorage<Texture>>,
         ReadStorage<'a, GlobalTransform>,
@@ -145,6 +146,7 @@ impl Pass for DrawFlat2D {
             display_config,
             active,
             camera,
+            tile_positions,
             sprite_sheet_storage,
             tex_storage,
             global,
@@ -158,22 +160,17 @@ impl Pass for DrawFlat2D {
     ) {
         let camera_g = get_camera(active, &camera, &global);
 
-        let camera_position;
-        {
-            let matrix = (camera_g.as_ref().unwrap().1).0;
-            camera_position = amethyst::core::nalgebra::Vector3::new(*(matrix.get(12).unwrap()), *(matrix.get(13).unwrap()), 0.);
-        }
+        let (_, camera_tile_position) = (&camera, &tile_positions).join().next().unwrap();
         // Calculate the scale of how much we can view...from...what?
         // this should be resolution / (tile width * scale(
         // TODO: dont hardcode the tileset size multiplier, this should be stored in Tiles
         let view_tiles = display_config.dimensions.unwrap().0 as f32 / (20. * game_settings.graphics.scale); // Hardcoded for now, these should be out of the sprites and into the Tiles object
-        let camera_tile_position = tiles.world_to_tile(&camera_position, &game_settings);
 
-        let view_x = (camera_tile_position.x as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().x as f32) as u32;
-        let view_y = (camera_tile_position.y as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().y as f32) as u32;
+        let view_x = (camera_tile_position.coord.x as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().x as f32) as u32;
+        let view_y = (camera_tile_position.coord.y as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().y as f32) as u32;
 
-        let view_e_x = (camera_tile_position.x as f32 + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
-        let view_e_y = (camera_tile_position.y as f32 + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
+        let view_e_x = (camera_tile_position.coord.x as f32 + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
+        let view_e_y = (camera_tile_position.coord.y as f32 + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
 
 //        println!("Viewing: real={:?}, camera=({}, {}), {}, {}, {}, {}", camera_position, camera_tile_position, camera_tile_y, view_x, view_y, view_e_x, view_e_y);
 
@@ -241,22 +238,22 @@ enum TextureDrawData {
 impl TextureDrawData {
     pub fn texture_handle(&self) -> &Handle<Texture> {
         match self {
-            TextureDrawData::Sprite { texture_handle, .. } => texture_handle,
-            TextureDrawData::Image { texture_handle, .. } => texture_handle,
+            TextureDrawData::Sprite { texture_handle, .. }
+            | TextureDrawData::Image { texture_handle, .. } => texture_handle,
         }
     }
 
     pub fn tex_id(&self) -> u32 {
         match self {
-            TextureDrawData::Sprite { texture_handle, .. } => texture_handle.id(),
-            TextureDrawData::Image { texture_handle, .. } => texture_handle.id(),
+            TextureDrawData::Image { texture_handle, .. }
+            | TextureDrawData::Sprite { texture_handle, .. } => texture_handle.id(),
         }
     }
 
     pub fn flipped(&self) -> &Option<Flipped> {
         match self {
-            TextureDrawData::Sprite { flipped, .. } => flipped,
-            TextureDrawData::Image { flipped, .. } => flipped,
+            TextureDrawData::Image { flipped, .. }
+            | TextureDrawData::Sprite { flipped, .. } => flipped,
         }
     }
 }
@@ -280,6 +277,7 @@ impl TextureBatch {
             None => return,
         };
 
+        #[allow(clippy::single_match_else)]
         let texture_dims = match tex_storage.get(&texture_handle) {
             Some(tex) => tex.size(),
             None => {
@@ -313,6 +311,7 @@ impl TextureBatch {
             None => return,
         };
 
+        #[allow(clippy::single_match_else)]
         let texture_handle = match sprite_sheet_storage.get(&sprite_render.sprite_sheet) {
             Some(sprite_sheet) => {
                 if tex_storage.get(&sprite_sheet.texture).is_none() {

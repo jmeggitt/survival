@@ -1,17 +1,6 @@
 (
     tag: 0,
     items: {
-        "test_collection_item_2": (
-            size: (0, 0, 0),
-            weight: 0,
-            flags: [Container,],
-            name: "Test Collection Item 2",
-            short_description: "Test Collection Item 2",
-            long_description: "Test Collection Item 2",
-            sprite_sheet_number: 0,
-            sprite_number: 0,
-            properties: [Container(can_hold:[Solid,],),],
-        ),
         "test_collection_item_1": (
             size: (0, 0, 0),
             weight: 0,
@@ -22,6 +11,19 @@
             sprite_sheet_number: 0,
             sprite_number: 0,
             properties: [],
+            interactions: [],
+        ),
+        "test_collection_item_2": (
+            size: (0, 0, 0),
+            weight: 0,
+            flags: [Container,],
+            name: "Test Collection Item 2",
+            short_description: "Test Collection Item 2",
+            long_description: "Test Collection Item 2",
+            sprite_sheet_number: 0,
+            sprite_number: 0,
+            properties: [Container(can_hold:[Solid,],),],
+            interactions: [],
         ),
     },
 )

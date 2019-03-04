@@ -13,6 +13,4 @@
 [submodule "dep/amethyst-imgui"]
 	path = dep/amethyst-imgui
 	url = git@github.com:jaynus/amethyst-imgui.git
-[submodule "dep/rhai"]
-	path = dep/rhai
-	url = https://github.com/jaynus/rhai
+

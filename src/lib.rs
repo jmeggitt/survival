@@ -8,8 +8,9 @@
 
 #[macro_use] pub mod bitflags_serial;
 
-pub mod imgui;
 pub mod goap;
+pub mod mapgen;
+
 pub mod assets;
 pub mod tiles;
 pub mod render;
@@ -18,7 +19,9 @@ pub mod components;
 pub mod settings;
 pub mod systems;
 
-pub mod mapgen;
+
+pub mod game_data;
+pub use game_data::{SurvivalData, SurvivalDataBuilder};
 
 use amethyst::{
     core::{TransformBundle},

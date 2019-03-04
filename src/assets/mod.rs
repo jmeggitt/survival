@@ -12,9 +12,11 @@ mod loader;
 #[allow(unused_imports)]
 use loader::AssetLoader as AssetLoader;
 
+pub mod body;
+
 bitflags_serial! {
     pub struct ItemFlag: u64 {
-        const None = 0;
+        const None = 1 << 0;
         const Container = 1 << 2;
         const Tool = 1 << 3;
     }
@@ -22,7 +24,7 @@ bitflags_serial! {
 
 bitflags_serial! {
     pub struct ContainerCanHold: u8 {
-        const Nothing = 0;
+        const Nothing = 1 << 0;
         const Liquid = 1 << 1;
         const Solid  = 1 << 2;
     }

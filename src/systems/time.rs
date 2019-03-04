@@ -4,6 +4,7 @@ use amethyst::{
     ecs::{Component, Join,
           DenseVecStorage,
           WriteStorage, Write, ReadExpect},
+    shrev::{EventChannel}
 };
 use specs_derive::Component;
 use crate::settings::Context;
@@ -21,11 +22,13 @@ pub enum TimeTurn {
     Player,
     AI,
 }
-#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct TimeState {
     pub turn: TimeTurn,
     pub current_time: u64,
     pub next_time: u64,
+    #[serde(skip_serializing, skip_deserializing)]
+    pub elapsed_event: EventChannel<u64>,
 }
 impl Default for TimeState {
     fn default() -> Self {
@@ -33,6 +36,7 @@ impl Default for TimeState {
             turn: TimeTurn::Player,
             current_time: 0,
             next_time: 0,
+            elapsed_event: EventChannel::new(),
         }
     }
 }
@@ -54,6 +58,8 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 ta.available_time += delta;
                 slog_info!(context.logs.root, "avail={}", ta.available_time);
             }
+
+            time_state.elapsed_event.single_write(delta);
 
             time_state.current_time += time_state.next_time;
         }

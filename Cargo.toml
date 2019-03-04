@@ -34,8 +34,9 @@ num-traits = "*"
 tiled = "*"
 
 # Game Related
-rhai = { path = "dep/rhai" }
+rlua = { path = "dep/rlua" }
 pathfinding = "*"
+petgraph = { version="*", features = ["serde-1"] }
 
 # Serialization
 serde = { version = "*", features = ["derive", "rc"] }

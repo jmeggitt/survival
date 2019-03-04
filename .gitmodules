@@ -14,3 +14,6 @@
 	path = dep/amethyst-imgui
 	url = git@github.com:jaynus/amethyst-imgui.git
 
+[submodule "dep/rlua"]
+	path = dep/rlua
+	url = git@github.com:jaynus/rlua.git

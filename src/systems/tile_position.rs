@@ -11,9 +11,9 @@ use amethyst::{
 use hibitset::BitSet;
 
 use crate::{
-    tiles::{Tiles, WriteTiles},
+    tiles::{Tiles, WriteTiles, TileEntities},
     settings::{Context, Config},
-    components::{TilePosition, TileEntities},
+    components::{TilePosition},
 };
 
 use slog::{slog_error, slog_trace};

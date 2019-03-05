@@ -8,6 +8,21 @@ use amethyst::{
     }
 };
 
+
+#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(strum_macros::EnumString, strum_macros::Display)]
+pub enum SurvivalState {
+    Paused,
+    Running,
+    // Unused
+    Level,
+}
+impl Default for SurvivalState {
+    fn default() -> Self {
+        SurvivalState::Paused
+    }
+}
+
 pub struct SurvivalData<'a, 'b> {
     level_dispatcher: Dispatcher<'a, 'b>,
     overworld_dispatcher: Dispatcher<'a, 'b>,
@@ -16,9 +31,11 @@ pub struct SurvivalData<'a, 'b> {
 
 impl<'a, 'b> SurvivalData<'a, 'b> {
     /// Update game data
-    pub fn update(&mut self, world: &World) {
+    pub fn update(&mut self, world: &World, state: SurvivalState,) {
+       *world.res.fetch_mut::<SurvivalState>() = state;
+
         self.level_dispatcher.dispatch(&world.res);
-        self.overworld_dispatcher.dispatch(&world.res);
+        //self.overworld_dispatcher.dispatch(&world.res);
         self.core_dispatcher.dispatch(&world.res);
     }
 }
@@ -27,24 +44,28 @@ pub struct SurvivalDataBuilder<'a, 'b> {
     pub level_dispatcher: DispatcherBuilder<'a, 'b>,
     pub overworld_dispatcher: DispatcherBuilder<'a, 'b>,
     pub core_dispatcher: DispatcherBuilder<'a, 'b>,
-}
-
-impl<'a, 'b> Default for SurvivalDataBuilder<'a, 'b> {
-    fn default() -> Self {
-        SurvivalDataBuilder::new()
-    }
+    pub context: crate::settings::Context,
+    pub display_config: amethyst::renderer::DisplayConfig,
+    pub game_config: crate::settings::Config,
 }
 
 impl<'a, 'b> SurvivalDataBuilder<'a, 'b> {
-    pub fn new() -> Self {
+    pub fn new(
+        context: crate::settings::Context,
+        display_config: amethyst::renderer::DisplayConfig,
+        game_config: crate::settings::Config,
+    ) -> Self {
         Self {
+            context,
+            display_config,
+            game_config,
             level_dispatcher: DispatcherBuilder::new(),
             overworld_dispatcher: DispatcherBuilder::new(),
             core_dispatcher: DispatcherBuilder::new(),
         }
     }
 
-    pub fn with_base_bundle<B>(mut self, bundle: B) -> Result<Self>
+    pub fn with_core_bundle<B>(mut self, bundle: B) -> Result<Self>
         where
             B: SystemBundle<'a, 'b>,
     {
@@ -83,6 +104,12 @@ impl<'a, 'b> DataInit<SurvivalData<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
         // Get a handle to the `ThreadPool`.
         let pool = world.read_resource::<ArcThreadPool>().clone();
 
+        // Add global resources
+        world.add_resource(self.context);
+        world.add_resource(self.game_config);
+        world.add_resource(self.display_config);
+
+        // create dispatchers
         let mut core_dispatcher = self.core_dispatcher.with_pool(pool.clone()).build();
         let mut level_dispatcher = self.level_dispatcher.with_pool(pool.clone()).build();
         let mut overworld_dispatcher = self.overworld_dispatcher.with_pool(pool.clone()).build();
@@ -90,6 +117,8 @@ impl<'a, 'b> DataInit<SurvivalData<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
         core_dispatcher.setup(&mut world.res);
         level_dispatcher.setup(&mut world.res);
         overworld_dispatcher.setup(&mut world.res);
+
+        // Add the context state to the world
 
         SurvivalData { core_dispatcher, level_dispatcher, overworld_dispatcher }
     }

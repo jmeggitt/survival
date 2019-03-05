@@ -7,7 +7,6 @@ use amethyst::{
 use crate::settings::Context;
 use crate::systems::time::TimeState;
 use crate::components::{Actionable, PawnAction, Player};
-use slog::slog_trace;
 
 #[derive(Default)]
 pub struct System {
@@ -20,7 +19,7 @@ pub struct System {
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,
-        ReadExpect<'s, TimeState>,
+        Read<'s, TimeState>,
         ReadStorage<'s, Player>,
         WriteStorage<'s, Actionable>,
         WriteStorage<'s, Transform>,
@@ -34,7 +33,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         self.action_reader_id = Some(res.fetch_mut::<EventChannel<(Entity, PawnAction)>>().register_reader());
     }
 
-    fn run(&mut self, (context, time, _, _actionables, mut transforms, action_channel): Self::SystemData) {
+    fn run(&mut self, (_, time, _, _actionables, mut transforms, action_channel): Self::SystemData) {
         for _time_elapsed in time.elapsed_event.read(self.elapsed_event_reader_id.as_mut().unwrap()) {
             for (entity, action) in action_channel.read(self.action_reader_id.as_mut().unwrap()) {
                 // TODO: do we just assume we had the time avialable?

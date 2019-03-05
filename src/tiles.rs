@@ -1,6 +1,15 @@
-use amethyst::ecs::{Component, Read, Write};
-use amethyst::core::nalgebra::{Vector2, Vector4, Vector3};
+use amethyst::{
+    ecs::{Entity, Component, Read, Write, DenseVecStorage},
+    core::nalgebra::{Vector2, Vector4, Vector3},
+};
+
 use specs_static::{Id, Storage};
+use specs_derive::Component;
+use std::collections::HashSet;
+
+#[derive(Component, Clone, Debug, Default)]
+#[storage(DenseVecStorage)]
+pub struct TileEntities(pub HashSet<Entity>);
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct TileId(u32);

@@ -77,7 +77,7 @@ pub struct System {
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,
-        ReadExpect<'s, TimeState>,
+        Read<'s, TimeState>,
         Read<'s, EventChannel<(Entity, Food)>>,
         WriteStorage<'s, Nutrition>,
     );
@@ -92,8 +92,8 @@ impl<'s> amethyst::ecs::System<'s> for System {
     fn run(&mut self, (_, time, consume_events, mut nutritions): Self::SystemData) {
         // Check for elapsed time
         for _time_elapsed in time.elapsed_event.read(self.elapsed_event_reader_id.as_mut().unwrap()) {
-            for (entity, food) in consume_events.read(self.consume_reader_id.as_mut().unwrap()) {
-                if let Some(nutrition) = nutritions.get_mut(*entity) {
+            for (entity, _food) in consume_events.read(self.consume_reader_id.as_mut().unwrap()) {
+                if let Some(_nutrition) = nutritions.get_mut(*entity) {
 
                 }
             }

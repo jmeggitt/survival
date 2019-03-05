@@ -51,7 +51,7 @@ fn time_system() -> amethyst::Result<()> {
             let mut time = world.write_resource::<TimeState>();
             time.next_time = 20;
         })
-        .with_resource(survival::settings::Context { logs: survival::settings::Logs { root: root_log } })
+        .with_resource(survival::settings::Context { spritesheet: None, logs: survival::settings::Logs { root: root_log } })
         .with_resource(TimeState{ turn: TimeTurn::AI, ..TimeState::default() } )
         .with_system(TimeSystem, "time_system", &[])
        // WTF? .with_state(|| TestState::default())

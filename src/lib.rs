@@ -3,7 +3,7 @@
 #![allow(clippy::cast_sign_loss, clippy::cast_precision_loss, clippy::cast_possible_truncation)] // TODO: revisit these
 #![allow(non_upper_case_globals)]
 
-#![feature(custom_attribute, concat_idents, futures_api, pin, arbitrary_self_types, futures_api, async_await)]
+#![feature(custom_attribute)]
 
 #![allow(dead_code)]
 
@@ -22,11 +22,11 @@ pub mod systems;
 
 
 pub mod game_data;
-pub use game_data::{SurvivalData, SurvivalDataBuilder};
+pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
 
 use amethyst::{
     assets::{PrefabLoaderSystem, HotReloadBundle},
-    core::{TransformBundle, frame_limiter::FrameRateLimitStrategy},
+    core::{TransformBundle, frame_limiter::FrameRateLimitStrategy, SystemExt},
     input::{InputBundle},
     prelude::*,
     ui::UiBundle,
@@ -39,7 +39,6 @@ use amethyst::{
     },
     utils::application_root_dir,
 };
-
 
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
@@ -58,35 +57,35 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
 
     );
 
-    let game_data = GameDataBuilder::default()
-        .with_bundle(TransformBundle::new())?
-        .with_bundle(
+    let game_config = crate::settings::Config::load(root.join("game_settings.ron"));
+    let game_context = crate::settings::Context { logs: crate::settings::Logs { root: root_logger.clone(), }, spritesheet: None, };
+
+    let game_data = SurvivalDataBuilder::new(game_context, display_config.clone(), game_config)
+        .with_core_bundle(TransformBundle::new())?
+        .with_core_bundle(
             InputBundle::<String, String>::new().with_bindings_from_file(root.join("input.ron"))?,
         )?
-        .with(systems::PlayerInputSystem::default(), "player_input", &[])
-        .with(systems::TilePositionSystem::default(), "tile_position", &[])
-        .with(systems::ImguiBeginFrameSystem::default(), "imgui_begin_frame", &[])
-        .with(systems::UiSystem::default(), "ui", &["imgui_begin_frame"])
-        .with(systems::ImguiEndFrameSystem::default(), "imgui_end_frame",
+        .with_core(systems::ImguiBeginFrameSystem::default(), "imgui_begin_frame", &[])
+        .with_core(systems::UiSystem::default(), "ui", &["imgui_begin_frame"])
+        .with_core(systems::ImguiEndFrameSystem::default(), "imgui_end_frame",
               &["imgui_begin_frame", "ui"]) // All systems which use imgui must be here.
-
-
-        .with(systems::MovementActionSystem::default(), "movement", &[])
-
-        .with(systems::TimeSystem::default(), "time", &[])
-
-        .with_bundle(HotReloadBundle::default())?
-        .with_bundle(UiBundle::<String, String>::new())?
-        .with(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
-        .with_bundle(FPSCounterBundle::default())?
-        .with_bundle(
-            RenderBundle::new(pipe, Some(display_config))
+        .with_core_bundle(HotReloadBundle::default())?
+        .with_core_bundle(UiBundle::<String, String>::new())?
+        .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
+        .with_core_bundle(FPSCounterBundle::default())?
+        .with_core_bundle(
+            RenderBundle::new(pipe, Some(display_config.clone()))
                 .with_sprite_sheet_processor()
                 .with_sprite_visibility_sorting(&[]), // Let's us use the `Transparent` component
         )?
+
+        .with_level(systems::PlayerInputSystem::default().pausable(SurvivalState::Paused), "player_input", &[])
+        .with_level(systems::TilePositionSystem::default(), "tile_position", &[])
+        .with_level(systems::MovementActionSystem::default(), "movement", &[])
+        .with_level(systems::TimeSystem::default(), "time", &[])
         ;
 
-    let mut game = Application::build(root, crate::states::Example::new(root_logger.clone()))?
+    let mut game = Application::build(root, crate::states::FirstLoad::new(root_logger.clone()))?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)
         .build(game_data)?;
 

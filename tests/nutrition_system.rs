@@ -45,7 +45,7 @@ fn time_system() -> amethyst::Result<()> {
         .with_setup( move |_| {
 
         })
-        .with_resource(survival::settings::Context { logs: survival::settings::Logs { root: root_log } })
+        .with_resource(survival::settings::Context { spritesheet: None, logs: survival::settings::Logs { root: root_log } })
         .with_system(NutritionSystem::default(), "nutrition_system", &[])
         // WTF? .with_state(|| TestState::default())
         .run().is_ok());

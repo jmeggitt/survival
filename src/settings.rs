@@ -20,4 +20,5 @@ pub struct Logs {
 #[derive(Clone, Debug)]
 pub struct Context {
     pub logs: Logs,
+    pub spritesheet: Option<amethyst::renderer::SpriteSheetHandle>,
 }

@@ -22,8 +22,6 @@ hibitset = { version = "*", features = ["parallel"] }
 strum = "*"
 strum_macros = "*"
 
-futures-preview = "0.3.0-alpha.13"
-
 # Logging
 slog = { version = "2", features = ["max_level_trace"] }
 slog-async = "*"

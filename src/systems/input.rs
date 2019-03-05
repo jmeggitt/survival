@@ -1,7 +1,7 @@
 #![allow(clippy::module_name_repetitions)]
 
 use amethyst::{
-    ecs::{world, Entity, Entities, ReadStorage, WriteStorage, WriteExpect, Write, ReadExpect, Read, Join},
+    ecs::{Entity, Entities, ReadStorage, WriteStorage, WriteExpect, Write, ReadExpect, Read, Join},
     input::InputHandler,
     shrev::EventChannel,
 };

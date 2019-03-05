@@ -7,7 +7,6 @@ use amethyst::{
         components::Transform,
         nalgebra::Vector3
     },
-    shrev::EventChannel,
 };
 use std::sync::Arc;
 use std::collections::HashSet;
@@ -83,10 +82,6 @@ impl TilePosition {
         }
     }
 }
-
-#[derive(Component, Clone, Debug, Default)]
-#[storage(DenseVecStorage)]
-pub struct TileEntities(pub HashSet<Entity>);
 
 bitflags_serial! {
     pub struct InteractionType: u64 {

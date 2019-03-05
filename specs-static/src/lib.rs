@@ -113,6 +113,23 @@ impl<C, D, I> Storage<C, D, I>
 
         old
     }
+    pub fn insert_default(&mut self, id: I) -> Option<C>
+        where C: Component + Default
+    {
+        let old = if self.bitset.add(id.id()) {
+            unsafe {
+                Some(self.data.remove(id.id()))
+            }
+        } else {
+            None
+        };
+
+        unsafe {
+            self.data.insert(id.id(), C::default());
+        }
+
+        old
+    }
 
     /// Removes the component at `id`.
     pub fn remove(&mut self, id: I) -> Option<C> {

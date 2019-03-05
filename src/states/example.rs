@@ -14,7 +14,7 @@ use amethyst::{
 use specs_static::WorldExt;
 
 use crate::tiles::{Tiles, TileId, WriteTiles};
-use crate::components::{Player, TileEntities, TilePosition, Actionable};
+use crate::components::{Player, TilePosition, Actionable};
 
 fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> SpriteSheetHandle {
     let texture_handle = {
@@ -136,11 +136,11 @@ impl SimpleState for Example {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
 
-        world.register_tile_comp::<crate::components::FlaggedSpriteRender, TileId>();
-        world.register_tile_comp::<amethyst::renderer::Flipped, TileId>();
-        world.register_tile_comp::<amethyst::renderer::Rgba, TileId>();
-        world.register_tile_comp::<amethyst::core::transform::GlobalTransform, TileId>();
-        world.register_tile_comp::<TileEntities, TileId>();
+        //world.register_tile_comp::<crate::components::FlaggedSpriteRender, TileId>();
+        //world.register_tile_comp::<amethyst::renderer::Flipped, TileId>();
+        //world.register_tile_comp::<amethyst::renderer::Rgba, TileId>();
+        //world.register_tile_comp::<amethyst::core::transform::GlobalTransform, TileId>();
+        //world.register_tile_comp::<TileEntities, TileId>();
 
         let tiles = Tiles::new(100, 100);
         let game_settings = crate::settings::Config::load(application_root_dir().unwrap().join("resources").join("game_settings.ron"));
@@ -163,9 +163,9 @@ impl SimpleState for Example {
             {
                 let mut sprites: WriteTiles<crate::components::FlaggedSpriteRender> = SystemData::fetch(&world.res);
                 let mut transforms: WriteTiles<amethyst::core::transform::GlobalTransform> = SystemData::fetch(&world.res);
-                let mut tile_entities_map: WriteTiles<crate::components::TileEntities> = SystemData::fetch(&world.res);
+                let mut tile_entities_map: WriteTiles<crate::tiles::TileEntities> = SystemData::fetch(&world.res);
                 for tile_id in tiles.iter_all() {
-                    tile_entities_map.insert(tile_id, crate::components::TileEntities::default());
+                    tile_entities_map.insert(tile_id, crate::tiles::TileEntities::default());
 
                     sprites.insert(tile_id, crate::components::FlaggedSpriteRender {
                         sprite_sheet: map_sprite_sheet_handle.clone(),
@@ -191,14 +191,15 @@ impl SimpleState for Example {
                 }
             }
         }
-        let display_config = amethyst::renderer::DisplayConfig::load(application_root_dir().unwrap().join("resources").join("display_config.ron"));
-        world.add_resource(display_config);
+        //let display_config = amethyst::renderer::DisplayConfig::load(application_root_dir().unwrap().join("resources").join("display_config.ron"));
+        //world.add_resource(display_config);
 
-        world.add_resource(crate::settings::Context { logs: crate::settings::Logs { root: self.log.clone() } });
+        //world.add_resource(crate::settings::Context { logs: crate::settings::Logs { root: self.log.clone() } });
         world.add_resource(tiles);
-        world.add_resource(game_settings);
+        //world.add_resource(game_settings);
 
         // Load items
+        /*
         world.add_resource(AssetStorage::<crate::assets::ItemStorage>::default());
         {
             let loader = &world.read_resource::<Loader>();
@@ -209,7 +210,7 @@ impl SimpleState for Example {
                 &mut self.progress_counter,
                 &world.read_resource::<AssetStorage<crate::assets::ItemStorage>>(),
             );
-        }
+        }*/
 
         // Initialize the UI
         world.exec(|mut creator: amethyst::ui::UiCreator<'_>| {

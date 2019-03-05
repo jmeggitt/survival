@@ -19,6 +19,9 @@ derivative = "*"
 bitflags = "1.0"
 hibitset = { version = "*", features = ["parallel"] }
 
+strum = "*"
+strum_macros = "*"
+
 # Logging
 slog = { version = "2", features = ["max_level_trace"] }
 slog-async = "*"

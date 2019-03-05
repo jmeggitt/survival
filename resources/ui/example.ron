@@ -1,0 +1,272 @@
+#![enable(implicit_some)]
+Container(
+    transform: (
+        id: "background",
+        anchor: Middle,
+        stretch: XY( x_margin: 0., y_margin: 0.),
+        width: 20.,
+        height: 20.,
+    ),
+    //background: (
+    //    image: Data(Rgba((1.0, 1.0, 1.0, 1.0), (channel: Srgb))),
+    //),
+    children: [
+        // Parenting test
+        Container(
+            transform: (
+                id: "top_right",
+                x: -32.,
+                y: -32.,
+                width: 64.,
+                height: 64.,
+                anchor: TopRight,
+            ),
+            background: (
+                image: Data(Rgba((0.09, 0.02, 0.25, 1.0), (channel: Srgb))),
+            ),
+            children: [
+                Image(
+                    transform: (
+                        id: "middle_top_right",
+                        width: 32.,
+                        height: 32.,
+                        anchor: Middle,
+                        stretch: XY( x_margin: 0., y_margin: 10.),
+                    ),
+                    image: (
+                        image: Data(Rgba((0.18, 0.05, 0.85, 1.0), (channel: Srgb))),
+                    )
+                ),
+            ]
+        ),
+
+        // Amethyst logo
+        /*Image(
+            transform: (
+                id: "logo",
+                y: 32.,
+                width: 64.,
+                height: 64.,
+                tab_order: 1,
+                anchor: BottomMiddle,
+                mouse_reactive: true,
+            ),
+            image: (
+                image: File("texture/logo_transparent.png", Png, (channel: Srgb)),
+            )
+        ),*/
+
+        // Editable text single line.
+        Container(
+            transform: (
+                id: "editable_container",
+                x: 270.0,
+                y: 50.,
+                width: 500.,
+                height: 75.,
+                tab_order: 1,
+                anchor: BottomLeft,
+            ),
+            background: (
+                image: Data(Rgba((0.09, 0.02, 0.25, 1.0), (channel: Srgb))),
+            ),
+            children: [
+                Text(
+                    transform: (
+                        id: "editable",
+                        width: 500.,
+                        height: 75.,
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0.),
+                        mouse_reactive: true,
+                        selectable: 0,
+                    ),
+                    text: (
+                        text: "Editable",
+                        font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                        font_size: 75.,
+                        color: (0.2, 0.2, 1.0, 1.0),
+                        align: MiddleRight,
+                        editable: (
+                            max_length: 12,
+                        ),
+                    )
+                ),
+            ]
+        ),
+
+        // Complex Button
+        Button(
+            transform: (
+                id: "complex_button",
+                y: -32.,
+                width: 128.,
+                height: 64.,
+                tab_order: 9,
+                anchor: TopMiddle,
+                mouse_reactive: true,
+            ),
+            button: (
+                text: "ComplexBtn",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 20.,
+                normal_text_color: (0.2, 0.2, 1.0, 1.0),
+                hover_text_color: (0.4, 0.4, 1.0, 1.0),
+                press_text_color: (0.6, 0.6, 1.0, 1.0),
+                normal_image: Data(Rgba((0., 1., 0., 1.), (channel: Srgb))),
+                hover_image: Data(Rgba((0.3, 1., 0.3, 1.), (channel: Srgb))),
+                press_image: Data(Rgba((0.15, 1., 0.15, 1.), (channel: Srgb))),
+            )
+        ),
+
+        // Simple Button
+        Button(
+            transform: (
+                id: "simple_button",
+                x: 250.,
+                y: -80., // -64-16
+                width: 128.,
+                height: 64.,
+                tab_order: 9,
+                anchor: TopLeft,
+                mouse_reactive: true,
+            ),
+            button: (
+                text: "SimpleBtn",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 20.,
+                normal_text_color: (0.0, 0.0, 0.0, 1.0),
+                normal_image: Data(Rgba((0.82, 0.83, 0.83, 1.0), (channel: Srgb))),
+            )
+        ),
+        Text(
+            transform: (
+                id: "fps",
+                x: 100.,
+                y: -16,
+                width: 200.,
+                height: 25.,
+                tab_order: 2,
+                anchor: TopLeft,
+                transparent: true,
+            ),
+            text: (
+                text: "N/A",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 25.,
+                color: (0.498, 0.254, 0.937, 1.0),
+            )
+        ),
+
+        // Random text
+        Text(
+            transform: (
+                id: "random_text",
+                x: 100.,
+                y: -48,
+                width: 300.,
+                height: 25.,
+                tab_order: 2,
+                anchor: TopLeft,
+                transparent: true,
+            ),
+            text: (
+                text: "N/A",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 25.,
+                color: (1.0, 1.0, 1.0, 1.0),
+            )
+        ),
+
+        Text(
+            transform: (
+                id: "multiline",
+                x: -200.,
+                width: 400.,
+                height: 200.,
+                tab_order: 1,
+                anchor: MiddleRight,
+            ),
+            text: (
+                text: "Multiline\nText!",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 30.,
+                color: (0.2, 0.2, 1.0, 1.0),
+                line_mode: Wrap,
+                align: MiddleRight,
+            )
+        ),
+
+        Text(
+            transform: (
+                id: "system_font",
+                x: 200.,
+                width: 400.,
+                height: 200.,
+                tab_order: 1,
+                anchor: MiddleLeft,
+            ),
+            text: (
+                text: "System Font",
+                font_size: 30.,
+                color: (0.2, 0.2, 1.0, 1.0),
+                align: MiddleLeft,
+            )
+        ),
+
+        // ------ Text Align Start ------
+        Text(
+            transform: (
+                id: "TopLeft",
+                y: 180.0,
+                width: 800.,
+                height: 175.,
+                tab_order: 1,
+                anchor: Middle,
+            ),
+            text: (
+                text: "TopLeft",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 75.,
+                color: (0.2, 0.2, 1.0, 1.0),
+                align: TopLeft, // ! relative to the transform specified, which only has a width of 800 and height of 175 !asdf
+            )
+        ),
+        /*Text(
+            transform: (
+                id: "Middle",
+                y: 0.0,
+                width: 800.,
+                height: 175.,
+                tab_order: 1,
+                anchor: Middle,
+            ),
+            text: (
+                text: "Middle",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 75.,
+                color: (0.2, 0.2, 1.0, 1.0),
+                align: Middle,
+            )
+        ),*/
+        Text(
+            transform: (
+                id: "BottomRight",
+                y: -180.0,
+                width: 800.,
+                height: 175.,
+                tab_order: 1,
+                anchor: Middle,
+            ),
+            text: (
+                text: "BottomRight",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 75.,
+                color: (0.2, 0.2, 1.0, 1.0),
+                align: BottomRight,
+            )
+        ),
+        // ------ Text Align Stop -------
+    ],
+)

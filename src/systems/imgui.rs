@@ -1,27 +1,15 @@
 #![allow(clippy::module_name_repetitions)]
+
 use amethyst::{
-    ecs::{Component, Join,
-          Resources, SystemData,
-          DenseVecStorage,
-          WriteStorage, Write, ReadExpect, WriteExpect},
+    ecs::{Write, ReadExpect,},
 };
-use specs_derive::Component;
 use amethyst_imgui as am_imgui;
 use amethyst_imgui::imgui as imgui;
 use crate::settings::Context;
 
-#[derive(Component, Default, Clone)]
-#[storage(DenseVecStorage)]
-pub struct ImguiWindow {
-    pub script: String,
-}
-
 #[derive(Default)]
-pub struct System {
-    lua: rlua::Lua, // Imgui system stores its own lua context for executing UI scripts with imgui in scope
-}
-
-impl System {
+pub struct BeginFrameSystem;
+impl BeginFrameSystem {
     pub fn open_frame<'ui>(
         &mut self,
         dimensions: &amethyst::renderer::ScreenDimensions,
@@ -45,13 +33,35 @@ impl System {
         std::mem::forget(frame);
         unsafe { imgui::Ui::current_ui() }
     }
+}
+impl<'s> amethyst::ecs::System<'s> for BeginFrameSystem {
+    type SystemData = (
+        ReadExpect<'s, Context>,
+        ReadExpect<'s, amethyst::renderer::ScreenDimensions>,
+        ReadExpect<'s, amethyst::core::timing::Time>,
+        Write<'s, Option<am_imgui::ImguiState>>,
+    );
 
-    pub fn close_frame(&mut self, ui: &imgui::Ui) {
+    fn run(&mut self, (_, dimensions, time, mut imgui_state, ): Self::SystemData) {
+        self.open_frame(&dimensions, &time, &mut imgui_state);
+    }
+}
+
+#[derive(Default)]
+pub struct EndFrameSystem;
+impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
+    type SystemData = ();
+
+    fn run(&mut self, _: Self::SystemData) {
         unsafe {
-            (ui as *const imgui::Ui).read_volatile();
+            if let Some(ui) = imgui::Ui::current_ui() {
+                (ui as *const imgui::Ui).read_volatile();
+            }
         };
     }
 }
+
+
 
 struct ImguiLuaWrapper<'ui>(&'ui imgui::Ui<'ui>);
 impl<'ui> rlua::UserData for ImguiLuaWrapper<'ui> {
@@ -60,39 +70,5 @@ impl<'ui> rlua::UserData for ImguiLuaWrapper<'ui> {
             im.0.new_line();
             Ok(())
         });
-    }
-}
-
-impl<'s> amethyst::ecs::System<'s> for System {
-    type SystemData = (
-        ReadExpect<'s, Context>,
-        ReadExpect<'s, amethyst::renderer::ScreenDimensions>,
-        ReadExpect<'s, amethyst::core::timing::Time>,
-        Write<'s, Option<am_imgui::ImguiState>>,
-        WriteExpect<'s, crate::systems::script::ScriptRuntime>,
-        // storages
-        WriteStorage<'s, ImguiWindow>,
-
-    );
-
-    fn setup(&mut self, res: &mut Resources) {
-        Self::SystemData::setup(res);
-
-
-    }
-
-    fn run(&mut self, (_, dimensions, time, mut imgui_state, _, mut windows, ): Self::SystemData) {
-        let ui = self.open_frame(&dimensions, &time, &mut imgui_state);
-
-        // Run our shit
-        if let Some(ui) = ui {
-            for _ in (&mut windows).join() {
-                // Run it
-
-            }
-
-            // End of frame
-            self.close_frame(ui);
-        }
     }
 }

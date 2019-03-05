@@ -16,7 +16,7 @@ pub mod body;
 
 bitflags_serial! {
     pub struct ItemFlag: u64 {
-        const None = 1 << 0;
+        const None = 1;
         const Container = 1 << 2;
         const Tool = 1 << 3;
     }
@@ -24,7 +24,7 @@ bitflags_serial! {
 
 bitflags_serial! {
     pub struct ContainerCanHold: u8 {
-        const Nothing = 1 << 0;
+        const Nothing = 1;
         const Liquid = 1 << 1;
         const Solid  = 1 << 2;
     }
@@ -32,6 +32,7 @@ bitflags_serial! {
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(strum_macros::EnumString, strum_macros::Display)]
 pub enum ItemProperty {
     Container {
         can_hold: ContainerCanHold,

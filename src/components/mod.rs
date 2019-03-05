@@ -20,15 +20,20 @@ use bitflags::*;
 #[storage(NullStorage)]
 pub struct Player;
 
-pub struct ActionEvent;
+pub mod actions;
+pub use actions::PawnAction as PawnAction;
 
-#[derive(Default, Serialize, Deserialize)]
+#[derive(Component, Serialize, Deserialize)]
+#[storage(DenseVecStorage)]
 pub struct Actionable {
-    #[serde(skip_serializing, skip_deserializing)]
-    channel: EventChannel<ActionEvent>,
+    pub move_speed: u64,
 }
-impl Component for Actionable {
-    type Storage = FlaggedStorage<Self, VecStorage<Self>>;
+impl Default for Actionable {
+    fn default() -> Self {
+        Self {
+            move_speed: 1
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -102,6 +107,7 @@ bitflags_serial! {
 pub struct Interactable(InteractionType);
 
 #[derive(Component, Copy, Clone, Debug, Serialize, Deserialize)]
+#[derive(strum_macros::EnumString, strum_macros::Display)]
 pub enum ObstructionType {
     Impassable,
     Blocking { height: f32, },

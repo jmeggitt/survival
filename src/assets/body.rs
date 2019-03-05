@@ -2,19 +2,28 @@ use petgraph;
 use bitflags::*;
 
 #[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]
+pub struct MaterialLayer {
+
+}
+
+#[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Part {
     pub name: String,
+    layers: Vec<MaterialLayer>,
 }
 impl Part {
     pub fn new(name: &str, ) -> Self {
-        Self { name: name.to_string() }
+        Self {
+            name: name.to_string(),
+            layers: Vec::new(),
+        }
     }
 }
 
 
 bitflags_serial! {
     pub struct JointRelation: u8 {
-        const Inside    = 1 << 0;
+        const Inside    = 1;
         const Outside   = 1 << 1;
         const Left      = 1 << 2;
         const Right     = 1 << 3;

@@ -40,6 +40,12 @@ impl Default for TimeState {
         }
     }
 }
+impl TimeState {
+    pub fn increment(&mut self, amount: u64) {
+        self.next_time = self.current_time + amount;
+    }
+}
+
 
 #[derive(Default)]
 pub struct System;
@@ -51,7 +57,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
     );
 
     fn run(&mut self, (context, mut time_state, mut time_avialables): Self::SystemData) {
-        if time_state.current_time < time_state.next_time && time_state.turn == TimeTurn::AI {
+        if time_state.current_time < time_state.next_time {
             let delta = time_state.next_time - time_state.current_time;
             slog_info!(context.logs.root, "inc={}", delta);
             for mut ta in (&mut time_avialables).join() {
@@ -61,7 +67,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
             time_state.elapsed_event.single_write(delta);
 
-            time_state.current_time += time_state.next_time;
+            time_state.current_time = time_state.next_time;
         }
     }
 }

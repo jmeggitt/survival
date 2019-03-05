@@ -73,9 +73,12 @@ impl<C, D, I> Storage<C, D, I>
     /// This will only check whether a component is inserted or not, without doing
     /// any liveness checks for the id.
     pub fn get(&self, id: I) -> Option<&C> {
-        match self.bitset.contains(id.id()) {
-            true => unsafe { Some(self.data.get(id.id())) },
-            false => None,
+        if self.bitset.contains(id.id()) {
+            unsafe {
+                Some(self.data.get(id.id()))
+            }
+        } else {
+            None
         }
     }
 
@@ -83,9 +86,12 @@ impl<C, D, I> Storage<C, D, I>
     /// This will only check whether a component is inserted or not, without doing
     /// any liveness checks for the id.
     pub fn get_mut(&mut self, id: I) -> Option<&mut C> {
-        match self.bitset.contains(id.id()) {
-            true => unsafe { Some(self.data.get_mut(id.id())) },
-            false => None,
+        if self.bitset.contains(id.id()) {
+            unsafe {
+                Some(self.data.get_mut(id.id()))
+            }
+        } else {
+            None
         }
     }
 
@@ -93,9 +99,12 @@ impl<C, D, I> Storage<C, D, I>
     ///
     /// In contrast to entities, **there are no invalid ids.**
     pub fn insert(&mut self, id: I, comp: C) -> Option<C> {
-        let old = match self.bitset.add(id.id()) {
-            true => unsafe { Some(self.data.remove(id.id())) },
-            false => None,
+        let old = if self.bitset.add(id.id()) {
+            unsafe {
+                Some(self.data.remove(id.id()))
+            }
+        } else {
+            None
         };
 
         unsafe {
@@ -107,9 +116,12 @@ impl<C, D, I> Storage<C, D, I>
 
     /// Removes the component at `id`.
     pub fn remove(&mut self, id: I) -> Option<C> {
-        match self.bitset.remove(id.id()) {
-            true => unsafe { Some(self.data.remove(id.id())) },
-            false => None,
+        if self.bitset.remove(id.id()) {
+            unsafe {
+                Some(self.data.remove(id.id()))
+            }
+        } else {
+            None
         }
     }
 }

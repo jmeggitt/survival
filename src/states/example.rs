@@ -8,13 +8,13 @@ use amethyst::{
         SpriteRender, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle, Texture,
         TextureMetadata, Transparent,
     },
-    utils::application_root_dir
+    utils::application_root_dir,
 };
 
 use specs_static::WorldExt;
 
 use crate::tiles::{Tiles, TileId, WriteTiles};
-use crate::components::{Player, TileEntities, TilePosition};
+use crate::components::{Player, TileEntities, TilePosition, Actionable};
 
 fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> SpriteSheetHandle {
     let texture_handle = {
@@ -71,6 +71,8 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate
         .with(transform)
         .with(Player)
         .with(sprite)
+        .with(Actionable::default())
+        .with(crate::systems::time::TimeAvailable::default())
         .with(Transparent)
         .build()
 }
@@ -122,7 +124,12 @@ impl SimpleState for Example {
 
     /// Executed on every frame immediately, as fast as the engine will allow (taking into account the frame rate limit).
     fn update(&mut self, _: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
-
+        //let world = &data.world;
+        // Test imgui draw calls
+        //let mut imgui: Write<EventChannel<crate::systems::ui::ImguiDraw>> = SystemData::fetch(&world.res);
+        //imgui.single_write(std::sync::Arc::new(|ui: &amethyst_imgui::imgui::Ui| {
+        //    ui.show_demo_window(&mut true);
+       // }));
         Trans::None
     }
 
@@ -204,6 +211,11 @@ impl SimpleState for Example {
             );
         }
 
+        // Initialize the UI
+        world.exec(|mut creator: amethyst::ui::UiCreator<'_>| {
+            let entity = creator.create("ui/main_ui.ron", ());
+            println!("Created ui: {}", entity.id());
+        });
 
     }
 }

@@ -1,12 +1,3 @@
-use amethyst::{
-    ecs::{ System, Join, WriteStorage, ReadStorage, Read, ReadExpect},
-    core::components::Transform,
-    input::InputHandler,
-};
-
-use crate::components::Player;
-use crate::settings::Context;
-
 pub mod tile_position;
 pub use tile_position::System as TilePositionSystem;
 
@@ -17,40 +8,17 @@ pub mod script;
 pub use script::System as ScriptSystem;
 
 pub mod imgui;
-pub use imgui::System as ImguiSystem;
+pub use imgui::BeginFrameSystem as ImguiBeginFrameSystem;
+pub use imgui::EndFrameSystem as ImguiEndFrameSystem;
 
 pub mod nutrition;
+pub use nutrition::System as NutritionSystem;
 
-#[derive(Default)]
-pub struct ActionSystem;
-impl<'s> System<'s> for ActionSystem {
-    type SystemData = (
-        ReadExpect<'s, Context>,
-    );
+pub mod ui;
+pub use ui::System as UiSystem;
 
-    fn run(&mut self, _: Self::SystemData) {
+pub mod input;
+pub use input::System as PlayerInputSystem;
 
-    }
-}
-
-#[derive(Default)]
-pub struct PlayerInputSystem;
-impl<'s> System<'s> for PlayerInputSystem {
-    type SystemData = (
-        ReadExpect<'s, Context>,
-        WriteStorage<'s, Transform>,
-        ReadStorage<'s, Player>,
-        Read<'s, InputHandler<String, String>>,
-    );
-
-    #[allow(clippy::cast_possible_truncation)]
-    fn run(&mut self, (_, mut transforms, players, input): Self::SystemData) {
-        let x_move = input.axis_value("entity_x").unwrap();
-        let y_move = input.axis_value("entity_y").unwrap();
-
-        for (_, transform) in (&players, &mut transforms).join() {
-            transform.translate_x(x_move as f32 * 20.0);
-            transform.translate_y(y_move as f32 * 20.0);
-        }
-    }
-}
+pub mod movement;
+pub use movement::System as MovementActionSystem;

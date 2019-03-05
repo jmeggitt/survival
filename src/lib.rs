@@ -3,7 +3,8 @@
 #![allow(clippy::cast_sign_loss, clippy::cast_precision_loss, clippy::cast_possible_truncation)] // TODO: revisit these
 #![allow(non_upper_case_globals)]
 
-#![feature(custom_attribute, concat_idents)]
+#![feature(custom_attribute, concat_idents, futures_api, pin, arbitrary_self_types, futures_api, async_await)]
+
 #![allow(dead_code)]
 
 #[macro_use] pub mod bitflags_serial;

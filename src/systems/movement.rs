@@ -1,10 +1,9 @@
 #![allow(clippy::module_name_repetitions)]
 use amethyst::{
-    ecs::{world, Read, Entity, Join, Resources, SystemData, ReadExpect, WriteStorage, ReadStorage, storage::ComponentEvent, },
+    ecs::{ Read, Entity, Resources, SystemData, ReadExpect, WriteStorage, ReadStorage, },
     shrev::{EventChannel, ReaderId},
     core::components::Transform,
 };
-use std::collections::HashMap;
 use crate::settings::Context;
 use crate::systems::time::TimeState;
 use crate::components::{Actionable, PawnAction, Player};
@@ -35,12 +34,11 @@ impl<'s> amethyst::ecs::System<'s> for System {
         self.action_reader_id = Some(res.fetch_mut::<EventChannel<(Entity, PawnAction)>>().register_reader());
     }
 
-    fn run(&mut self, (context, time, _, mut actionables, mut transforms, action_channel): Self::SystemData) {
+    fn run(&mut self, (context, time, _, _actionables, mut transforms, action_channel): Self::SystemData) {
         for _time_elapsed in time.elapsed_event.read(self.elapsed_event_reader_id.as_mut().unwrap()) {
-            slog_trace!(context.logs.root, "hit");
             for (entity, action) in action_channel.read(self.action_reader_id.as_mut().unwrap()) {
-                slog_trace!(context.logs.root, "hit3");
-                // TODO: check movement vs. time available
+                // TODO: do we just assume we had the time avialable?
+                // does the time system instead read the events too, and consume the appropriate times taken?
                 if let Some(transform) = transforms.get_mut(*entity) {
                     match action {
                         PawnAction::Move(x, y) => {

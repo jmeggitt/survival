@@ -1,10 +1,9 @@
 #![allow(clippy::module_name_repetitions)]
 use amethyst::{
-    ecs::{world, Join, Component, FlaggedStorage, DenseVecStorage, Resources, SystemData, ReadExpect, WriteStorage, storage::ComponentEvent, },
+    ecs::{Entity, Component, Read, DenseVecStorage, Resources, SystemData, ReadExpect, WriteStorage,  },
     shrev::{EventChannel, ReaderId},
 };
 use specs_derive::Component;
-use std::collections::HashMap;
 use crate::settings::Context;
 use crate::systems::time::TimeState;
 
@@ -33,7 +32,8 @@ pub struct NutritionConfig {
     pub calorie_speed: f32,
 }
 
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Component, serde::Serialize, serde::Deserialize)]
+#[storage(DenseVecStorage)]
 pub struct Nutrition {
     pub vitamins: [f32; 25],
     pub stomach_load: f32,
@@ -47,12 +47,8 @@ pub struct Nutrition {
     pub caloric_balance: f32,
     pub caloric_track: u32,
 
-    #[serde(skip_serializing, skip_deserializing)]
-    pub consume: EventChannel<Food>,
-
     pub config: NutritionConfig,
 }
-impl Component for Nutrition { type Storage = FlaggedStorage<Self, DenseVecStorage<Self>>; }
 impl Default for Nutrition {
     fn default() -> Self {
         Self {
@@ -68,8 +64,6 @@ impl Default for Nutrition {
             caloric_balance: 1.,
             caloric_track: 2000,
 
-            consume: EventChannel::default(),
-
             config: NutritionConfig::default(),
         }
     }
@@ -77,63 +71,32 @@ impl Default for Nutrition {
 
 #[derive(Default)]
 pub struct System {
-    components: hibitset::BitSet,
-    new_components: hibitset::BitSet,
-
-    comp_reader_id: Option<ReaderId<ComponentEvent>>,
-    consume_reader_ids: HashMap<world::Index, ReaderId<Food>>,
+    consume_reader_id: Option<ReaderId<(Entity, Food)>>,
     elapsed_event_reader_id: Option<ReaderId<u64>>
 }
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,
         ReadExpect<'s, TimeState>,
+        Read<'s, EventChannel<(Entity, Food)>>,
         WriteStorage<'s, Nutrition>,
     );
 
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
 
-        self.comp_reader_id = Some(res.fetch_mut::<EventChannel<ComponentEvent>>().register_reader());
+        self.consume_reader_id = Some(res.fetch_mut::<EventChannel<(Entity, Food)>>().register_reader());
         self.elapsed_event_reader_id = Some(res.fetch_mut::<TimeState>().elapsed_event.register_reader());
     }
 
-    fn run(&mut self, (_, time, mut nutritions): Self::SystemData) {
-        self.new_components.clear();
-
-        for event in nutritions.channel().read(self.comp_reader_id.as_mut().unwrap()) {
-            match event {
-                ComponentEvent::Inserted(id) => {
-                    self.components.add(*id);
-                    self.new_components.add(*id);
-                }
-                ComponentEvent::Removed(id) => {
-                    self.components.remove(*id);
-                    self.consume_reader_ids.remove(id); // Remove the reader
-                },
-                _ => {},
-            };
-        }
-        // Subscribe to new components
-        for (new_component, id) in (&mut nutritions, &self.new_components).join() {
-            self.consume_reader_ids.insert(id, new_component.consume.register_reader());
-        }
-
-
+    fn run(&mut self, (_, time, consume_events, mut nutritions): Self::SystemData) {
         // Check for elapsed time
         for _time_elapsed in time.elapsed_event.read(self.elapsed_event_reader_id.as_mut().unwrap()) {
-            for (data, id) in (&mut nutritions, &self.components).join() {
-
-                // Check for food consumption events, we only do these when time elapsed?
-                for _consumed in data.consume.read(self.consume_reader_ids.get_mut(&id).unwrap()) {
+            for (entity, food) in consume_events.read(self.consume_reader_id.as_mut().unwrap()) {
+                if let Some(nutrition) = nutritions.get_mut(*entity) {
 
                 }
-
-                // Do nutirtion shit based on the time elapsed
             }
         }
-
-
-
     }
 }

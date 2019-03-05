@@ -5,7 +5,7 @@ authors = ["Walter Pearce <jaynus@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-amethyst = { git = "https://github.com/jaynus/amethyst.git", features = ["nightly", "saveload"] }
+amethyst = { path = "dep/amethyst", features = ["nightly", "saveload"] }
 amethyst-imgui = { path = "dep/amethyst-imgui" }
 specs-static = { path = "specs-static" }
 specs-derive = "*"
@@ -21,6 +21,8 @@ hibitset = { version = "*", features = ["parallel"] }
 
 strum = "*"
 strum_macros = "*"
+
+futures-preview = "0.3.0-alpha.13"
 
 # Logging
 slog = { version = "2", features = ["max_level_trace"] }

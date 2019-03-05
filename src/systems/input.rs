@@ -9,7 +9,6 @@ use crate::settings::Context;
 use crate::components::{Player, Actionable, PawnAction};
 use crate::systems::time::TimeState;
 
-use slog::slog_trace;
 
 #[derive(Default)]
 pub struct System;
@@ -26,7 +25,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
     );
 
     #[allow(clippy::cast_possible_truncation)]
-    fn run(&mut self, (context, mut time_state, entities, mut actionables, players, mut action_channel, input): Self::SystemData) {
+    fn run(&mut self, (_, mut time_state, entities, mut actionables, players, mut action_channel, input): Self::SystemData) {
         for (entity, actionable, _) in (&entities, &mut actionables, &players).join() {
             let mut time_taken: u64 = 0;
 

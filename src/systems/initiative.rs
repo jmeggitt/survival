@@ -12,8 +12,7 @@ use crate::components;
 
 #[derive(Default)]
 pub struct System {
-    components: hibitset::BitSet,
-    new_components: hibitset::BitSet,
+
 }
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
@@ -34,6 +33,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
             },
             SurvivalState::Running => {
                 // Handle monster initiative, and handing it back to the player.
+                *state == SurvivalState::Paused;
             },
         }
     }

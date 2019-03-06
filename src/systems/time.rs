@@ -8,15 +8,15 @@ use amethyst::{
 };
 use specs_derive::Component;
 use crate::settings::Context;
-use crate::components::EnergyAvailable;
+use crate::components::TimeAvailable;
 
 use slog::slog_info;
 
 #[derive(Default, Copy, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct TimeState {
     pub current_time: u64,
+    pub player_time_taken: u64,
 }
-
 
 #[derive(Default)]
 pub struct System;
@@ -24,7 +24,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,
         Write<'s, TimeState>,
-        WriteStorage<'s, EnergyAvailable>,
+        WriteStorage<'s, TimeAvailable>,
     );
 
     fn run(&mut self, (context, mut time_state, mut time_avialables): Self::SystemData) {

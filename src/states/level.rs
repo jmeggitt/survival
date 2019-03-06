@@ -14,7 +14,7 @@ use slog::slog_trace;
 
 use crate::SurvivalData;
 use crate::tiles::{Tiles, TileId, WriteTiles};
-use crate::components::{EnergyAvailable, FlaggedSpriteRender, Player, TilePosition};
+use crate::components::{TimeAvailable, FlaggedSpriteRender, Player, TilePosition};
 use crate::tiles::TileEntities;
 use crate::settings;
 
@@ -32,7 +32,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles
         .with(transform)
         .with(Player)
         .with(sprite)
-        .with(EnergyAvailable::default())
+        .with(TimeAvailable::default())
         .with(Transparent)
         .build()
 }

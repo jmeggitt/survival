@@ -7,12 +7,14 @@ use amethyst::{
         components::Transform,
         nalgebra::Vector3
     },
+    shrev::{EventChannel,},
 };
 use std::sync::Arc;
 use std::collections::HashSet;
 use specs_derive::Component;
 use serde::{Serialize, Deserialize};
 use bitflags::*;
+use crate::utils::HasChannel;
 
 #[derive(Component, Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(NullStorage)]
@@ -29,12 +31,31 @@ pub struct PawnTraits {
     pub move_speed: f32,
 }
 
+#[derive(Default, Serialize, Deserialize)]
+pub struct Actionable {
+    #[serde(skip_serializing, skip_deserializing)]
+    pub channel: EventChannel<crate::actions::Action>,
+}
+impl Component for Actionable {
+    type Storage = FlaggedStorage<Self, DenseVecStorage<Self>>;
+}
+impl HasChannel<crate::actions::Action> for Actionable {
+    fn channel(&self) -> &EventChannel<crate::actions::Action> {
+        &self.channel
+    }
+
+    fn channel_mut(&mut self) -> &mut EventChannel<crate::actions::Action> {
+        &mut self.channel
+    }
+}
+
+
 #[derive(Component, Default, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[storage(DenseVecStorage)]
-pub struct EnergyAvailable {
+pub struct TimeAvailable {
     pub count: u64,
 }
-impl EnergyAvailable {
+impl TimeAvailable {
     pub fn has(&self, time: u64) -> bool {
         self.count > time
     }

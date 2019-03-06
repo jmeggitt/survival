@@ -21,7 +21,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
     );
 
     #[allow(clippy::cast_possible_truncation)]
-    fn run(&mut self, (_, mut state, input, entities, players, ): Self::SystemData) {
+    fn run(&mut self, (_, mut state, input, entities, players,): Self::SystemData) {
         if *state == SurvivalState::Paused {
             for (entity, _, ) in (&entities, &players, ).join() {
                 let mut got_input = false;

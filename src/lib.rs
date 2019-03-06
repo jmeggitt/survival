@@ -19,7 +19,8 @@ pub mod states;
 pub mod components;
 pub mod settings;
 pub mod systems;
-
+pub mod utils;
+pub mod actions;
 
 pub mod game_data;
 pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};

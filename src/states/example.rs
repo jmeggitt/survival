@@ -71,7 +71,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate
         .with(transform)
         .with(Player)
         .with(sprite)
-        .with(crate::components::EnergyAvailable::default())
+        .with(crate::components::TimeAvailable::default())
         .with(Transparent)
         .build()
 }

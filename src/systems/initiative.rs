@@ -5,9 +5,10 @@ use amethyst::{
     core::components::Transform,
 };
 use specs_derive::Component;
-use crate::settings::Context;
+use crate::settings::{Context};
+use crate::game_data::SurvivalState;
 use crate::systems::time::TimeState;
-use crate::components::{Player};
+use crate::components;
 
 #[derive(Default)]
 pub struct System {
@@ -17,8 +18,8 @@ pub struct System {
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,
-        ReadStorage<'s, Player>,
-        WriteStorage<'s, Transform>,
+        Write<'s, SurvivalState>,
+        WriteStorage<'s, components::IsTurn>
     );
 
     fn setup(&mut self, res: &mut Resources) {
@@ -26,7 +27,14 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
     }
 
-    fn run(&mut self, _: Self::SystemData) {
-
+    fn run(&mut self, (_, state, is_turns): Self::SystemData) {
+        match state {
+            SurvivalState::Paused => {
+                // do nothing?
+            },
+            SurvivalState::Running => {
+                // Handle monster initiative, and handing it back to the player.
+            },
+        }
     }
 }

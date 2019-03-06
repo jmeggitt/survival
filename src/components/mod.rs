@@ -14,24 +14,35 @@ use specs_derive::Component;
 use serde::{Serialize, Deserialize};
 use bitflags::*;
 
-
 #[derive(Component, Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(NullStorage)]
 pub struct Player;
 
-pub mod actions;
-pub use actions::PawnAction as PawnAction;
+#[derive(Component, Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[storage(NullStorage)]
+pub struct IsTurn;
 
-#[derive(Component, Serialize, Deserialize)]
+#[derive(Component, Default, Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]
-pub struct Actionable {
-    pub move_speed: u64,
+pub struct PawnTraits {
+    pub quickness: f32,
+    pub move_speed: f32,
 }
-impl Default for Actionable {
-    fn default() -> Self {
-        Self {
-            move_speed: 1
-        }
+
+#[derive(Component, Default, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[storage(DenseVecStorage)]
+pub struct EnergyAvailable {
+    pub count: u64,
+}
+impl EnergyAvailable {
+    pub fn has(&self, time: u64) -> bool {
+        self.count > time
+    }
+    pub fn consume(&mut self, time: u64) {
+        self.count -= time;
+    }
+    pub fn add(&mut self, time: u64) {
+        self.count += time;
     }
 }
 

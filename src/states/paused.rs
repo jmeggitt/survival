@@ -34,7 +34,10 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         _: StateData<'_, SurvivalData<'_, '_>>,
         _: StateEvent,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
-        slog_trace!(self.log, "Event Paused");
+        //slog_trace!(self.log, "Event Paused");
+
+        // Wait for player input and trans if we get it.
+
         Trans::None
     }
 
@@ -42,7 +45,10 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         &mut self,
         data: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
-        data.data.update(&data.world, SurvivalState::Paused);
+        if data.data.update(&data.world, SurvivalState::Paused) != SurvivalState::Paused {
+            return Trans::Push(Box::new(super::Running::new(self.log.clone())));
+        }
+
         Trans::None
     }
 }

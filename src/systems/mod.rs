@@ -17,8 +17,8 @@ pub use nutrition::System as NutritionSystem;
 pub mod ui;
 pub use ui::System as UiSystem;
 
-pub mod input;
-pub use input::System as PlayerInputSystem;
-
 pub mod movement;
-pub use movement::System as MovementActionSystem;
+pub use movement::System as MovementSystem;
+
+pub mod input;
+pub use input::System as InputSystem;

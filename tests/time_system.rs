@@ -11,9 +11,9 @@ use amethyst_test::{
 
 use survival::systems::{
     TimeSystem,
-    time::{TimeAvailable, TimeTurn, TimeState}
+    time::{TimeState}
 };
-
+use survival::components::EnergyAvailable;
 #[derive(Default)]
 struct TestState {
     iters: u32,
@@ -45,14 +45,13 @@ fn time_system() -> amethyst::Result<()> {
 
     assert!(AmethystApplication::blank()
         .with_setup( move |world| {
-            world.create_entity().with(TimeAvailable::default()).build();
+            world.create_entity().with(EnergyAvailable::default()).build();
 
             // Apply 20 time from 'player'
             let mut time = world.write_resource::<TimeState>();
-            time.next_time = 20;
         })
         .with_resource(survival::settings::Context { spritesheet: None, logs: survival::settings::Logs { root: root_log } })
-        .with_resource(TimeState{ turn: TimeTurn::AI, ..TimeState::default() } )
+        .with_resource(TimeState::default())
         .with_system(TimeSystem, "time_system", &[])
        // WTF? .with_state(|| TestState::default())
         .run().is_ok());

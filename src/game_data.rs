@@ -31,12 +31,14 @@ pub struct SurvivalData<'a, 'b> {
 
 impl<'a, 'b> SurvivalData<'a, 'b> {
     /// Update game data
-    pub fn update(&mut self, world: &World, state: SurvivalState,) {
+    pub fn update(&mut self, world: &World, state: SurvivalState,) -> SurvivalState {
        *world.res.fetch_mut::<SurvivalState>() = state;
 
         self.level_dispatcher.dispatch(&world.res);
         //self.overworld_dispatcher.dispatch(&world.res);
         self.core_dispatcher.dispatch(&world.res);
+
+         world.res.fetch::<SurvivalState>().clone()
     }
 }
 

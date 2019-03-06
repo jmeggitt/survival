@@ -78,10 +78,9 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
                 .with_sprite_sheet_processor()
                 .with_sprite_visibility_sorting(&[]), // Let's us use the `Transparent` component
         )?
-
-        .with_level(systems::PlayerInputSystem::default().pausable(SurvivalState::Paused), "player_input", &[])
+        .with_level(systems::InputSystem::default(), "input", &[])
         .with_level(systems::TilePositionSystem::default(), "tile_position", &[])
-        .with_level(systems::MovementActionSystem::default(), "movement", &[])
+        .with_level(systems::MovementSystem::default(), "movement", &[])
         .with_level(systems::TimeSystem::default(), "time", &[])
         ;
 

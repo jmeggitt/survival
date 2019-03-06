@@ -14,7 +14,7 @@ use amethyst::{
 use specs_static::WorldExt;
 
 use crate::tiles::{Tiles, TileId, WriteTiles};
-use crate::components::{Player, TilePosition, Actionable};
+use crate::components::{Player, TilePosition};
 
 fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> SpriteSheetHandle {
     let texture_handle = {
@@ -71,8 +71,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate
         .with(transform)
         .with(Player)
         .with(sprite)
-        .with(Actionable::default())
-        .with(crate::systems::time::TimeAvailable::default())
+        .with(crate::components::EnergyAvailable::default())
         .with(Transparent)
         .build()
 }

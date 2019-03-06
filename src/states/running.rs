@@ -42,7 +42,10 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         &mut self,
         data: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
-        data.data.update(&data.world, SurvivalState::Running);
+        if data.data.update(&data.world, SurvivalState::Running) != SurvivalState::Running {
+            return Trans::Pop;
+        }
+
         Trans::None
     }
 }

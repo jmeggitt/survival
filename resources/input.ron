@@ -1,13 +1,9 @@
 (
-    axes: {
-        "entity_x": Emulated(
-            pos: Key(D),
-            neg: Key(A),
-        ),
-        "entity_y": Emulated(
-            pos: Key(W),
-            neg: Key(S),
-        ),
+    axes: {},
+    actions: {
+        "move_left":    [ [Key(Left)], [Key(A)] ],
+        "move_right":   [ [Key(Right)], [Key(D)] ],
+        "move_up":      [ [Key(Up)], [Key(W)] ],
+        "move_Down":    [ [Key(Down)], [Key(S)] ],
     },
-    actions: {},
 )

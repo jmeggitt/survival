@@ -72,12 +72,10 @@ impl Default for Nutrition {
 #[derive(Default)]
 pub struct System {
     consume_reader_id: Option<ReaderId<(Entity, Food)>>,
-    elapsed_event_reader_id: Option<ReaderId<u64>>
 }
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,
-        Read<'s, TimeState>,
         Read<'s, EventChannel<(Entity, Food)>>,
         WriteStorage<'s, Nutrition>,
     );
@@ -86,17 +84,9 @@ impl<'s> amethyst::ecs::System<'s> for System {
         Self::SystemData::setup(res);
 
         self.consume_reader_id = Some(res.fetch_mut::<EventChannel<(Entity, Food)>>().register_reader());
-        self.elapsed_event_reader_id = Some(res.fetch_mut::<TimeState>().elapsed_event.register_reader());
     }
 
-    fn run(&mut self, (_, time, consume_events, mut nutritions): Self::SystemData) {
-        // Check for elapsed time
-        for _time_elapsed in time.elapsed_event.read(self.elapsed_event_reader_id.as_mut().unwrap()) {
-            for (entity, _food) in consume_events.read(self.consume_reader_id.as_mut().unwrap()) {
-                if let Some(_nutrition) = nutritions.get_mut(*entity) {
+    fn run(&mut self, (_, consume_events, mut nutritions): Self::SystemData) {
 
-                }
-            }
-        }
     }
 }

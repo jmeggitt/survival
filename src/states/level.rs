@@ -14,8 +14,7 @@ use slog::slog_trace;
 
 use crate::SurvivalData;
 use crate::tiles::{Tiles, TileId, WriteTiles};
-use crate::components::{FlaggedSpriteRender, Player, TilePosition, Actionable};
-use crate::systems::time::TimeAvailable;
+use crate::components::{EnergyAvailable, FlaggedSpriteRender, Player, TilePosition};
 use crate::tiles::TileEntities;
 use crate::settings;
 
@@ -33,8 +32,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles
         .with(transform)
         .with(Player)
         .with(sprite)
-        .with(Actionable::default())
-        .with(TimeAvailable::default())
+        .with(EnergyAvailable::default())
         .with(Transparent)
         .build()
 }
@@ -75,7 +73,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         {
             let context = world.res.fetch::<settings::Context>().clone();
             let map_sprite_sheet_handle = context.spritesheet.as_ref().unwrap();
-            let mut d = world.res.fetch::<settings::Config>().clone();
+            let mut game_settings = world.res.fetch::<settings::Config>().clone();
 
             let player = init_player(world, map_sprite_sheet_handle, tiles, &game_settings);
             let _camera = init_camera(world, player, tiles, &game_settings);

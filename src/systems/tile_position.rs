@@ -16,7 +16,7 @@ use crate::{
     components::{TilePosition},
 };
 
-use slog::{slog_error, slog_trace};
+use slog::{slog_error};
 
 #[derive(Default)]
 pub struct System {
@@ -34,12 +34,14 @@ impl<'s> amethyst::ecs::System<'s> for System {
         WriteStorage<'s, TilePosition>
     );
 
-    fn run(&mut self, (entities, context, game_settings, tiles, mut tile_entities_map, transforms, mut tile_positions): Self::SystemData) {
+    fn run(&mut self, (entities, context, game_settings, tiles,
+        mut tile_entities_map, transforms, mut tile_positions): Self::SystemData) {
         self.dirty.clear();
 
         for event in transforms.channel().read(self.transform_reader.as_mut().unwrap()) {
             match event {
                 ComponentEvent::Modified(id) | ComponentEvent::Inserted(id) => {
+                    //slog_trace!(context.logs.root, "New Transform component");
                     self.dirty.add(*id);
                 }
                 ComponentEvent::Removed(_) => (),
@@ -52,9 +54,9 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
             // Did they actually move tiles? LOL
             if tile_position.coord.xy() != new_position {
-                slog_trace!(context.logs.root, "TileMove E:{}: ({},{}) -> ({},{}) ", entity.id(),
-                tile_position.coord.x, tile_position.coord.y,
-                new_position.x, new_position.y);
+                //slog_trace!(context.logs.root, "TileMove E:{}: ({},{}) -> ({},{}) ", entity.id(),
+                //tile_position.coord.x, tile_position.coord.y,
+                //new_position.x, new_position.y);
 
                 if let Some(entities_list) = tile_entities_map.get_mut(tiles.id_from_vector(tile_position.coord.xy())) {
                     entities_list.0.remove(&entity);

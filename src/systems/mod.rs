@@ -22,3 +22,9 @@ pub use movement::System as MovementSystem;
 
 pub mod input;
 pub use input::System as InputSystem;
+
+pub mod initiative;
+pub use initiative::System as InitiativeSystem;
+
+pub mod wearing;
+pub use wearing::System as WearingSystem;

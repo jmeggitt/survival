@@ -1,7 +1,7 @@
 use amethyst::shrev;
 use amethyst::ecs::{
     Entity, Resources, WriteStorage, Component, SystemData, Entities, Join,
-    storage::{ComponentEvent, FlaggedStorage, UnprotectedStorage},
+    storage::{ComponentEvent, UnprotectedStorage},
     storage,
 };
 use hibitset::BitSet;
@@ -32,8 +32,7 @@ impl<C, T, S> ComponentEventReader<C, T, S>
         S: UnprotectedStorage<C> + storage::Tracked + Sized + Send + Sync + 'static,
 {
     pub fn setup(&mut self, res: &mut Resources, ) {
-        let reader_id = WriteStorage::<C>::fetch(&res).channel_mut().register_reader();
-        self.component_reader = Some(reader_id);
+        self.component_reader = Some(WriteStorage::<C>::fetch(&res).channel_mut().register_reader());
     }
 
     pub fn subscribe(&mut self, entity: Entity, storage: &mut WriteStorage<C>, ) {

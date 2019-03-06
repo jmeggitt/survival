@@ -21,11 +21,11 @@ impl State {
     }
 }
 impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
-    fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
+    fn on_start(&mut self, _: StateData<'_, SurvivalData<'_, '_>>) {
         slog_trace!(self.log, "Changed state to Paused");
     }
 
-    fn on_pause(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
+    fn on_pause(&mut self, _: StateData<'_, SurvivalData<'_, '_>>) {
 
     }
 

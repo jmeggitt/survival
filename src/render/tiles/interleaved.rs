@@ -8,7 +8,7 @@ use glsl_layout::Uniform;
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::{
     nalgebra::Vector4,
-    specs::prelude::{Read, ReadStorage, ReadExpect, Join},
+    specs::prelude::{Read, ReadStorage, ReadExpect},
     transform::{Transform, GlobalTransform},
 };
 use amethyst::error::Error;
@@ -146,7 +146,7 @@ impl Pass for DrawFlat2D {
             display_config,
             active,
             camera,
-            tile_positions,
+            _,
             sprite_sheet_storage,
             tex_storage,
             global,
@@ -160,19 +160,27 @@ impl Pass for DrawFlat2D {
     ) {
         let camera_g = get_camera(active, &camera, &global);
 
-        let (_, camera_tile_position) = (&camera, &tile_positions).join().next().unwrap();
+        let (_, g) = camera_g.as_ref().unwrap();
+        let global: amethyst::core::nalgebra::Matrix4<f32> = g.0;
+        let camera_world_position = amethyst::core::nalgebra::Vector3::new(global[12], global[13], global[14]);
+        let camera_tile_position = tiles.world_to_tile(&camera_world_position.xyz(), &game_settings);
+        //let (_, camera_tile_position) = (&camera, &tile_positions).join().next().unwrap();
+
+
+        //let translation: amethyst::core::nalgebra::Translation3<f32> = amethyst::core::nalgebra::convert(transform);
+
         // Calculate the scale of how much we can view...from...what?
         // this should be resolution / (tile width * scale(
         // TODO: dont hardcode the tileset size multiplier, this should be stored in Tiles
         let view_tiles = display_config.dimensions.unwrap().0 as f32 / (20. * game_settings.graphics.scale); // Hardcoded for now, these should be out of the sprites and into the Tiles object
 
-        let view_x = (camera_tile_position.coord.x as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().x as f32) as u32;
-        let view_y = (camera_tile_position.coord.y as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().y as f32) as u32;
+        let view_x = (camera_tile_position.x as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().x as f32) as u32;
+        let view_y = (camera_tile_position.y as f32 - view_tiles - 20.).max(0.).min(tiles.dimensions().y as f32) as u32;
 
-        let view_e_x = (camera_tile_position.coord.x as f32 + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
-        let view_e_y = (camera_tile_position.coord.y as f32 + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
+        let view_e_x = (camera_tile_position.x as f32 + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
+        let view_e_y = (camera_tile_position.y as f32 + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
 
-//        println!("Viewing: real={:?}, camera=({}, {}), {}, {}, {}, {}", camera_position, camera_tile_position, camera_tile_y, view_x, view_y, view_e_x, view_e_y);
+       // println!("Viewing: camera=({}, {}), {}, {}, {}, {}", camera_tile_position.x, camera_tile_position.y, view_x, view_y, view_e_x, view_e_y);
 
         // TODO: we should scale this to viewport from teh camera
         for tile_id in tiles.iter_region(

@@ -1,19 +1,13 @@
 #![allow(clippy::module_name_repetitions)]
 use amethyst::{
-    ecs::{ Read, Entity, Resources, SystemData, ReadExpect, WriteStorage, ReadStorage, DenseVecStorage, },
-    shrev::{EventChannel, ReaderId},
-    core::components::Transform,
+    ecs::{Write, Resources, SystemData, ReadExpect, WriteStorage, },
 };
-use specs_derive::Component;
 use crate::settings::{Context};
 use crate::game_data::SurvivalState;
-use crate::systems::time::TimeState;
 use crate::components;
 
 #[derive(Default)]
-pub struct System {
-
-}
+pub struct System;
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,
@@ -26,15 +20,17 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
     }
 
-    fn run(&mut self, (_, state, is_turns): Self::SystemData) {
-        match state {
+    fn run(&mut self, (_, mut state, _): Self::SystemData) {
+        match state.clone() {
             SurvivalState::Paused => {
                 // do nothing?
             },
             SurvivalState::Running => {
                 // Handle monster initiative, and handing it back to the player.
-                *state == SurvivalState::Paused;
+                *state = SurvivalState::Paused;
+                //slog_trace!(context.logs.root, "AI turn finished, pausing");
             },
+            _ => {},
         }
     }
 }

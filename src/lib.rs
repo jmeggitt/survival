@@ -1,6 +1,6 @@
 #![warn(clippy::pedantic, clippy::all)]
 #![allow(clippy::type_complexity, clippy::empty_enum, clippy::default_trait_access)]
-#![allow(clippy::cast_sign_loss, clippy::cast_precision_loss, clippy::cast_possible_truncation)] // TODO: revisit these
+#![allow(clippy::cast_sign_loss, clippy::cast_precision_loss, clippy::cast_possible_truncation, clippy::similar_names)] // TODO: revisit these
 #![allow(non_upper_case_globals)]
 
 #![feature(custom_attribute)]
@@ -27,7 +27,7 @@ pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
 
 use amethyst::{
     assets::{PrefabLoaderSystem, HotReloadBundle},
-    core::{TransformBundle, frame_limiter::FrameRateLimitStrategy, SystemExt},
+    core::{TransformBundle, frame_limiter::FrameRateLimitStrategy},
     input::{InputBundle},
     prelude::*,
     ui::UiBundle,
@@ -79,10 +79,12 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
                 .with_sprite_sheet_processor()
                 .with_sprite_visibility_sorting(&[]), // Let's us use the `Transparent` component
         )?
+        .with_level(systems::WearingSystem::default(), "wearing", &[])
         .with_level(systems::InputSystem::default(), "input", &[])
         .with_level(systems::TilePositionSystem::default(), "tile_position", &[])
         .with_level(systems::MovementSystem::default(), "movement", &[])
         .with_level(systems::TimeSystem::default(), "time", &[])
+        .with_level(systems::InitiativeSystem::default(), "initiative", &[])
         ;
 
     let mut game = Application::build(root, crate::states::FirstLoad::new(root_logger.clone()))?

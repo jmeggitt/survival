@@ -13,7 +13,17 @@ fn main() -> amethyst::Result<()> {
     let decorator = slog_term::TermDecorator::new().force_color().build();
     let drain = slog_term::FullFormat::new(decorator).build().fuse();
     let async_drain = slog_async::Async::new(drain).build().fuse();
-    let root_log = slog::Logger::root(async_drain, slog::slog_o!());
+    let root_log = slog::Logger::root(
+        async_drain,
+        slog::o!("@" =>
+           slog::FnValue(move |info| {
+               format!("{}({}:{})",
+                       info.module(),
+                       info.file(),
+                       info.line(),
+                       )
+           })
+          ));
 
     survival::run(&root_log)
 }

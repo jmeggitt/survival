@@ -15,6 +15,7 @@ rayon = "*"
 gfx = { version = "0.17.1", features = ["serialize"] }
 gfx_core = { version = "0.9.0", features = ["serialize"] }
 glsl-layout = { version = "0.1.1", features = ["gfx"] }
+winit = { version = "0.18.1" }
 derivative = "*"
 bitflags = "1.0"
 hibitset = { version = "*", features = ["parallel"] }

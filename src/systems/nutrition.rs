@@ -5,7 +5,6 @@ use amethyst::{
 };
 use specs_derive::Component;
 use crate::settings::Context;
-use crate::systems::time::TimeState;
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 enum Vitamin {
@@ -86,7 +85,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         self.consume_reader_id = Some(res.fetch_mut::<EventChannel<(Entity, Food)>>().register_reader());
     }
 
-    fn run(&mut self, (_, consume_events, mut nutritions): Self::SystemData) {
+    fn run(&mut self, _: Self::SystemData) {
 
     }
 }

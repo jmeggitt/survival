@@ -10,7 +10,6 @@ use amethyst::{
     shrev::{EventChannel,},
 };
 use std::sync::Arc;
-use std::collections::HashSet;
 use specs_derive::Component;
 use serde::{Serialize, Deserialize};
 use bitflags::*;
@@ -49,22 +48,49 @@ impl HasChannel<crate::actions::Action> for Actionable {
     }
 }
 
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(strum_macros::EnumString, strum_macros::Display)]
+pub enum TreeFamily {
+    Deciduous,
+    Coniferous,
+}
+
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(strum_macros::EnumString, strum_macros::Display)]
+pub enum TreeKind {
+    Pine,//(TreeFamily::Coniferous),
+    Fur,//(TreeFamily::Coniferous),
+    Spruce,//(TreeFamily::Coniferous),
+    Cedar,//(TreeFamily::Coniferous),
+
+    Oak,//(TreeFamily::Deciduous),
+    Elm,//(TreeFamily::Deciduous),
+    Maple,//(TreeFamily::Deciduous),
+    Birch,//(TreeFamily::Deciduous),
+    Willow,//(TreeFamily::Deciduous)
+}
+
+#[derive(Component, Default, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[storage(NullStorage)]
+pub struct Impassable;
+
+#[derive(Component, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[storage(DenseVecStorage)]
+pub struct Tree {
+    kind: TreeKind,
+    size: f32,
+    branches: f32,
+}
 
 #[derive(Component, Default, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[storage(DenseVecStorage)]
-pub struct TimeAvailable {
-    pub count: u64,
-}
+pub struct TimeAvailable(pub u64);
 impl TimeAvailable {
-    pub fn has(&self, time: u64) -> bool {
-        self.count > time
-    }
+    pub fn has(&self, time: u64) -> bool { self.0 >= time }
     pub fn consume(&mut self, time: u64) {
-        self.count -= time;
+        self.0 -= time;
     }
-    pub fn add(&mut self, time: u64) {
-        self.count += time;
-    }
+    pub fn add(&mut self, time: u64) { self.0 += time; }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -89,11 +115,11 @@ pub struct Container {
 #[derive(Component, Clone, Debug, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]
 pub struct Item {
-    #[serde(skip_serializing, skip_deserializing)]
-    pub parent: Option<Entity>,
-
     pub details: Arc<crate::assets::ItemDetails>,
     pub properties: Vec<crate::assets::ItemProperty>,
+
+    #[serde(skip_serializing, skip_deserializing)]
+    pub contains: Option<Vec<Entity>>,
 }
 impl PartialEq<Item> for Item { fn eq(&self, other: &Self) -> bool { self.details.name == other.details.name } }
 

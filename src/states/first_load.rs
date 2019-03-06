@@ -54,9 +54,9 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         slog_trace!(self.log, "Changed state to first_load");
 
         // Load sprite sheets
-        let _default_sprite_sheet = load_sprite_sheet(world, "spritesheets/Bisasam_24x24.png", "spritesheets/Bisasam_24x24.ron");
+        let default_sprite_sheet = load_sprite_sheet(world, "spritesheets/Bisasam_24x24.png", "spritesheets/Bisasam_24x24.ron");
         // How do we pass this along?
-        world.res.fetch_mut::<settings::Context>().spritesheet = Some(_default_sprite_sheet);
+        world.res.fetch_mut::<settings::Context>().spritesheet = Some(default_sprite_sheet);
 
             // Load items
         world.add_resource(AssetStorage::<crate::assets::ItemStorage>::default());
@@ -77,6 +77,8 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         world.register_tile_comp::<amethyst::renderer::Rgba, crate::tiles::TileId>();
         world.register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>();
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
+
+        world.register_tile_comp::<crate::components::Impassable, crate::tiles::TileId>();
     }
 
     fn handle_event(
@@ -90,7 +92,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
 
     fn update(
         &mut self,
-        data: StateData<'_, SurvivalData<'_, '_>>,
+        _: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
         Trans::Switch(Box::new(super::Level::new(self.log.clone())))
     }

@@ -1,11 +1,10 @@
 use amethyst::{
-    assets::{AssetStorage},
-    renderer::{Projection, Camera, SpriteSheet, SpriteRender, SpriteSheetHandle, Transparent},
+    renderer::{Projection, Camera, SpriteRender, SpriteSheetHandle, Transparent},
     core::{
         Parent,
         components::{Transform, GlobalTransform}
     },
-    ecs::{Entity, EntityBuilder, Builder, SystemData, World},
+    ecs::{Entity, Builder, SystemData, World},
     StateEvent, Trans, StateData,
     assets::ProgressCounter,
 };
@@ -13,15 +12,15 @@ use amethyst::{
 use slog::slog_trace;
 
 use crate::SurvivalData;
-use crate::tiles::{Tiles, TileId, WriteTiles};
-use crate::components::{TimeAvailable, FlaggedSpriteRender, Player, TilePosition};
+use crate::tiles::{Tiles, WriteTiles};
+use crate::components::{TimeAvailable, FlaggedSpriteRender, Player, TilePosition, Actionable};
 use crate::tiles::TileEntities;
 use crate::settings;
 
 fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles, game_settings: &settings::Config) -> Entity {
     let mut transform = Transform::default();
-    transform.set_x(50.0);
-    transform.set_y(50.0);
+    transform.set_x(100.0);
+    transform.set_y(-100.0);
     let sprite = SpriteRender {
         sprite_sheet: sprite_sheet.clone(),
         sprite_number: 1,
@@ -33,6 +32,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles
         .with(Player)
         .with(sprite)
         .with(TimeAvailable::default())
+        .with(Actionable::default())
         .with(Transparent)
         .build()
 }
@@ -73,10 +73,10 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         {
             let context = world.res.fetch::<settings::Context>().clone();
             let map_sprite_sheet_handle = context.spritesheet.as_ref().unwrap();
-            let mut game_settings = world.res.fetch::<settings::Config>().clone();
+            let game_settings = world.res.fetch::<settings::Config>().clone();
 
             let player = init_player(world, map_sprite_sheet_handle, tiles, &game_settings);
-            let _camera = init_camera(world, player, tiles, &game_settings);
+            init_camera(world, player, tiles, &game_settings);
 
             let mut sprites: WriteTiles<FlaggedSpriteRender> = SystemData::fetch(&world.res);
             let mut transforms: WriteTiles<GlobalTransform> = SystemData::fetch(&world.res);
@@ -102,7 +102,22 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
                 let mut global = GlobalTransform::default();
                 global.0 = transform.matrix();
                 transforms.insert(tile_id, global);
+                println!("Writing: ({}, {})", coords.0, coords.1);
             }
+
+            let mut impassable_tiles: WriteTiles<crate::components::Impassable> = SystemData::fetch(&world.res);
+            // Set all the edges to impassable
+            for x in &[0, tiles.dimensions().x-1]{
+                for y in 0..tiles.dimensions().y {
+                    impassable_tiles.insert_default(tiles.id(*x, y));
+                }
+            }
+            for y in &[0, tiles.dimensions().y-1] {
+                for x in 0..tiles.dimensions().x {
+                    impassable_tiles.insert_default(tiles.id(x, *y));
+                }
+            }
+
         }
 
         world.add_resource(tiles);
@@ -119,7 +134,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
 
     fn update(
         &mut self,
-        data: StateData<'_, SurvivalData<'_, '_>>,
+        _: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
         // Just swap straight to Paused
         Trans::Push(Box::new(super::Paused::new(self.log.clone())))

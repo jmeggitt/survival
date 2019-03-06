@@ -105,15 +105,36 @@ mod tests {
                 let int = body.add_node(Part::new("Intestines"));
                 body.add_edge(torso, int, Joint { relation: JointRelation::Inside, ..Default::default() });
 
-                let r_arm = body.add_node(Part::new("Right Arm"));
-                body.add_edge(r_arm, torso, Joint { relation: JointRelation::Right | JointRelation::Outside, ..Default::default() });
-                let l_arm = body.add_node(Part::new("Left Arm"));
-                body.add_edge(l_arm, torso, Joint { relation: JointRelation::Left | JointRelation::Outside, ..Default::default() });
+                let r_upper_arm = body.add_node(Part::new("Right Upper Arm"));
+                body.add_edge(r_upper_arm, torso, Joint { relation: JointRelation::Right | JointRelation::Outside, ..Default::default() });
+                let l_upper_arm = body.add_node(Part::new("Left Upper Arm"));
+                body.add_edge(l_upper_arm, torso, Joint { relation: JointRelation::Left | JointRelation::Outside, ..Default::default() });
 
-                let r_thigh = body.add_node(Part::new("Right Thigh"));
+                let r_lower_arm = body.add_node(Part::new("Right Lower Arm"));
+                body.add_edge(r_lower_arm, r_upper_arm, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+                let l_lower_arm = body.add_node(Part::new("Left Lower Arm"));
+                body.add_edge(l_lower_arm, l_upper_arm, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+
+                let r_hand = body.add_node(Part::new("Right Hand"));
+                body.add_edge(r_hand, r_lower_arm, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+                let l_hand = body.add_node(Part::new("Left Hand"));
+                body.add_edge(l_hand, l_lower_arm, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+
+
+                let r_thigh = body.add_node(Part::new("Right Upper Leg"));
                 body.add_edge(r_thigh, torso, Joint { relation: JointRelation::Right | JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
-                let l_thigh = body.add_node(Part::new("Left Thigh"));
+                let l_thigh = body.add_node(Part::new("Left Upper Leg"));
                 body.add_edge(l_thigh, torso, Joint { relation: JointRelation::Left | JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+
+                let r_calf = body.add_node(Part::new("Right Lower leg"));
+                body.add_edge(r_calf, r_thigh, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+                let l_calf = body.add_node(Part::new("Left Lower Leg"));
+                body.add_edge(l_calf, l_thigh, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+
+                let r_foot = body.add_node(Part::new("Right Foot"));
+                body.add_edge(r_foot, r_calf, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
+                let l_foot = body.add_node(Part::new("Left Foot"));
+                body.add_edge(l_foot, l_calf, Joint { relation: JointRelation::Bottom | JointRelation::Outside, ..Default::default() });
             }
         }
         let serialized = ron::ser::to_string_pretty(&details.parts, ron::ser::PrettyConfig {

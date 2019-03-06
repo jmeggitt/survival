@@ -47,8 +47,6 @@ fn time_system() -> amethyst::Result<()> {
         .with_setup( move |world| {
             world.create_entity().with(TimeAvailable::default()).build();
 
-            // Apply 20 time from 'player'
-            let mut time = world.write_resource::<TimeState>();
         })
         .with_resource(survival::settings::Context { spritesheet: None, logs: survival::settings::Logs { root: root_log } })
         .with_resource(TimeState::default())

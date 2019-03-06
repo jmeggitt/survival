@@ -11,9 +11,7 @@ use amethyst::{
     utils::application_root_dir,
 };
 
-use specs_static::WorldExt;
-
-use crate::tiles::{Tiles, TileId, WriteTiles};
+use crate::tiles::{Tiles, WriteTiles};
 use crate::components::{Player, TilePosition};
 
 fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> SpriteSheetHandle {

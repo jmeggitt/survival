@@ -79,6 +79,7 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
                 .with_sprite_sheet_processor()
                 .with_sprite_visibility_sorting(&[]), // Let's us use the `Transparent` component
         )?
+        .with_level(systems::DroppedItemSystem::default(), "ground_items", &[])
         .with_level(systems::WearingSystem::default(), "wearing", &[])
         .with_level(systems::InputSystem::default(), "input", &[])
         .with_level(systems::TilePositionSystem::default(), "tile_position", &[])

@@ -126,9 +126,6 @@ pub struct Container {
 pub struct Item {
     pub details: Arc<crate::assets::ItemDetails>,
     pub properties: Vec<crate::assets::ItemProperty>,
-
-    #[serde(skip_serializing, skip_deserializing)]
-    pub contains: Option<Vec<Entity>>,
 }
 impl PartialEq<Item> for Item { fn eq(&self, other: &Self) -> bool { self.details.name == other.details.name } }
 

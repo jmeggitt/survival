@@ -57,8 +57,8 @@ pub struct ItemDetails {
     pub name: String,
     pub short_description: String,
     pub long_description: String,
-    pub sprite_sheet_number: u32,
-    pub sprite_number: u32,
+    pub sprite_sheet_number: usize,
+    pub sprite_number: usize,
 
     pub properties: Vec<ItemProperty>,
     pub interactions: crate::components::InteractionType,

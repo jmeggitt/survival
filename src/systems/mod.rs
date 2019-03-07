@@ -28,3 +28,10 @@ pub use initiative::System as InitiativeSystem;
 
 pub mod wearing;
 pub use wearing::System as WearingSystem;
+
+
+pub mod dropped_item;
+pub use dropped_item::System as DroppedItemSystem;
+
+pub mod handle_pickup;
+pub use handle_pickup::System as HandlePickupSystem;

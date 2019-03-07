@@ -8,6 +8,7 @@ use amethyst::{
 use crate::game_data::SurvivalState;
 use crate::settings::Context;
 use crate::components;
+use crate::actions;
 use crate::actions::{Action, Direction};
 
 #[derive(Default)]
@@ -54,9 +55,9 @@ impl<'s> amethyst::ecs::System<'s> for System {
                     actionable.channel.single_write(Action::Move(Direction::W));
                     got_input = true;
                 }
-                if input.action_is_down("move_right").unwrap() {
+                if input.action_is_down("pickup").unwrap() {
                     //slog_trace!(context.logs.root, "Got player input in direction: move_right");
-                    actionable.channel.single_write(Action::Move(Direction::E));
+                    actionable.channel.single_write(Action::TryPickup(actions::PickupTarget::Under));
                     got_input = true;
                 }
 

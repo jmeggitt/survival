@@ -35,6 +35,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
     fn run(&mut self, (_, mut state, input, input_events, entities, players, mut actionables): Self::SystemData) {
         if *state == SurvivalState::Paused {
             for (_, _, actionable) in (&entities, &players, &mut actionables).join() {
+
                 let mut got_input = false;
 
                 // hold-down key actions go here

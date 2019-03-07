@@ -7,6 +7,7 @@ use amethyst::{
 use crate::settings::Context;
 use crate::components;
 
+
 #[derive(Default)]
 pub struct System;
 impl<'s> amethyst::ecs::System<'s> for System {

@@ -70,6 +70,15 @@ pub enum TreeKind {
     Willow,//(TreeFamily::Deciduous)
 }
 
+#[derive(Component, Copy, Clone, Debug, Serialize, Deserialize)]
+#[derive(strum_macros::EnumString, strum_macros::Display)]
+pub enum ObstructionType {
+    Impassable,
+    Blocking { height: f32, },
+    Vegetation(f32),
+    Liquid { depth: f32, current: f32, }
+}
+
 #[derive(Component, Default, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[storage(NullStorage)]
 pub struct Impassable;
@@ -159,21 +168,12 @@ bitflags_serial! {
 #[storage(DenseVecStorage)]
 pub struct Interactable(InteractionType);
 
-#[derive(Component, Copy, Clone, Debug, Serialize, Deserialize)]
-#[derive(strum_macros::EnumString, strum_macros::Display)]
-pub enum ObstructionType {
-    Impassable,
-    Blocking { height: f32, },
-    Vegetation(f32),
-    Liquid { depth: f32, current: f32, }
-}
-
 pub struct MaterialStatus {
     // TODO: Deterioration? Damage? HP?
 }
 
-#[derive(Component, Copy, Clone, Debug, Serialize, Deserialize)]
+#[derive(Component, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[storage(DenseVecStorage)]
-pub struct Obstruction {
-    pub kind: ObstructionType,
+pub struct Wearing {
+
 }

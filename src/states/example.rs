@@ -154,7 +154,7 @@ impl SimpleState for Example {
             let parent = init_player(world, &circle_sprite_sheet_handle, tiles, &game_settings);
             init_camera(world, parent, tiles, &game_settings);
 
-            let map_sprite_sheet_handle = load_sprite_sheet(world, "spritesheets/Bisasam_24x24.png", "spritesheets/Bisasam_24x24.ron");
+            let map_sprite_sheet_handle = load_sprite_sheet(world, "spritesheets/Bisasam_16x16.png", "spritesheets/Bisasam_16x16.ron");
 
 
             {

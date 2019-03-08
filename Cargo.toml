@@ -10,7 +10,7 @@ amethyst-imgui = { path = "dep/amethyst-imgui" }
 specs-static = { path = "specs-static" }
 specs-derive = "*"
 
-rayon = "*"
+rayon = { version = "1.0.0" }
 
 gfx = { version = "0.17.1", features = ["serialize"] }
 gfx_core = { version = "0.9.0", features = ["serialize"] }

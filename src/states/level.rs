@@ -1,5 +1,5 @@
 use amethyst::{
-    renderer::{Projection, Camera, SpriteRender, SpriteSheetHandle, Transparent},
+    renderer::{Rgba, Projection, Camera, SpriteRender, SpriteSheetHandle, Transparent},
     core::{
         Parent,
         components::{Transform, GlobalTransform}
@@ -21,32 +21,35 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles
     let mut transform = Transform::default();
     transform.set_x(100.0);
     transform.set_y(-100.0);
-    let sprite = SpriteRender {
-        sprite_sheet: sprite_sheet.clone(),
-        sprite_number: 1,
-    };
+    transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 1.);
     world
         .create_entity()
         .with(TilePosition::from_transform(&transform, tiles, game_settings))
         .with(transform)
         .with(Player)
-        .with(sprite)
+        .with(SpriteRender {
+            sprite_sheet: sprite_sheet.clone(),
+            sprite_number: 25,
+        })
         .with(TimeAvailable::default())
         .with(Actionable::default())
         .with(Transparent)
+        .with(Rgba::RED)
         .build()
 }
 
 fn init_camera(world: &mut World, parent: Entity, tiles: Tiles, game_settings: &settings::Config) {
     let mut transform = Transform::default();
     transform.set_z(1.0);
+    //*transform.scale_mut() = transform.scale() * 4.0;
+   // transform.set_scale(game_settings.graphics.scale * 20. * -1., game_settings.graphics.scale * 20. * -1., 0.);
     world
         .create_entity()
         .with(TilePosition::from_transform(&transform, tiles, game_settings))
         .with(Camera::from(Projection::orthographic(
             -1000.0, 1000.0, -1000.0, 1000.0,
         )))
-        .with(Parent { entity: parent })
+        //.with(Parent { entity: parent })
         .with(transform)
         .build();
 }
@@ -81,28 +84,30 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
             let mut sprites: WriteTiles<FlaggedSpriteRender> = SystemData::fetch(&world.res);
             let mut transforms: WriteTiles<GlobalTransform> = SystemData::fetch(&world.res);
             let mut tile_entities_map: WriteTiles<TileEntities> = SystemData::fetch(&world.res);
+            let mut tile_rgb: WriteTiles<Rgba> = SystemData::fetch(&world.res);
             for tile_id in tiles.iter_all() {
                 tile_entities_map.insert_default(tile_id);
 
                 sprites.insert(tile_id, FlaggedSpriteRender {
                     sprite_sheet: map_sprite_sheet_handle.clone(),
-                    sprite_number: 3,
+                    sprite_number: 11,
                 });
+
+               // tile_rgb.insert(tile_id, Rgba::GREEN);
 
                 let coords = tile_id.coords(tiles.dimensions());
                 let mut transform = Transform::default();
 
-                let width = 20.;
-                let height = 20.;
+                let width = 16.;
+                let height = 16.;
                 transform.set_xyz(coords.0 * width * game_settings.graphics.scale,
                                   -1. * (coords.1 * height * game_settings.graphics.scale),
                                   0.);
-                transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 0.);
+                transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, game_settings.graphics.scale,);
 
                 let mut global = GlobalTransform::default();
                 global.0 = transform.matrix();
                 transforms.insert(tile_id, global);
-                println!("Writing: ({}, {})", coords.0, coords.1);
             }
 
             let mut impassable_tiles: WriteTiles<crate::components::Impassable> = SystemData::fetch(&world.res);

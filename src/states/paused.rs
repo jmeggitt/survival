@@ -31,10 +31,11 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
 
     fn handle_event(
         &mut self,
-        _: StateData<'_, SurvivalData<'_, '_>>,
-        _: StateEvent,
+        data: StateData<'_, SurvivalData<'_, '_>>,
+        event: StateEvent,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
         //slog_trace!(self.log, "Event Paused");
+        amethyst_imgui::handle_imgui_events(data.world, &event);
 
         // Wait for player input and trans if we get it.
 

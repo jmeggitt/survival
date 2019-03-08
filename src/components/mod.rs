@@ -116,10 +116,7 @@ impl Component for FlaggedSpriteRender {
 
 #[derive(Component, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]
-pub struct Container {
-    #[serde(skip_serializing, skip_deserializing)]
-    pub items: Vec<Entity>,
-}
+pub struct Container;
 
 #[derive(Component, Clone, Debug, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]

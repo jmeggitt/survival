@@ -22,7 +22,7 @@ impl State {
 }
 impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
     fn on_start(&mut self, _: StateData<'_, SurvivalData<'_, '_>>) {
-        slog_trace!(self.log, "Changed state to Running");
+        //slog_trace!(self.log, "Changed state to Running");
     }
 
     fn on_pause(&mut self, _: StateData<'_, SurvivalData<'_, '_>>) {
@@ -31,10 +31,11 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
 
     fn handle_event(
         &mut self,
-        _: StateData<'_, SurvivalData<'_, '_>>,
-        _: StateEvent,
+        data: StateData<'_, SurvivalData<'_, '_>>,
+        event: StateEvent,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
-        slog_trace!(self.log, "Event Running");
+        //slog_trace!(self.log, "Event Running");
+        amethyst_imgui::handle_imgui_events(data.world, &event);
         Trans::None
     }
 

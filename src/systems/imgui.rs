@@ -56,6 +56,7 @@ impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
         unsafe {
             if let Some(ui) = imgui::Ui::current_ui() {
                 (ui as *const imgui::Ui).read_volatile();
+                ui.show_demo_window(&mut true);
             }
         };
     }

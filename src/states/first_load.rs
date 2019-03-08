@@ -54,7 +54,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         slog_trace!(self.log, "Changed state to first_load");
 
         // Load sprite sheets
-        let default_sprite_sheet = load_sprite_sheet(world, "spritesheets/Bisasam_24x24.png", "spritesheets/Bisasam_24x24.ron");
+        let default_sprite_sheet = load_sprite_sheet(world, "spritesheets/Bisasam_16x16.png", "spritesheets/Bisasam_16x16.ron");
         // How do we pass this along?
         world.res.fetch_mut::<settings::Context>().spritesheet = Some(default_sprite_sheet);
 

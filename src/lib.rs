@@ -57,7 +57,7 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
             .with_pass(crate::render::tiles::Pass::new())
             .with_pass(DrawFlat2D::new())
             .with_pass(amethyst::ui::DrawUi::new())
-            .with_pass(amethyst_imgui::DrawUi::default())
+            .with_pass(amethyst_imgui::DrawUi::default().docking())
 
     );
 

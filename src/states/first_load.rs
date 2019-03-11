@@ -12,7 +12,7 @@ use slog::slog_trace;
 use crate::SurvivalData;
 use crate::settings;
 
-fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> SpriteSheetHandle {
+fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str, progress_counter: &mut ProgressCounter) -> SpriteSheetHandle {
     let texture_handle = {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
@@ -30,7 +30,7 @@ fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> Sprit
         ron_path,
         SpriteSheetFormat,
         texture_handle,
-        (),
+        progress_counter,
         &sprite_sheet_store,
     )
 }
@@ -53,8 +53,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
 
         slog_trace!(self.log, "Changed state to first_load");
 
-        // Load sprite sheets
-        let default_sprite_sheet = load_sprite_sheet(world, "spritesheets/Bisasam_16x16.png", "spritesheets/Bisasam_16x16.ron");
+        let default_sprite_sheet = load_sprite_sheet(world, "spritesheets/Bisasam_16x16.png", "spritesheets/Bisasam_16x16.ron", &mut self.progress_counter);
 
         // How do we pass this along?
         world.res.fetch_mut::<settings::Context>().spritesheet = Some(default_sprite_sheet);

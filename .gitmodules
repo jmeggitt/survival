@@ -1,19 +1,12 @@
 [submodule "dep/amethyst"]
 	path = dep/amethyst
 	url = git@github.com:jaynus/amethyst.git
-[submodule "dep/voronoi"]
-	path = dep/voronoi
-	url = git@github.com:jaynus/rust_voronoi.git
-[submodule "dep/delaunay2d"]
-	path = dep/delaunay2d
-	url = git@github.com:jaynus/delaunay2d.git
 [submodule "dep/termpix"]
 	path = dep/termpix
 	url = https://github.com/hopey-dishwasher/termpix.git
 [submodule "dep/amethyst-imgui"]
 	path = dep/amethyst-imgui
 	url = git@github.com:jaynus/amethyst-imgui.git
-
 [submodule "dep/rlua"]
 	path = dep/rlua
 	url = git@github.com:jaynus/rlua.git

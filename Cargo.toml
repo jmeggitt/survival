@@ -29,8 +29,6 @@ slog-async = "*"
 slog-term = "*"
 
 # For Mapgen/procedural
-voronoi = { path = "dep/voronoi" }
-delaunay2d = { path = "dep/delaunay2d" }
 noise = "*"
 rand = "*"
 ordered-float = "*"

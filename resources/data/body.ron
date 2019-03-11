@@ -1,265 +1,270 @@
 (
-    nodes: [
-        (
-            name: "Head",
-            layers: [],
-        ),
-        (
-            name: "Brain",
-            layers: [],
-        ),
-        (
-            name: "Right Ear",
-            layers: [],
-        ),
-        (
-            name: "Left Ear",
-            layers: [],
-        ),
-        (
-            name: "Right Eye",
-            layers: [],
-        ),
-        (
-            name: "Left Eye",
-            layers: [],
-        ),
-        (
-            name: "Nose",
-            layers: [],
-        ),
-        (
-            name: "Mouth",
-            layers: [],
-        ),
-        (
-            name: "Neck",
-            layers: [],
-        ),
-        (
-            name: "Torso",
-            layers: [],
-        ),
-        (
-            name: "Right Lung",
-            layers: [],
-        ),
-        (
-            name: "Left Lung",
-            layers: [],
-        ),
-        (
-            name: "Heart",
-            layers: [],
-        ),
-        (
-            name: "Liver",
-            layers: [],
-        ),
-        (
-            name: "Spleen",
-            layers: [],
-        ),
-        (
-            name: "Stomach",
-            layers: [],
-        ),
-        (
-            name: "Intestines",
-            layers: [],
-        ),
-        (
-            name: "Right Upper Arm",
-            layers: [],
-        ),
-        (
-            name: "Left Upper Arm",
-            layers: [],
-        ),
-        (
-            name: "Right Lower Arm",
-            layers: [],
-        ),
-        (
-            name: "Left Lower Arm",
-            layers: [],
-        ),
-        (
-            name: "Right Hand",
-            layers: [],
-        ),
-        (
-            name: "Left Hand",
-            layers: [],
-        ),
-        (
-            name: "Right Upper Leg",
-            layers: [],
-        ),
-        (
-            name: "Left Upper Leg",
-            layers: [],
-        ),
-        (
-            name: "Right Lower leg",
-            layers: [],
-        ),
-        (
-            name: "Left Lower Leg",
-            layers: [],
-        ),
-        (
-            name: "Right Foot",
-            layers: [],
-        ),
-        (
-            name: "Left Foot",
-            layers: [],
-        ),
-    ],
-    node_holes: [
-    ],
-    edge_property: directed,
-    edges: [
-        Some((0, 1, (
-            parent: 0,
-            relation: [Inside,],
-            depth: 0,
-        ))),
-        Some((2, 0, (
-            parent: 0,
-            relation: [Outside,Right,],
-            depth: 0,
-        ))),
-        Some((3, 0, (
-            parent: 0,
-            relation: [Outside,Left,],
-            depth: 0,
-        ))),
-        Some((4, 0, (
-            parent: 0,
-            relation: [Outside,Right,Front,],
-            depth: 0,
-        ))),
-        Some((5, 0, (
-            parent: 0,
-            relation: [Outside,Left,Front,],
-            depth: 0,
-        ))),
-        Some((6, 0, (
-            parent: 0,
-            relation: [Outside,Front,],
-            depth: 0,
-        ))),
-        Some((7, 0, (
-            parent: 0,
-            relation: [Outside,Front,],
-            depth: 0,
-        ))),
-        Some((8, 0, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((9, 8, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((9, 10, (
-            parent: 0,
-            relation: [Inside,Right,],
-            depth: 0,
-        ))),
-        Some((9, 11, (
-            parent: 0,
-            relation: [Inside,Left,],
-            depth: 0,
-        ))),
-        Some((9, 12, (
-            parent: 0,
-            relation: [Inside,],
-            depth: 0,
-        ))),
-        Some((9, 13, (
-            parent: 0,
-            relation: [Inside,],
-            depth: 0,
-        ))),
-        Some((9, 14, (
-            parent: 0,
-            relation: [Inside,],
-            depth: 0,
-        ))),
-        Some((9, 15, (
-            parent: 0,
-            relation: [Inside,],
-            depth: 0,
-        ))),
-        Some((9, 16, (
-            parent: 0,
-            relation: [Inside,],
-            depth: 0,
-        ))),
-        Some((17, 9, (
-            parent: 0,
-            relation: [Outside,Right,],
-            depth: 0,
-        ))),
-        Some((18, 9, (
-            parent: 0,
-            relation: [Outside,Left,],
-            depth: 0,
-        ))),
-        Some((19, 17, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((20, 18, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((21, 19, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((22, 20, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((23, 9, (
-            parent: 0,
-            relation: [Outside,Right,Bottom,],
-            depth: 0,
-        ))),
-        Some((24, 9, (
-            parent: 0,
-            relation: [Outside,Left,Bottom,],
-            depth: 0,
-        ))),
-        Some((25, 23, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((26, 24, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((27, 25, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-        Some((28, 26, (
-            parent: 0,
-            relation: [Outside,Bottom,],
-            depth: 0,
-        ))),
-    ],
+    tag: 0,
+    bodies: {
+        "Human": (
+            nodes: [
+                (
+                    name: "Head",
+                    layers: [],
+                ),
+                (
+                    name: "Brain",
+                    layers: [],
+                ),
+                (
+                    name: "Right Ear",
+                    layers: [],
+                ),
+                (
+                    name: "Left Ear",
+                    layers: [],
+                ),
+                (
+                    name: "Right Eye",
+                    layers: [],
+                ),
+                (
+                    name: "Left Eye",
+                    layers: [],
+                ),
+                (
+                    name: "Nose",
+                    layers: [],
+                ),
+                (
+                    name: "Mouth",
+                    layers: [],
+                ),
+                (
+                    name: "Neck",
+                    layers: [],
+                ),
+                (
+                    name: "Torso",
+                    layers: [],
+                ),
+                (
+                    name: "Right Lung",
+                    layers: [],
+                ),
+                (
+                    name: "Left Lung",
+                    layers: [],
+                ),
+                (
+                    name: "Heart",
+                    layers: [],
+                ),
+                (
+                    name: "Liver",
+                    layers: [],
+                ),
+                (
+                    name: "Spleen",
+                    layers: [],
+                ),
+                (
+                    name: "Stomach",
+                    layers: [],
+                ),
+                (
+                    name: "Intestines",
+                    layers: [],
+                ),
+                (
+                    name: "Right Upper Arm",
+                    layers: [],
+                ),
+                (
+                    name: "Left Upper Arm",
+                    layers: [],
+                ),
+                (
+                    name: "Right Lower Arm",
+                    layers: [],
+                ),
+                (
+                    name: "Left Lower Arm",
+                    layers: [],
+                ),
+                (
+                    name: "Right Hand",
+                    layers: [],
+                ),
+                (
+                    name: "Left Hand",
+                    layers: [],
+                ),
+                (
+                    name: "Right Upper Leg",
+                    layers: [],
+                ),
+                (
+                    name: "Left Upper Leg",
+                    layers: [],
+                ),
+                (
+                    name: "Right Lower leg",
+                    layers: [],
+                ),
+                (
+                    name: "Left Lower Leg",
+                    layers: [],
+                ),
+                (
+                    name: "Right Foot",
+                    layers: [],
+                ),
+                (
+                    name: "Left Foot",
+                    layers: [],
+                ),
+            ],
+            node_holes: [
+            ],
+            edge_property: directed,
+            edges: [
+                Some((0, 1, (
+                    parent: 0,
+                    relation: [Inside,],
+                    depth: 0,
+                ))),
+                Some((2, 0, (
+                    parent: 0,
+                    relation: [Outside,Right,],
+                    depth: 0,
+                ))),
+                Some((3, 0, (
+                    parent: 0,
+                    relation: [Outside,Left,],
+                    depth: 0,
+                ))),
+                Some((4, 0, (
+                    parent: 0,
+                    relation: [Outside,Right,Front,],
+                    depth: 0,
+                ))),
+                Some((5, 0, (
+                    parent: 0,
+                    relation: [Outside,Left,Front,],
+                    depth: 0,
+                ))),
+                Some((6, 0, (
+                    parent: 0,
+                    relation: [Outside,Front,],
+                    depth: 0,
+                ))),
+                Some((7, 0, (
+                    parent: 0,
+                    relation: [Outside,Front,],
+                    depth: 0,
+                ))),
+                Some((8, 0, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((9, 8, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((9, 10, (
+                    parent: 0,
+                    relation: [Inside,Right,],
+                    depth: 0,
+                ))),
+                Some((9, 11, (
+                    parent: 0,
+                    relation: [Inside,Left,],
+                    depth: 0,
+                ))),
+                Some((9, 12, (
+                    parent: 0,
+                    relation: [Inside,],
+                    depth: 0,
+                ))),
+                Some((9, 13, (
+                    parent: 0,
+                    relation: [Inside,],
+                    depth: 0,
+                ))),
+                Some((9, 14, (
+                    parent: 0,
+                    relation: [Inside,],
+                    depth: 0,
+                ))),
+                Some((9, 15, (
+                    parent: 0,
+                    relation: [Inside,],
+                    depth: 0,
+                ))),
+                Some((9, 16, (
+                    parent: 0,
+                    relation: [Inside,],
+                    depth: 0,
+                ))),
+                Some((17, 9, (
+                    parent: 0,
+                    relation: [Outside,Right,],
+                    depth: 0,
+                ))),
+                Some((18, 9, (
+                    parent: 0,
+                    relation: [Outside,Left,],
+                    depth: 0,
+                ))),
+                Some((19, 17, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((20, 18, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((21, 19, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((22, 20, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((23, 9, (
+                    parent: 0,
+                    relation: [Outside,Right,Bottom,],
+                    depth: 0,
+                ))),
+                Some((24, 9, (
+                    parent: 0,
+                    relation: [Outside,Left,Bottom,],
+                    depth: 0,
+                ))),
+                Some((25, 23, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((26, 24, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((27, 25, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+                Some((28, 26, (
+                    parent: 0,
+                    relation: [Outside,Bottom,],
+                    depth: 0,
+                ))),
+            ],
+        )
+    }
 )

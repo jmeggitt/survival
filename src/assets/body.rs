@@ -1,5 +1,11 @@
 use petgraph;
 use bitflags::*;
+use std::collections::HashMap;
+use std::sync::Arc;
+use amethyst::{
+    assets::{Asset, Handle},
+    ecs::VecStorage,
+};
 
 #[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]
 pub struct MaterialLayer {
@@ -44,6 +50,17 @@ pub struct Joint {
 #[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Details {
     pub parts: petgraph::Graph<Part, Joint>,
+}
+
+#[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]
+pub struct Storage {
+    tag: u32,
+    bodies: HashMap<String, Arc<Details>>,
+}
+impl Asset for Storage {
+    const NAME: &'static str = "survival::Body";
+    type Data = Self;
+    type HandleStorage = VecStorage<Handle<Self>>;
 }
 
 #[cfg(test)]

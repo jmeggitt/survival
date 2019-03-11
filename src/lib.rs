@@ -71,8 +71,9 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
         )?
         .with_core(systems::ImguiBeginFrameSystem::default(), "imgui_begin_frame", &[])
         .with_core(systems::UiSystem::default(), "ui", &["imgui_begin_frame"])
+        .with_core(systems::DebugSystem::default(), "debug", &["imgui_begin_frame"])
         .with_core(systems::ImguiEndFrameSystem::default(), "imgui_end_frame",
-              &["imgui_begin_frame", "ui"]) // All systems which use imgui must be here.
+              &["imgui_begin_frame", "ui", "debug"]) // All systems which use imgui must be here.
         .with_core_bundle(HotReloadBundle::default())?
         .with_core_bundle(UiBundle::<String, String>::new())?
         .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])

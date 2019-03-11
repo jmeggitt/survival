@@ -35,3 +35,6 @@ pub use dropped_item::System as DroppedItemSystem;
 
 pub mod handle_pickup;
 pub use handle_pickup::System as HandlePickupSystem;
+
+pub mod debug;
+pub use debug::System as DebugSystem;

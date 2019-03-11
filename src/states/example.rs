@@ -197,7 +197,7 @@ impl SimpleState for Example {
 
         // Load items
         /*
-        world.add_resource(AssetStorage::<crate::assets::ItemStorage>::default());
+        world.add_resource(AssetStorage::<crate::assets::item::ItemStorage>::default());
         {
             let loader = &world.read_resource::<Loader>();
             let _handle = loader.load(
@@ -205,7 +205,7 @@ impl SimpleState for Example {
                 amethyst::assets::RonFormat,
                 (),
                 &mut self.progress_counter,
-                &world.read_resource::<AssetStorage<crate::assets::ItemStorage>>(),
+                &world.read_resource::<AssetStorage<crate::assets::item::ItemStorage>>(),
             );
         }*/
 

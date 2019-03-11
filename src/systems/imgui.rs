@@ -29,7 +29,7 @@ impl BeginFrameSystem {
             _ => return None,
         };
 
-        let frame = imgui.frame(imgui::FrameSize::new(f64::from(dimensions.width()), f64::from(dimensions.height()), 1.), time.delta_seconds());
+        let frame = imgui.frame(imgui::FrameSize::new(f64::from(dimensions.width()), f64::from(dimensions.height()), dimensions.hidpi_factor()), time.delta_seconds());
         std::mem::forget(frame);
         unsafe { imgui::Ui::current_ui() }
     }
@@ -58,18 +58,6 @@ impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
                 (ui as *const imgui::Ui).read_volatile();
                 //ui.show_demo_window(&mut true);
                 let root_dock = ui.dockspace_over_viewport(None, imgui::ImGuiDockNodeFlags::PassthruDockspace );
-
-                ui.window(imgui::im_str!("Hello world"))
-                    .size((300.0, 100.0), imgui::ImGuiCond::FirstUseEver)
-                    .dockspace_id(root_dock, imgui::ImGuiCond::FirstUseEver)
-                    .build(|| {
-                        ui.text(imgui::im_str!("Hello world!"));
-                        ui.text(imgui::im_str!("こんにちは世界！"));
-                        ui.text(imgui::im_str!("This...is...imgui-rs!"));
-                        ui.separator();
-                        let mouse_pos = ui.imgui().mouse_pos();
-                        ui.text(imgui::im_str!("Mouse Position: ({:.1},{:.1})", mouse_pos.0, mouse_pos.1));
-                    })
 
                 //ui.show_demo_window(&mut true);
             }

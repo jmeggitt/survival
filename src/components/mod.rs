@@ -121,8 +121,8 @@ pub struct Container;
 #[derive(Component, Clone, Debug, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]
 pub struct Item {
-    pub details: Arc<crate::assets::ItemDetails>,
-    pub properties: Vec<crate::assets::ItemProperty>,
+    pub details: Arc<crate::assets::item::Details>,
+    pub properties: Vec<crate::assets::item::Property>,
 }
 impl PartialEq<Item> for Item { fn eq(&self, other: &Self) -> bool { self.details.name == other.details.name } }
 

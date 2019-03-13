@@ -89,18 +89,19 @@ impl<R> Generator<R>
         //let start_cell = self.rng.gen_range(0, cells.len());
         // Find the center polygon
         use amethyst::core::nalgebra as na;
-        let mut center = IndexPoint::new(OrderedFloat(0.), OrderedFloat(0.));
-        let target = IndexPoint::new(OrderedFloat(config.box_size / 2.), OrderedFloat(config.box_size / 2.));
-        for (key, _) in cells {
-            if na::distance(target, center) > na::distance(target, key) {
-                center = *key;
+        let mut center = Point::new(0., 0.);
+        let target = Point::new(config.box_size / 2., config.box_size / 2.);
+        for (key, _) in cells.iter() {
+            let point = Point::new(key.x.into_inner(), key.y.into_inner());
+            if na::distance(&target, &center) > na::distance(&target, &point) {
+                center = point;
             }
         }
 
         let mut height = settings.height;
 
         let mut queue = Vec::new();
-        queue.push(center);
+        queue.push(IndexPoint::new(OrderedFloat(center.x), OrderedFloat(center.y)));
         cells.get_mut(&queue[0]).unwrap().data.height = height;
 
         let mut i = 0;
@@ -213,7 +214,12 @@ mod tests {
             &config
         );
 
-        generator.create_island(&config, &IslandGeneratorSettings{ height: 1.0, radius: 0.5, sharpness: 0.9 },  &mut cells);
+        generator.create_island(&config,
+                                &IslandGeneratorSettings{
+                                    height: 1.0,
+                                    radius: 0.95,
+                                    sharpness: 0.2 },
+                                &mut cells);
 
         for (n, (point, cell)) in cells.iter().enumerate() {
             let mut points = cell.polygon.iter().map(|p| {
@@ -226,7 +232,7 @@ mod tests {
             }
 
             let height_color = (cell.data.height * 255.) as u8;
-            let color = if height_color < 1 {
+            let color = if cell.data.height < 0.5 {
                 image::Rgb([0, 191, 255])
             } else {
                 image::Rgb([height_color, 0, 0])
@@ -235,11 +241,11 @@ mod tests {
             imageproc::drawing::draw_convex_polygon_mut(&mut imgbuf, &points, color);
 
             // Draw lines to all the neighbors
-           // let point1 = { (point.x.into_inner() as f32, point.y.into_inner() as f32) };
+            //let point1 = { (point.x.into_inner() as f32, point.y.into_inner() as f32) };
             //for neighbor in &cell.neighbors {
             //    let point2 = { (neighbor.x.into_inner() as f32, neighbor.y.into_inner() as f32) };
-           //     imageproc::drawing::draw_line_segment_mut(&mut imgbuf, point1, point2, image::Rgb([0, 255, 0]));
-           // }
+            //    imageproc::drawing::draw_line_segment_mut(&mut imgbuf, point1, point2, image::Rgb([0, 255, 0]));
+            //}
         }
 
         imgbuf.save(&Path::new("/tmp/test.png")).unwrap();

@@ -20,15 +20,10 @@ impl<'s> amethyst::ecs::System<'s> for System {
         imgui_draw.single_write(Arc::new(|ui: &amethyst_imgui::imgui::Ui| {
             use amethyst_imgui::imgui as imgui;
 
-            ui.window(imgui::im_str!("Hello world"))
+            ui.window(imgui::im_str!("Map Gen Test"))
             .size((300.0, 100.0), imgui::ImGuiCond::FirstUseEver)
                 .build(|| {
                     ui.text(imgui::im_str!("Hello world!"));
-                    ui.text(imgui::im_str!("こんにちは世界！"));
-                    ui.text(imgui::im_str!("This...is...imgui-rs!"));
-                    ui.separator();
-                    let mouse_pos = ui.imgui().mouse_pos();
-                    ui.text(imgui::im_str!("Mouse Position: ({:.1},{:.1})", mouse_pos.0, mouse_pos.1));
                 })
         }));
     }

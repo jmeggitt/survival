@@ -14,22 +14,21 @@ pub trait HasChannel<E> {
 }
 
 #[derive(Default)]
-pub struct ComponentEventReader<C, T, S>
+pub struct ComponentEventReader<C, T>
     where
         T: 'static,
 {
     component_reader: Option<shrev::ReaderId<ComponentEvent>>,
     action_readers: std::collections::HashMap<Entity, shrev::ReaderId<T>>,
     phantom_1: std::marker::PhantomData<C>,
-    phantom_2: std::marker::PhantomData<S>,
     components: BitSet,
 }
 
-impl<C, T, S> ComponentEventReader<C, T, S>
+impl<C, T> ComponentEventReader<C, T>
     where
         T: amethyst::shrev::Event + 'static,
-        C: Component<Storage=S> + HasChannel<T> + Sized,
-        S: UnprotectedStorage<C> + storage::Tracked + Sized + Send + Sync + 'static,
+        C: Component + HasChannel<T> + Sized,
+        <C as Component>::Storage: UnprotectedStorage<C> + storage::Tracked + Sized + Send + Sync + 'static,
 {
     pub fn setup(&mut self, res: &mut Resources, ) {
         self.component_reader = Some(WriteStorage::<C>::fetch(&res).channel_mut().register_reader());

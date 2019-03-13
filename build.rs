@@ -46,7 +46,7 @@ fn main() {
                 if input_path.is_file() && match input_path.extension() { Some(e) => e == "png", None => false } {
                     match image::open(input_path.as_path()) {
                         Ok(img) => {
-                            println!("rerun-if-changed={}", file.path().to_string_lossy());
+                           // println!("rerun-if-changed={}", file.path().to_string_lossy());
 
                             // Extract the dimensions from the filename
                             let stride = get_tile_size(input_path.as_path().file_stem().unwrap().to_str().unwrap());

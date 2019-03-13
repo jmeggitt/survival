@@ -14,7 +14,7 @@ use slog::slog_error;
 
 #[derive(Default)]
 pub struct System {
-    action_reader: ComponentEventReader<components::Actionable, Action, <components::Actionable as Component>::Storage>,
+    action_reader: ComponentEventReader<components::Actionable, Action>,
 }
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (

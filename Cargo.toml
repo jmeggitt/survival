@@ -11,6 +11,8 @@ specs-static = { path = "specs-static" }
 specs-derive = "*"
 
 rayon = { version = "1.0.0" }
+rayon-hash = "*"
+crossbeam-skiplist = { git = "https://github.com/crossbeam-rs/crossbeam.git" }
 
 gfx = { version = "0.17.1", features = ["serialize"] }
 gfx_core = { version = "0.9.0", features = ["serialize"] }
@@ -29,11 +31,14 @@ slog-async = "*"
 slog-term = "*"
 
 # For Mapgen/procedural
+voronoi = { path = "dep/voronoi" }
+delaunay2d = { path = "dep/delaunay2d" }
 noise = "*"
 rand = "*"
 ordered-float = "*"
 num-traits = "*"
 tiled = "*"
+itertools = "*"
 
 # Game Related
 rlua = { path = "dep/rlua" }

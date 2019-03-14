@@ -1,6 +1,6 @@
 use amethyst::{
     ecs::{Entity, Component, Read, Write, DenseVecStorage},
-    core::nalgebra::{Vector2, Vector4, Vector3},
+    core::math::{Vector2, Vector4, Vector3},
 };
 
 use specs_static::{Id, Storage};

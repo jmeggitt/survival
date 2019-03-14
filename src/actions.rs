@@ -1,5 +1,5 @@
 use amethyst::ecs::Entity;
-use amethyst::core::nalgebra::Vector3;
+use amethyst::core::math::Vector3;
 
 #[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize)]
 #[derive(strum_macros::EnumString, strum_macros::Display)]

@@ -1,7 +1,7 @@
 use amethyst::{
     core::{
         Transform,
-        nalgebra::Vector3,
+        math::Vector3,
     },
     ecs::{ Resources,
            storage::ComponentEvent, Entities,

@@ -8,8 +8,8 @@ use thread_profiler::profile_scope;
 
 use amethyst::assets::AssetStorage;
 use amethyst::core::{
-    nalgebra::Matrix4,
-    specs::prelude::{Join, Read, ReadStorage},
+    math::Matrix4,
+    ecs::prelude::{Join, Read, ReadStorage},
     GlobalTransform,
 };
 

@@ -5,4 +5,4 @@ authors = ["Walter Pearce <jaynus@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-amethyst = { path = "../dep/amethyst" }
+amethyst = { path = "../dep/amethyst", features = ["nightly", "saveload"] }

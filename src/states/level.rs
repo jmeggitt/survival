@@ -19,8 +19,8 @@ use crate::settings;
 
 fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles, game_settings: &settings::Config) -> Entity {
     let mut transform = Transform::default();
-    transform.set_x(100.0);
-    transform.set_y(-100.0);
+    transform.set_translation_x(100.0);
+    transform.set_translation_y(-100.0);
     transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 1.);
     world
         .create_entity()
@@ -40,7 +40,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles
 
 fn init_camera(world: &mut World, parent: Entity, tiles: Tiles, game_settings: &settings::Config) {
     let mut transform = Transform::default();
-    transform.set_z(1.0);
+    transform.set_translation_z(1.0);
     //*transform.scale_mut() = transform.scale() * 4.0;
    // transform.set_scale(game_settings.graphics.scale * 20. * -1., game_settings.graphics.scale * 20. * -1., 0.);
     world
@@ -100,7 +100,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
 
                 let width = 16.;
                 let height = 16.;
-                transform.set_xyz(coords.0 * width * game_settings.graphics.scale,
+                transform.set_translation_xyz(coords.0 * width * game_settings.graphics.scale,
                                   -1. * (coords.1 * height * game_settings.graphics.scale),
                                   0.);
                 transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, game_settings.graphics.scale,);

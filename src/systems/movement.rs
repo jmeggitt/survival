@@ -61,10 +61,10 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         let mut target = transform.clone();
 
                         match direction {
-                            Direction::N => { target.translate_y(5.0); },
-                            Direction::S => { target.translate_y(-5.0); },
-                            Direction::E => { target.translate_x(5.0); },
-                            Direction::W => { target.translate_x(-5.0); },
+                            Direction::N => { target.move_right(5.0); },
+                            Direction::S => { target.move_left(5.0); },
+                            Direction::E => { target.move_up(5.0); },
+                            Direction::W => { target.move_down(5.0); },
                             _ => { slog_error!(context.logs.root, "Unsupported direction"); },
                         }
 

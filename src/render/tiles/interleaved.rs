@@ -7,8 +7,8 @@ use glsl_layout::Uniform;
 
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::{
-    nalgebra::Vector4,
-    specs::prelude::{Read, ReadStorage, ReadExpect},
+    math::Vector4,
+    ecs::prelude::{Read, ReadStorage, ReadExpect},
     transform::{Transform, GlobalTransform},
 };
 use amethyst::error::Error;
@@ -161,13 +161,13 @@ impl Pass for DrawFlat2D {
         let camera_g = get_camera(active, &camera, &global);
 
         let (_, g) = camera_g.as_ref().unwrap();
-        let global: amethyst::core::nalgebra::Matrix4<f32> = g.0;
-        let camera_world_position = amethyst::core::nalgebra::Vector3::new(global[12], global[13], global[14]);
+        let global: amethyst::core::math::Matrix4<f32> = g.0;
+        let camera_world_position = amethyst::core::math::Vector3::new(global[12], global[13], global[14]);
         let camera_tile_position = tiles.world_to_tile(&camera_world_position.xyz(), &game_settings);
         //let (_, camera_tile_position) = (&camera, &tile_positions).join().next().unwrap();
 
 
-        //let translation: amethyst::core::nalgebra::Translation3<f32> = amethyst::core::nalgebra::convert(transform);
+        //let translation: amethyst::core::math::Translation3<f32> = amethyst::core::math::convert(transform);
 
         // Calculate the scale of how much we can view...from...what?
         // this should be resolution / (tile width * scale(

@@ -39,6 +39,10 @@ ordered-float = "*"
 num-traits = "*"
 tiled = "*"
 itertools = "*"
+image = "0.21.0"
+imageproc = "0.18.0"
+sha2 = "*"
+arrayref = "*"
 
 # Game Related
 rlua = { path = "dep/rlua" }
@@ -49,21 +53,23 @@ petgraph = { version="*", features = ["serde-1"] }
 serde = { version = "*", features = ["derive", "rc"] }
 ron = "*"
 
-[[bin]]
-name = "survival_game"
-path = "src/main.rs"
-
-[lib]
-name = "survival"
-path = "src/lib.rs"
-
 [dev-dependencies]
-# For test runs of mapgen
-image = "0.21.0"
-imageproc = "0.18.0"
 amethyst_test = { path = "dep/amethyst/amethyst_test" }
 
 [build-dependencies]
 image = "0.21.0"
 serde = { version = "*", features = ["derive"] }
 ron = "*"
+
+[[bin]]
+name = "survival_game"
+path = "src/main.rs"
+
+[[bin]]
+name = "terrain_generator"
+path = "tools/terrain_generator/main.rs"
+
+[lib]
+name = "survival"
+path = "src/lib.rs"
+

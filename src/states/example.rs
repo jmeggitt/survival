@@ -40,8 +40,8 @@ fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> Sprit
 // Initialize a sprite as a reference point at a fixed location
 fn init_reference_sprite(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate::tiles::Tiles, game_settings: &crate::settings::Config) -> Entity {
     let mut transform = Transform::default();
-    transform.set_x(100.0);
-    transform.set_y(0.0);
+    transform.set_translation_x(100.0);
+    transform.set_translation_y(0.0);
     let sprite = SpriteRender {
         sprite_sheet: sprite_sheet.clone(),
         sprite_number: 0,
@@ -57,8 +57,8 @@ fn init_reference_sprite(world: &mut World, sprite_sheet: &SpriteSheetHandle, ti
 
 fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate::tiles::Tiles, game_settings: &crate::settings::Config) -> Entity {
     let mut transform = Transform::default();
-    transform.set_x(50.0);
-    transform.set_y(50.0);
+    transform.set_translation_x(50.0);
+    transform.set_translation_y(50.0);
     let sprite = SpriteRender {
         sprite_sheet: sprite_sheet.clone(),
         sprite_number: 1,
@@ -76,7 +76,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate
 
 fn init_camera(world: &mut World, parent: Entity, tiles: crate::tiles::Tiles, game_settings: &crate::settings::Config) {
     let mut transform = Transform::default();
-    transform.set_z(1.0);
+    transform.set_translation_z(1.0);
     world
         .create_entity()
         .with(TilePosition::from_transform(&transform, tiles, game_settings))
@@ -174,7 +174,7 @@ impl SimpleState for Example {
 
                     let width = 20.;
                     let height = 20.;
-                    transform.set_xyz(coords.0 * width * game_settings.graphics.scale,
+                    transform.set_translation_xyz(coords.0 * width * game_settings.graphics.scale,
                                       -1. * (coords.1 * height * game_settings.graphics.scale),
                                       0.);
                     transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 0.);

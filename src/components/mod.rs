@@ -5,7 +5,7 @@ use amethyst::{
     renderer::SpriteSheetHandle,
     core::{
         components::Transform,
-        nalgebra::Vector3
+        math::Vector3
     },
     shrev::{EventChannel,},
 };

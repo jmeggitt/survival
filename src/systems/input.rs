@@ -110,7 +110,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 if let Some((camera, transform)) = (&cameras, &mut transforms).join().next() {
                     if let Some(t) = player_translation {
                         *transform.translation_mut() = t;
-                        transform.set_z(1.0);
+                        transform.set_translation_z(1.0);
                     }
                 }
 

@@ -10,9 +10,9 @@ use std::collections::{HashSet, HashMap};
 use rayon::prelude::*;
 
 pub struct GeneratorConfig {
-    num_points: usize,
-    num_lloyd: usize,
-    box_size: f64,
+    pub num_points: usize,
+    pub num_lloyd: usize,
+    pub box_size: f64,
 }
 impl Default for GeneratorConfig {
     fn default() -> Self {
@@ -23,10 +23,9 @@ impl Default for GeneratorConfig {
         }
     }
 }
+pub type Point = amethyst::core::math::Point2<f64>;
+pub type IndexPoint = amethyst::core::math::Point2<OrderedFloat<f64>>;
 
-
-pub type Point = amethyst::core::nalgebra::Point2<f64>;
-pub type IndexPoint = amethyst::core::nalgebra::Point2<OrderedFloat<f64>>;
 
 fn convert_point(other: Point) -> IndexPoint {
     IndexPoint::new(OrderedFloat(other.x), OrderedFloat(other.y))
@@ -47,15 +46,17 @@ fn inside_poly(target: Point, points: &[Point]) -> bool {
 }
 
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct CellData {
     height: f64,
     used: bool,
 }
 
+#[derive(Debug)]
 pub struct Cell<T> {
+    position: IndexPoint,
     polygon: Vec<Point>,
-    neighbors: HashSet<IndexPoint>,
+    neighbors: Vec<IndexPoint>,
     data: T,
 }
 
@@ -64,11 +65,20 @@ pub struct Generator<R> {
     rng: R,
 }
 
-#[derive(Default)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub struct IslandGeneratorSettings {
     pub height: f64,
     pub radius: f64,
     pub sharpness: f64,
+}
+impl Default for IslandGeneratorSettings {
+    fn default() -> Self {
+        Self {
+            height: 1.0,
+            radius: 0.95,
+            sharpness: 0.2
+        }
+    }
 }
 
 impl<R> Generator<R>
@@ -88,7 +98,8 @@ impl<R> Generator<R>
     pub fn create_island(&mut self, config: &GeneratorConfig, settings: &IslandGeneratorSettings, cells: &mut HashMap<IndexPoint, Cell<CellData>>,) {
         //let start_cell = self.rng.gen_range(0, cells.len());
         // Find the center polygon
-        use amethyst::core::nalgebra as na;
+
+        use amethyst::core::math as na;
         let mut center = Point::new(0., 0.);
         let target = Point::new(config.box_size / 2., config.box_size / 2.);
         for (key, _) in cells.iter() {
@@ -112,8 +123,13 @@ impl<R> Generator<R>
             neighbors.iter().for_each(|n| {
                 let cell = cells.get_mut(n).unwrap();
                 if ! cell.data.used {
-                    let r: f64 = self.rng.sample(Standard);
-                    let modifier: f64 = r * settings.sharpness + 1.1 - settings.sharpness;
+                    let modifier: f64 = if settings.sharpness == 0. {
+                        1.0
+                    } else {
+                        let r: f64 = self.rng.gen();
+                        r * settings.sharpness + 1.1 - settings.sharpness
+                    };
+
                     cell.data.height += height * modifier;
                     cell.data.used = true;
 
@@ -152,7 +168,7 @@ impl<R> Generator<R>
 
         // Now extract the actual cells from this
         let dt_points = dt.export_points().par_iter().map(|p| IndexPoint::new(OrderedFloat(p.0), OrderedFloat(p.1))).collect::<Vec<_>>();
-        let triangles = dt.export_triangles().par_iter().map(|t| (dt_points[t.0], dt_points[t.1], dt_points[t.2]) ).collect::<Vec<_>>();
+        let mut triangles = dt.export_triangles().par_iter().map(|t| (dt_points[t.0], dt_points[t.1], dt_points[t.2]) ).collect::<Vec<_>>();
 
         for cell in diagram.cells().iter() {
             let mut neighbors = HashSet::new();
@@ -166,10 +182,22 @@ impl<R> Generator<R>
                 }
             }
             neighbors.remove(&point);
+            let mut n_vec = neighbors.drain().collect::<Vec<IndexPoint>>();
+            n_vec.sort_by(|a, b| {
+                use std::cmp::Ordering;
+                let x = a.x.cmp(&b.x);
+                let y = a.x.cmp(&b.y);
+                if x == Ordering::Equal && y == Ordering::Equal {
+                    return Ordering::Equal
+                } else {
+                    return x
+                }
+            });
 
             ret.insert(point, Cell {
+                position: point,
                 polygon: cell.points.par_iter().map(|p| Point::new(p.x(), p.y())).collect::<Vec<_>>(),
-                neighbors: neighbors,
+                neighbors: n_vec,
                 data: T::default(),
             });
         }
@@ -177,49 +205,10 @@ impl<R> Generator<R>
         ret
     }
 
-    fn sample_point(&mut self, config: &GeneratorConfig) -> (f64, f64) {
-        let x: f64 = self.rng.sample(Standard);
-        let y: f64 = self.rng.sample(Standard);
-        (x * config.box_size, y * config.box_size)
-    }
-}
+    pub fn save_heightmap_image(&self, config: &GeneratorConfig, path: &std::path::Path,
+                       cells: &HashMap<IndexPoint, Cell<CellData>>,) -> std::io::Result<()> {
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use amethyst::core::nalgebra::Point2;
-    use rand::SeedableRng;
-
-    #[test]
-    pub fn voronoi_1() {
-        use std::path::Path;
-
-        let seed = [
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
-        ];
-        let mut master_rand = rand::rngs::StdRng::from_seed(seed);
-
-        let mut imgbuf = image::ImageBuffer::new(500, 500);
-
-        let mut generator = Generator::new(master_rand.clone());
-
-        let config = GeneratorConfig {
-            box_size: 500.0,
-            num_points: 7000,
-            ..Default::default()
-        };
-
-        let mut cells = generator.gen_voronoi::<CellData>(
-            &config
-        );
-
-        generator.create_island(&config,
-                                &IslandGeneratorSettings{
-                                    height: 1.0,
-                                    radius: 0.95,
-                                    sharpness: 0.2 },
-                                &mut cells);
+        let mut imgbuf = image::ImageBuffer::new(config.box_size as u32, config.box_size as u32);
 
         for (n, (point, cell)) in cells.iter().enumerate() {
             let mut points = cell.polygon.iter().map(|p| {
@@ -239,16 +228,69 @@ mod tests {
             };
 
             imageproc::drawing::draw_convex_polygon_mut(&mut imgbuf, &points, color);
-
-            // Draw lines to all the neighbors
-            //let point1 = { (point.x.into_inner() as f32, point.y.into_inner() as f32) };
-            //for neighbor in &cell.neighbors {
-            //    let point2 = { (neighbor.x.into_inner() as f32, neighbor.y.into_inner() as f32) };
-            //    imageproc::drawing::draw_line_segment_mut(&mut imgbuf, point1, point2, image::Rgb([0, 255, 0]));
-            //}
         }
 
-        imgbuf.save(&Path::new("/tmp/test.png")).unwrap();
+        imgbuf.save(path)
+    }
+
+    fn sample_point(&mut self, config: &GeneratorConfig) -> (f64, f64) {
+        let x: f64 = self.rng.gen();
+        let y: f64 = self.rng.gen();
+        (x * config.box_size, y * config.box_size)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use amethyst::core::math::Point2;
+    use rand::SeedableRng;
+
+    #[test]
+    pub fn rng_sample_test() {
+        use rand::SeedableRng;
+        let seed = [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+        ];
+        let mut rand1 = rand::rngs::StdRng::from_seed(seed);
+        let mut rand2 = rand::rngs::StdRng::from_seed(seed);
+
+        let samples1 = vec![rand1.gen::<f64>(), rand1.gen::<f64>(), rand1.gen::<f64>(),];
+        println!("samples1={:?}", samples1);
+        let samples2 = vec![rand2.gen::<f64>(), rand2.gen::<f64>(), rand2.gen::<f64>(),];
+        println!("samples2={:?}", samples2);
+
+        assert_eq!(samples1, samples2);
+    }
+
+    #[test]
+    pub fn voronoi_1() {
+        use std::path::Path;
+
+        let seed = [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+        ];
+        let mut master_rand = rand::rngs::StdRng::from_seed(seed);
+
+        let mut generator = Generator::new(master_rand.clone());
+
+        let config = GeneratorConfig {
+            box_size: 500.0,
+            num_points: 10,
+            ..Default::default()
+        };
+
+        let mut cells = generator.gen_voronoi::<CellData>(
+            &config
+        );
+
+        generator.create_island(&config,
+                                &IslandGeneratorSettings::default(),
+                                &mut cells);
+
+        generator.save_heightmap_image(&config, &Path::new("/tmp/test.png"), &cells).unwrap();
     }
 
 }

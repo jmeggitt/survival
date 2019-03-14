@@ -4,7 +4,7 @@ use std::collections::{HashSet, HashMap};
 
 use amethyst::{
     assets::{Loader, AssetStorage, HotReloadBundle},
-    ecs::{Write, ReadExpect, Entity},
+    ecs::{Write, ReadExpect, Entity, Resources, SystemData},
     prelude::*,
     core::{Transform, TransformBundle},
     renderer::{Camera, Projection, Texture, PngFormat, TextureHandle, TextureMetadata, DisplayConfig, DrawFlat2D, Pipeline, RenderBundle, Stage, },
@@ -68,9 +68,28 @@ impl Default for UiState {
 #[derive(Default)]
 pub struct ImguiEndFrameSystem {
     state: UiState,
+    height: f32,
+    sharpness: f32,
+    radius: f32,
+    box_size: f32,
+    num_points: i32,
+    num_lloyd: i32,
 }
 impl<'s> amethyst::ecs::System<'s> for ImguiEndFrameSystem {
     type SystemData = ();
+
+    fn setup(&mut self, res: &mut Resources) {
+        Self::SystemData::setup(res);
+
+        let g_d = GeneratorConfig::default();
+        let i_d = IslandGeneratorSettings::default();
+        self.height = i_d.height as f32;
+        self.sharpness = i_d.sharpness as f32;
+        self.radius = i_d.radius as f32;
+        self.box_size = g_d.box_size as f32;
+        self.num_points = g_d.num_points as i32;
+        self.num_lloyd = g_d.num_lloyd as i32;
+    }
 
     fn run(&mut self, _: Self::SystemData) {
         if let Some(ui) = unsafe { imgui::Ui::current_ui() } {
@@ -90,10 +109,30 @@ impl<'s> amethyst::ecs::System<'s> for ImguiEndFrameSystem {
                         let mut hasher = Sha256::new();
                         hasher.input(self.state.seed.to_str().as_bytes());
                         let result = hasher.result();
-                        generate_new_map(arrayref::array_ref![result.deref(), 0, 32]);
+
+                        let settings = IslandGeneratorSettings {
+                            height: self.height as f64,
+                            sharpness: self.sharpness as f64,
+                            radius: self.radius as f64,
+                        };
+
+                        let config = GeneratorConfig {
+                            box_size: self.box_size as f64,
+                            num_points: self.num_points as usize,
+                            num_lloyd: self.num_lloyd as usize,
+                        };
+
+                        generate_new_map(arrayref::array_ref![result.deref(), 0, 32], &config, &settings);
                     }
                     ui.input_text(im_str!("Seed"), &mut self.state.seed).build();
-
+                    ui.separator();
+                    ui.slider_float(im_str!("Box Size"), &mut self.box_size, 1.0, 5000.0).build();
+                    ui.slider_int(im_str!("Points #"), &mut self.num_points, 1, 20000).build();
+                    ui.slider_int(im_str!("Lloyd Reductions"), &mut self.num_lloyd, 1, 20).build();
+                    ui.separator();
+                    ui.slider_float(im_str!("Start Height"), &mut self.height, 0.1, 1.0).build();
+                    ui.slider_float(im_str!("Radius"), &mut self.radius, 0.1, 0.99999).build();
+                    ui.slider_float(im_str!("Sharpness"), &mut self.sharpness, 0.1, 2.0).build();
                 });
         }
     }
@@ -142,22 +181,18 @@ fn main() -> amethyst::Result<()> {
     Ok(())
 }
 
-fn generate_new_map(seed : &[u8; 32],) -> amethyst::Result<()> {
+fn generate_new_map(seed : &[u8; 32], config: &GeneratorConfig, settings: &IslandGeneratorSettings) -> amethyst::Result<()> {
     use rand::SeedableRng;
 
     let mut generator = Generator::new(rand::rngs::StdRng::from_seed(*seed));
 
-    let config = GeneratorConfig {
-        box_size: 500.0,
-        num_points: 8000,
-        ..Default::default()
-    };
+
 
     let mut cells = generator.gen_voronoi::<CellData>(
         &config
     );
-    generator.create_island(&config,
-                            &IslandGeneratorSettings::default(),
+    generator.create_island(config,
+                            settings,
                             &mut cells);
 
     generator.save_heightmap_image(&config, &application_root_dir()?.join("tools/terrain_generator/resources/map.png"), &cells).unwrap();

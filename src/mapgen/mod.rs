@@ -17,7 +17,7 @@ pub struct GeneratorConfig {
 impl Default for GeneratorConfig {
     fn default() -> Self {
         Self {
-            num_points: 10,
+            num_points: 6000,
             num_lloyd: 2,
             box_size: 500.0,
         }
@@ -157,6 +157,10 @@ impl<R> Generator<R>
             vor_pts = voronoi::lloyd_relaxation(&vor_pts, config.box_size);
         }
 
+        // De-dup the point list.
+        vor_pts.sort();
+        vor_pts.dedup();
+
         let diagram = voronoi::VoronoiDiagram::new(&vor_pts, config.box_size, 2);
 
         // Build the DT out of the centroids so they are associated
@@ -215,7 +219,9 @@ impl<R> Generator<R>
                 imageproc::drawing::Point::new(p.x as i32,
                                                p.y as i32)
             }).collect::<Vec<_>>();
-
+            if points.len() == 0 {
+                continue;
+            }
             while points[0] == points[points.len()-1] {
                 points.remove(points.len()-1);
             }
@@ -263,7 +269,6 @@ mod tests {
 
         assert_eq!(samples1, samples2);
     }
-
     #[test]
     pub fn voronoi_1() {
         use std::path::Path;

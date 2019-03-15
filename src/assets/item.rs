@@ -8,21 +8,23 @@ use amethyst::{
 use std::sync::Arc;
 use std::collections::HashMap;
 
-bitflags_serial! {
+bitflags! {
+    #[derive(Serialize, Deserialize)]
     pub struct ItemFlag: u64 {
-        const None = 1;
-        const Container = 1 << 2;
-        const Tool = 1 << 3;
+        const Container = 1;
+        const Tool      = 1 << 1;
     }
 }
+impl Default for ItemFlag { fn default() -> Self { Self { bits: 0 } } }
 
-bitflags_serial! {
+bitflags! {
+    #[derive(Serialize, Deserialize)]
     pub struct ContainerCanHold: u8 {
-        const Nothing = 1;
-        const Liquid = 1 << 1;
-        const Solid  = 1 << 2;
+        const Liquid = 1 ;
+        const Solid  = 1 << 1;
     }
 }
+impl Default for ContainerCanHold { fn default() -> Self { Self { bits: 0 } } }
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -59,15 +61,16 @@ pub struct Details {
 }
 impl PartialEq for Details { fn eq(&self, other: &Self) -> bool { self.name == other.name } }
 
+impl Asset for Details {
+    const NAME: &'static str = "survival::Item";
+    type Data = Self;
+    type HandleStorage = VecStorage<Handle<Self>>;
+}
+
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
 pub struct Storage {
     tag: u32,
     items: HashMap<String, Arc<Details>>,
-}
-impl Asset for Storage {
-    const NAME: &'static str = "survival::Items";
-    type Data = Self;
-    type HandleStorage = VecStorage<Handle<Self>>;
 }
 
 #[test]

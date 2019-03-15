@@ -1,29 +1,29 @@
 (
     tag: 0,
-    items: {
+    data: {
         "Container": (
             size: (0, 0, 0),
             weight: 0,
-            flags: [Container,],
+            flags: (bits: 0),
             name: "Test Collection Item 2",
             short_description: "Test Collection Item 2",
             long_description: "Test Collection Item 2",
             sprite_sheet_number: 0,
             sprite_number: 0,
-            properties: [Container(can_hold:[Solid,],),],
+            properties: [Container(can_hold:(bits: 0),),],
             interactions: [],
         ),
         "hand_axe": (
             size: (0.5, 0.05, 0.05),
             weight: 0.9,
-            flags: [Tool,],
+            flags: (bits: 0),
             name: "Hand Axe",
             short_description: "Hand Axe",
             long_description: "Hand Axe",
             sprite_sheet_number: 0,
             sprite_number: 0,
             properties: [Cutting(1), Chopping(5), Hitting(2), Hammering(1), ],
-            interactions: [Chop, Cut, Hammer, Hit],
+            interactions: [],
         ),
     },
 )

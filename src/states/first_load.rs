@@ -58,31 +58,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         // How do we pass this along?
         world.res.fetch_mut::<settings::Context>().spritesheet = Some(default_sprite_sheet);
 
-        // Load items
-        world.add_resource(AssetStorage::<crate::assets::item::Storage>::default());
-        {
-            let loader = &world.read_resource::<Loader>();
-            let _handle = loader.load(
-                "resources/data/items.ron",
-                amethyst::assets::RonFormat,
-                (),
-                &mut self.progress_counter,
-                &world.read_resource::<AssetStorage<crate::assets::item::Storage>>(),
-            );
-        }
-
-        // Load body description
-        world.add_resource(AssetStorage::<crate::assets::body::Storage>::default());
-        {
-            let loader = &world.read_resource::<Loader>();
-            let _handle = loader.load(
-                "resources/data/body.ron",
-                amethyst::assets::RonFormat,
-                (),
-                &mut self.progress_counter,
-                &world.read_resource::<AssetStorage<crate::assets::body::Storage>>(),
-            );
-        }
+        crate::assets::StorageSource::<crate::assets::Item>::apply(&std::path::Path::new("resources/data/items.ron"), world).unwrap();
 
         // Register tile components
         world.register_tile_comp::<crate::components::FlaggedSpriteRender, crate::tiles::TileId>();

@@ -76,7 +76,6 @@ impl<T> StorageSource<T>
                 let mut borrow = storage.write().unwrap();
                 let keys = borrow.data.keys().map(|k| k.clone()).collect::<Vec<_>>();
                 for key in &keys {
-                    println!("Adding key: {}", key);
                     borrow.handles.insert(key.to_string(), loader.load_from(
                         key.as_str(),
                         amethyst::assets::RonFormat,

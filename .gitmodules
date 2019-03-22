@@ -9,7 +9,7 @@
 	url = https://github.com/jaynus/amethyst-imgui
 [submodule "dep/rlua"]
 	path = dep/rlua
-	url = https://github.com/jaynus/aynus/rlua
+	url = https://github.com/jaynus/jaynus/rlua
 [submodule "dep/voronoi"]
 	path = dep/voronoi
 	url = https://github.com/jaynus/rust_voronoi

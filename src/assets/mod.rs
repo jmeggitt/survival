@@ -49,12 +49,10 @@ impl<T> StorageSource<T>
     <T as Asset>::Data: for<'a> serde::Deserialize<'a>
 {
     pub fn apply(source: &Path, world: &mut World) -> Result<Arc<RwLock<Storage<T>>>, Error> {
-        use std::io::Read;
-
         let file = File::open(&source)
             .with_context(|_| format_err!("Failed to open file {:?}", source))?;
 
-        let mut storage: Arc<RwLock<Storage<T>>> = Arc::new(RwLock::new(ron::de::from_reader(file)?));
+        let storage: Arc<RwLock<Storage<T>>> = Arc::new(RwLock::new(ron::de::from_reader(file)?));
 
         {
             world.add_resource(AssetStorage::<T>::default());

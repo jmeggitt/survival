@@ -59,6 +59,7 @@ amethyst_test = { path = "dep/amethyst/amethyst_test" }
 [build-dependencies]
 image = "0.21.0"
 serde = { version = "*", features = ["derive"] }
+amethyst_renderer = { path = "dep/amethyst/amethyst_renderer" }
 ron = "*"
 
 [[bin]]

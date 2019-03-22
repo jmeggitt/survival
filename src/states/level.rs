@@ -1,7 +1,6 @@
 use amethyst::{
     renderer::{Rgba, Projection, Camera, SpriteRender, SpriteSheetHandle, Transparent},
     core::{
-        Parent,
         components::{Transform, GlobalTransform}
     },
     ecs::{Entity, Builder, SystemData, World},
@@ -38,7 +37,7 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: Tiles
         .build()
 }
 
-fn init_camera(world: &mut World, parent: Entity, tiles: Tiles, game_settings: &settings::Config) {
+fn init_camera(world: &mut World, _: Entity, tiles: Tiles, game_settings: &settings::Config) {
     let mut transform = Transform::default();
     transform.set_translation_z(1.0);
     //*transform.scale_mut() = transform.scale() * 4.0;
@@ -84,7 +83,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
             let mut sprites: WriteTiles<FlaggedSpriteRender> = SystemData::fetch(&world.res);
             let mut transforms: WriteTiles<GlobalTransform> = SystemData::fetch(&world.res);
             let mut tile_entities_map: WriteTiles<TileEntities> = SystemData::fetch(&world.res);
-            let mut tile_rgb: WriteTiles<Rgba> = SystemData::fetch(&world.res);
+            //let tile_rgb: WriteTiles<Rgba> = SystemData::fetch(&world.res);
             for tile_id in tiles.iter_all() {
                 tile_entities_map.insert_default(tile_id);
 

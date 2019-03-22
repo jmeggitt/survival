@@ -1,0 +1,32 @@
+#![enable(implicit_some)]
+Container(
+    transform: (
+        id: "inventory_window",
+        width: 400.,
+        height: 400.,
+        anchor: Middle,
+    ),
+    background: (
+        image: Data(Rgba((0., 0., 0., 1.0), (channel: Srgb))),
+    ),
+    children: [
+        Text(
+            transform: (
+                id: "inventory_text",
+                x: 0.,
+                y: 0.,
+                width: 400.,
+                height: 400.,
+                anchor: Middle,
+            ),
+            text: (
+                text: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                font: File("fonts/ProggySquare.ttf", Ttf, ()),
+                font_size: 10.,
+                color: (0.2, 0.2, 1.0, 1.0),
+                line_mode: Wrap,
+                align: TopLeft,
+            )
+        )
+    ]
+)

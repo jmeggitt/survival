@@ -1,9 +1,6 @@
 use rand::{
     Rng,
-    distributions::{Standard},
 };
-use delaunay2d::Delaunay2D;
-use voronoi::VoronoiDiagram;
 use ordered_float::OrderedFloat;
 use std::collections::{HashSet, HashMap};
 
@@ -166,15 +163,15 @@ impl<R> Generator<R>
         // Build the DT out of the centroids so they are associated
 
         let mut dt = delaunay2d::Delaunay2D::new((config.box_size/2., config.box_size/2.), config.box_size / 2.);
-        for cell in diagram.cells().iter() {
+        for cell in &diagram.cells() {
             dt.add_point((cell.centroid.x(), cell.centroid.y()));
         }
 
         // Now extract the actual cells from this
         let dt_points = dt.export_points().par_iter().map(|p| IndexPoint::new(OrderedFloat(p.0), OrderedFloat(p.1))).collect::<Vec<_>>();
-        let mut triangles = dt.export_triangles().par_iter().map(|t| (dt_points[t.0], dt_points[t.1], dt_points[t.2]) ).collect::<Vec<_>>();
+        let triangles = dt.export_triangles().par_iter().map(|t| (dt_points[t.0], dt_points[t.1], dt_points[t.2]) ).collect::<Vec<_>>();
 
-        for cell in diagram.cells().iter() {
+        for cell in &diagram.cells() {
             let mut neighbors = HashSet::new();
 
             let point = IndexPoint::new(cell.centroid.x, cell.centroid.y);
@@ -219,7 +216,7 @@ impl<R> Generator<R>
                 imageproc::drawing::Point::new(p.x as i32,
                                                p.y as i32)
             }).collect::<Vec<_>>();
-            if points.len() == 0 {
+            if points.is_empty() {
                 continue;
             }
             while points[0] == points[points.len()-1] {
@@ -249,7 +246,6 @@ impl<R> Generator<R>
 #[cfg(test)]
 mod tests {
     use super::*;
-    use amethyst::core::math::Point2;
     use rand::SeedableRng;
 
     #[test]
@@ -277,7 +273,7 @@ mod tests {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
         ];
-        let mut master_rand = rand::rngs::StdRng::from_seed(seed);
+        let master_rand = rand::rngs::StdRng::from_seed(seed);
 
         let mut generator = Generator::new(master_rand.clone());
 

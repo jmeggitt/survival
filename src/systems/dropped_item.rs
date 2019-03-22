@@ -1,7 +1,7 @@
 #![allow(clippy::module_name_repetitions)]
 
 use amethyst::{
-    ecs::{Component, Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entity, Entities},
+    ecs::{Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entities},
     core::transform::Transform,
     core::components::Parent,
 };
@@ -61,7 +61,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             Some(transform) => {
                                 let item = items.get(entity).unwrap();
 
-                                transforms.insert(*dropped_item, transform.clone());
+                                transforms.insert(*dropped_item, transform.clone()).unwrap();
                                 sprites.insert(entity, components::FlaggedSpriteRender {
                                     sprite_sheet: sheet_handle.clone(),
                                     sprite_number: item.details.sprite_number,
@@ -77,7 +77,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         transforms.remove(*picked_item);
                         sprites.remove(*picked_item);
 
-                        parents.insert(*picked_item, Parent{ entity });
+                        parents.insert(*picked_item, Parent{ entity }).unwrap();
                     },
                     _ => {},
                 }

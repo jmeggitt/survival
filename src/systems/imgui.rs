@@ -1,7 +1,7 @@
 #![allow(clippy::module_name_repetitions)]
 
 use amethyst::{
-    ecs::{Write, ReadExpect, Resources,},
+    ecs::{Write, ReadExpect,},
 };
 use amethyst_imgui as am_imgui;
 use amethyst_imgui::imgui as imgui;
@@ -57,7 +57,7 @@ impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
             if let Some(ui) = imgui::Ui::current_ui() {
                 (ui as *const imgui::Ui).read_volatile();
                 //ui.show_demo_window(&mut true);
-                let root_dock = ui.dockspace_over_viewport(None, imgui::ImGuiDockNodeFlags::PassthruDockspace );
+                //let root_dock = ui.dockspace_over_viewport(None, imgui::ImGuiDockNodeFlags::PassthruDockspace );
 
                 //ui.show_demo_window(&mut true);
             }

@@ -2,12 +2,10 @@
 
 use amethyst::{
     core::{ParentHierarchy, Parent},
-    ecs::{Join, ReadStorage, WriteStorage, Read, ReadExpect, Entity, Entities},
+    ecs::{WriteStorage, ReadExpect, Entities},
 };
 use crate::settings::Context;
 use crate::components;
-use hibitset::BitSet;
-use crate::inventory;
 
 #[derive(Default)]
 pub struct System;
@@ -22,8 +20,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
     );
 
-    fn run(&mut self, (_, hierarchy,
-                        entities, items, containers, parents)
+    fn run(&mut self, _
     : Self::SystemData) {
         //let (entity, _) = (&entities, &items).join().next().unwrap();
         //let container_bitset = inventory::get_all_containers(entity, &hierarchy, &containers);

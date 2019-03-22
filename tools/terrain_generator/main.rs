@@ -1,6 +1,5 @@
 extern crate amethyst;
 extern crate amethyst_imgui;
-use std::collections::{HashSet, HashMap};
 
 use amethyst::{
     assets::{Loader, AssetStorage, HotReloadBundle},
@@ -12,7 +11,7 @@ use amethyst::{
 };
 
 use amethyst_imgui::{ImguiState, imgui, imgui::{im_str}};
-use survival::mapgen::{Point, CellData, Cell, IndexPoint, Generator, GeneratorConfig, IslandGeneratorSettings};
+use survival::mapgen::{CellData, Generator, GeneratorConfig, IslandGeneratorSettings};
 
 #[derive(Default)]
 pub struct ImguiBeginFrameSystem;
@@ -95,7 +94,7 @@ impl<'s> amethyst::ecs::System<'s> for ImguiEndFrameSystem {
         if let Some(ui) = unsafe { imgui::Ui::current_ui() } {
             unsafe {
                 (ui as *const imgui::Ui).read_volatile();
-                let root_dock = ui.dockspace_over_viewport(None, imgui::ImGuiDockNodeFlags::PassthruDockspace );
+                //let root_dock = ui.dockspace_over_viewport(None, imgui::ImGuiDockNodeFlags::PassthruDockspace );
                 //ui.show_demo_window(&mut true);
             }
 
@@ -111,18 +110,18 @@ impl<'s> amethyst::ecs::System<'s> for ImguiEndFrameSystem {
                         let result = hasher.result();
 
                         let settings = IslandGeneratorSettings {
-                            height: self.height as f64,
-                            sharpness: self.sharpness as f64,
-                            radius: self.radius as f64,
+                            height: f64::from(self.height),
+                            sharpness: f64::from(self.sharpness),
+                            radius: f64::from(self.radius),
                         };
 
                         let config = GeneratorConfig {
-                            box_size: self.box_size as f64,
+                            box_size: f64::from(self.box_size),
                             num_points: self.num_points as usize,
                             num_lloyd: self.num_lloyd as usize,
                         };
 
-                        generate_new_map(arrayref::array_ref![result.deref(), 0, 32], &config, &settings);
+                        generate_new_map(arrayref::array_ref![result.deref(), 0, 32], &config, &settings).unwrap();
                     }
                     ui.input_text(im_str!("Seed"), &mut self.state.seed).build();
                     ui.separator();

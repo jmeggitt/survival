@@ -1,13 +1,16 @@
 (
     axes: {},
     actions: {
-        "pickup":       [ [Key(G)], ],
-        "move_left":    [ [Key(Left)], [Key(A)] ],
-        "move_right":   [ [Key(Right)], [Key(D)] ],
-        "move_up":      [ [Key(Up)], [Key(W)] ],
-        "move_down":    [ [Key(Down)], [Key(S)] ],
+        PickUp:       [ [Key(G)], ],
 
-        "zoom_in":      [ [Key(Period)], ],
-        "zoom_out":     [ [Key(Comma)], ],
+        MoveLeft:    [ [Key(Left)], [Key(A)] ],
+        MoveRight:   [ [Key(Right)], [Key(D)] ],
+        MoveUp:      [ [Key(Up)], [Key(W)] ],
+        MoveDown:    [ [Key(Down)], [Key(S)] ],
+
+        ZoomIn:      [ [Key(Period)], ],
+        ZoomOut:     [ [Key(Comma)], ],
+
+        ToggleInventory: [ [Key(I)], ],
     },
 )

@@ -1,30 +1,5 @@
 use image;
-use serde::{Serialize, Deserialize};
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct SpritePosition {
-    /// Horizontal position of the sprite in the sprite sheet
-    pub x: u32,
-    /// Vertical position of the sprite in the sprite sheet
-    pub y: u32,
-    /// Width of the sprite
-    pub width: u32,
-    /// Height of the sprite
-    pub height: u32,
-    /// Number of pixels to shift the sprite to the left and down relative to the entity holding it
-    pub offsets: Option<[f32; 2]>,
-}
-
-/// Structure acting as scaffolding for serde when loading a spritesheet file.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct SerializedSpriteSheet {
-    /// Width of the sprite sheet
-    pub spritesheet_width: u32,
-    /// Height of the sprite sheet
-    pub spritesheet_height: u32,
-    /// Description of the sprites
-    pub sprites: Vec<SpritePosition>,
-}
+use amethyst_renderer::{SpriteList, SpritePosition};
 
 fn get_tile_size(filepart: &str) -> usize {
     // Last 2 digits of a filepart should be the size right?!
@@ -65,9 +40,9 @@ fn main() {
                                 }
                             }
 
-                            let sheet = SerializedSpriteSheet {
-                                spritesheet_width: img.dimensions().0,
-                                spritesheet_height: img.dimensions().1,
+                            let sheet = SpriteList {
+                                texture_width: img.dimensions().0,
+                                texture_height: img.dimensions().1,
                                 sprites,
                             };
 

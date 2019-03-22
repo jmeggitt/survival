@@ -3,8 +3,6 @@ use amethyst::{
     assets::ProgressCounter,
 };
 
-use slog::slog_trace;
-
 use crate::SurvivalData;
 use crate::game_data::SurvivalState;
 

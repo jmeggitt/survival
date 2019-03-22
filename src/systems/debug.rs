@@ -1,7 +1,7 @@
 #![allow(clippy::module_name_repetitions)]
 use std::sync::{Arc, Mutex};
 use amethyst::{
-    ecs::{Join, ReadStorage, ReadExpect, Entity, Entities, Write, Read, Resources, SystemData},
+    ecs::{ReadExpect, Entities, Write, Read, Resources, SystemData},
     shrev::EventChannel,
 };
 use crate::settings::Context;
@@ -55,7 +55,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
     fn run(&mut self, (_, _, mut imgui_draw, item_storage): Self::SystemData) {
         use amethyst_imgui::imgui as imgui;
-        use assets::GetStorage;
         use amethyst_imgui::imgui::{ImString, im_str};
         use std::borrow::Borrow;
 
@@ -65,19 +64,19 @@ impl<'s> amethyst::ecs::System<'s> for System {
             let mut state_lck = self.item_explorer_state.lock().unwrap();
             if state_lck.last_current_item != state_lck.current_item {
                 state_lck.active_item = Some(item_storage.read().unwrap().data.values().nth(state_lck.current_item as usize).unwrap().clone());
-                state_lck.edit_item.name = state_lck.active_item.unwrap().name;
+                //state_lck.edit_item.name = state_lck.active_item.unwrap().name;
             }
         }
 
-        let mut state = self.item_explorer_state.clone();
+        let state = self.item_explorer_state.clone();
 
         imgui_draw.single_write(Arc::new(move |ui: &amethyst_imgui::imgui::Ui| {
-            let mut state = state.clone();
+            let state = state.clone();
             ui.window(imgui::im_str!("Item Explorer"))
             .size((300.0, 100.0), imgui::ImGuiCond::FirstUseEver)
                 .build(|| {
                     let mut refs = vec![];
-                    for item in items.iter() {
+                    for item in &items {
                         refs.push(item.borrow());
                     }
 
@@ -92,7 +91,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                     );
 
                     ui.same_line(0.);
-                    if let Some(item) = state_lck.active_item.as_ref() {
+                    if let Some(_) = state_lck.active_item.as_ref() {
                         ui.input_text(im_str!("Seed"), &mut state_lck.edit_item.name).build();
                     }
                 })

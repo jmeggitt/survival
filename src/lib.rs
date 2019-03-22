@@ -11,6 +11,7 @@
 
 pub mod goap;
 pub mod mapgen;
+pub mod system_chain;
 
 pub mod assets;
 pub mod tiles;
@@ -67,22 +68,23 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
     let game_data = SurvivalDataBuilder::new(game_context, display_config.clone(), game_config)
         .with_core_bundle(TransformBundle::new())?
         .with_core_bundle(
-            InputBundle::<String, String>::new().with_bindings_from_file(root.join("input.ron"))?,
+            InputBundle::<actions::PlayerInputAction, actions::PlayerInputAction>::new().with_bindings_from_file(root.join("input.ron"))?,
         )?
         .with_core(systems::ImguiBeginFrameSystem::default(), "imgui_begin_frame", &[])
-        .with_core(systems::UiSystem::default(), "ui", &["imgui_begin_frame"])
         .with_core(systems::DebugSystem::default(), "debug", &["imgui_begin_frame"])
-        .with_core(systems::ImguiEndFrameSystem::default(), "imgui_end_frame",
-              &["imgui_begin_frame", "ui", "debug"]) // All systems which use imgui must be here.
         .with_core_bundle(HotReloadBundle::default())?
-        .with_core_bundle(UiBundle::<String, String>::new())?
+        .with_core_bundle(UiBundle::<actions::PlayerInputAction, actions::PlayerInputAction>::new())?
         .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with_core_bundle(FPSCounterBundle::default())?
         .with_core_bundle(
             RenderBundle::new(pipe, Some(display_config.clone()))
                 .with_sprite_sheet_processor()
-                .with_sprite_visibility_sorting(&[]), // Let's us use the `Transparent` component
+                .with_sprite_visibility_sorting(&[])
+                .with_hide_hierarchy_system(), // Let's us use the `Transparent` component
         )?
+        .with_core(systems::UiSystem::default(), "ui", &["imgui_begin_frame", "ui_loader"])
+        .with_core(systems::ImguiEndFrameSystem::default(), "imgui_end_frame",
+                   &["imgui_begin_frame", "ui", "debug"]) // All systems which use imgui must be here.
         .with_level(systems::DroppedItemSystem::default(), "ground_items", &[])
         .with_level(systems::WearingSystem::default(), "wearing", &[])
         .with_level(systems::InputSystem::default(), "input", &[])

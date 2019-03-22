@@ -1,7 +1,7 @@
 #![allow(clippy::module_name_repetitions)]
 
 use amethyst::{
-    ecs::{Component, Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entity, Entities},
+    ecs::{Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entities},
     core::transform::Transform,
     core::components::Parent,
 };
@@ -37,7 +37,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         self.action_reader.setup(res);
     }
 
-    fn run(&mut self, (context, config, tiles, entities, items, transforms, mut actionables, parents, tile_entities_map): Self::SystemData) {
+    fn run(&mut self, (context, config, tiles, entities, items, transforms, mut actionables, _, tile_entities_map): Self::SystemData) {
         self.action_reader.maintain(&entities, &mut actionables);
         let mut events = Vec::new();
         for (entity, transform, actionable) in (&entities, &transforms, &mut actionables, ).join() {
@@ -46,8 +46,8 @@ impl<'s> amethyst::ecs::System<'s> for System {
                     match target {
                         actions::PickupTarget::Under => {
                             // Target there any other tile entities underneath us?
-                            for entity in tile_entities_map.get(tiles.id_from_vector(tiles.world_to_tile(transform.translation(), &config))).unwrap().0.iter() {
-                                if let Some(item) = items.get(*entity) {
+                            for entity in &tile_entities_map.get(tiles.id_from_vector(tiles.world_to_tile(transform.translation(), &config))).unwrap().0 {
+                                if let Some(_) = items.get(*entity) {
                                     // Its an item! We can get it.
                                     // TODO: allllll sorts of checks
                                     // rebroadcast the DoPickup event
@@ -55,8 +55,8 @@ impl<'s> amethyst::ecs::System<'s> for System {
                                 }
                             }
                         },
-                        actions::PickupTarget::Location(vector) => { slog_error!(context.logs.root, "Location Not implemented"); },
-                        actions::PickupTarget::Entity(entity) => { slog_error!(context.logs.root, "Entity Not implemented"); },
+                        actions::PickupTarget::Location(_) => { slog_error!(context.logs.root, "Location Not implemented"); },
+                        actions::PickupTarget::Entity(_) => { slog_error!(context.logs.root, "Entity Not implemented"); },
                     }
                 }
             }

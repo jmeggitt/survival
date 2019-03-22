@@ -1,17 +1,14 @@
 #![allow(clippy::module_name_repetitions)]
 
 use amethyst::{
-    core::{ParentHierarchy, Parent},
-    ecs::{Join, Entity, Entities, storage::{GenericReadStorage},},
+    core::{ParentHierarchy},
+    ecs::{Join, Entity, storage::{GenericReadStorage},},
 };
-use rayon::iter::ParallelIterator;
-use crate::settings::Context;
 use crate::components;
 use hibitset::BitSet;
-use std::collections::HashMap;
 
 pub fn in_container<S>(item: Entity, hierarchy: &ParentHierarchy,
-                    container_storage: S) -> bool
+                    container_storage: &S) -> bool
     where S: GenericReadStorage<Component=components::Container>
 {
     if let Some(e) = hierarchy.parent(item) {
@@ -27,14 +24,14 @@ pub fn get_items_in_container<S>(container: Entity, hierarchy: &ParentHierarchy,
 {
     let mut items = BitSet::new();
 
-    (item_storage, hierarchy.all_children(container)).join().for_each(|(item, id)| {
+    (item_storage, hierarchy.all_children(container)).join().for_each(|(_, id)| {
         items.add(id);
     });
 
     items
 }
 
-pub fn get_all_items<'a, C, I>(parent: Entity, hierarchy: &ParentHierarchy,
+pub fn get_all_items<C, I>(parent: Entity, hierarchy: &ParentHierarchy,
                      container_storage: C,
                      item_storage: I
 ) -> BitSet
@@ -49,7 +46,7 @@ pub fn get_all_items<'a, C, I>(parent: Entity, hierarchy: &ParentHierarchy,
     items
 }
 
-pub fn get_all_containers<'a, S>(parent: Entity, hierarchy: &ParentHierarchy,
+pub fn get_all_containers<S>(parent: Entity, hierarchy: &ParentHierarchy,
                           container_storage: S
 ) -> BitSet
     where S: GenericReadStorage<Component=components::Container> + Join

@@ -4,6 +4,7 @@ Container(
         id: "background",
         anchor: Middle,
         stretch: XY( x_margin: 0., y_margin: 0.),
+        transparent: true,
     ),
     children: [
         Text(
@@ -12,7 +13,7 @@ Container(
                 x: 100.,
                 y: -16,
                 width: 200.,
-                height: 25.,
+                height: 768.,
                 tab_order: 2,
                 anchor: TopLeft,
                 transparent: true,
@@ -28,9 +29,8 @@ Container(
         Container(
             transform: (
                 id: "right_bar",
-                width: 400.,
-                height: 768.,
-                stretch: Y( y_margin: 0.),
+                width: 500.,
+                height: 2048.,
                 anchor: TopRight,
             ),
             background: (
@@ -41,13 +41,13 @@ Container(
                     transform: (
                         id: "multiline",
                         x: 0.,
-                        y: 0.,
-                        width: 400.,
-                        height: 20.,
-                        tab_order: 1,
+                        y: -512.,
+                        width: 500.,
+                        height: 1024.,
+                        anchor: Middle,
                     ),
                     text: (
-                        text: "Multiline\nText!",
+                        text: "Multiline\nAAAA!\nasdf\nasdf\nasdf\nballs\n123\nballs\nballs\nballs\nballs\nballs\nballs\nballs\nballs\nballs\nballs",
                         font: File("fonts/ProggySquare.ttf", Ttf, ()),
                         font_size: 10.,
                         color: (0.2, 0.2, 1.0, 1.0),

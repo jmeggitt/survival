@@ -34,3 +34,18 @@ pub enum Action {
     DoPickup(Entity),
 }
 impl Default for Action { fn default() -> Self { Action::Wait } }
+
+#[derive(Clone, Hash, Eq, PartialEq, Copy, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(strum_macros::EnumString, strum_macros::Display)]
+pub enum PlayerInputAction {
+    MoveUp,
+    MoveDown,
+    MoveLeft,
+    MoveRight,
+    ZoomIn,
+    ZoomOut,
+
+    PickUp,
+
+    ToggleInventory,
+}

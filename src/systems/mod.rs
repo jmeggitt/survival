@@ -1,3 +1,5 @@
+pub mod ui;
+
 pub mod tile_position;
 pub use tile_position::System as TilePositionSystem;
 
@@ -7,15 +9,13 @@ pub use time::System as TimeSystem;
 pub mod script;
 pub use script::System as ScriptSystem;
 
-pub mod imgui;
-pub use imgui::BeginFrameSystem as ImguiBeginFrameSystem;
-pub use imgui::EndFrameSystem as ImguiEndFrameSystem;
+
+pub use ui::imgui::BeginFrameSystem as ImguiBeginFrameSystem;
+pub use ui::imgui::EndFrameSystem as ImguiEndFrameSystem;
+pub use ui::ui::System as UiSystem;
 
 pub mod nutrition;
 pub use nutrition::System as NutritionSystem;
-
-pub mod ui;
-pub use ui::System as UiSystem;
 
 pub mod movement;
 pub use movement::System as MovementSystem;

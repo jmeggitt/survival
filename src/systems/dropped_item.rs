@@ -1,7 +1,8 @@
 #![allow(clippy::module_name_repetitions)]
 
 use amethyst::{
-    ecs::{Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entities},
+    assets::AssetStorage,
+    ecs::{Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entities, Read},
     core::transform::Transform,
     core::components::Parent,
 };
@@ -25,6 +26,8 @@ impl<'s> amethyst::ecs::System<'s> for System {
         WriteStorage<'s, components::FlaggedSpriteRender>,
         WriteStorage<'s, components::Actionable>,
         WriteStorage<'s, Parent>,
+
+        Read<'s, AssetStorage<crate::assets::Item>>,
     );
 
     fn setup(&mut self, res: &mut Resources) {
@@ -33,7 +36,9 @@ impl<'s> amethyst::ecs::System<'s> for System {
         self.action_reader.setup(res);
     }
 
-    fn run(&mut self, (context, entities, items, mut transforms, mut sprites, mut actionables, mut parents): Self::SystemData) {
+    fn run(&mut self, (context, entities, items, mut transforms, mut sprites, mut actionables, mut parents,
+    item_storage,
+    ): Self::SystemData) {
         self.action_reader.maintain(&entities, &mut actionables);
 
         // search for dropped items with a transform, but no sprite. Add the sprite.
@@ -44,10 +49,12 @@ impl<'s> amethyst::ecs::System<'s> for System {
             // If the item doesn't have a sprite, add it
             if sprites.get(entity).is_none() {
                 // Insert a sprite for it
-                sprites.insert(entity, components::FlaggedSpriteRender {
-                    sprite_sheet: sheet_handle.clone(),
-                    sprite_number: item.details.sprite_number,
-                }).unwrap();
+                if let Some(details) = item_storage.get(&item.handle) {
+                    sprites.insert(entity, components::FlaggedSpriteRender {
+                        sprite_sheet: sheet_handle.clone(),
+                        sprite_number: details.sprite_number,
+                    }).unwrap();
+                }
             }
         }
 
@@ -60,15 +67,16 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         match transforms.get(entity) {
                             Some(transform) => {
                                 let item = items.get(entity).unwrap();
+                                if let Some(details) = item_storage.get(&item.handle) {
+                                    transforms.insert(*dropped_item, transform.clone()).unwrap();
+                                    sprites.insert(entity, components::FlaggedSpriteRender {
+                                        sprite_sheet: sheet_handle.clone(),
+                                        sprite_number: details.sprite_number,
+                                    }).unwrap();
 
-                                transforms.insert(*dropped_item, transform.clone()).unwrap();
-                                sprites.insert(entity, components::FlaggedSpriteRender {
-                                    sprite_sheet: sheet_handle.clone(),
-                                    sprite_number: item.details.sprite_number,
-                                }).unwrap();
-
-                                // Remove the parent relationship
-                                parents.remove(*dropped_item);
+                                    // Remove the parent relationship
+                                    parents.remove(*dropped_item);
+                                }
                             }
                             None => { slog_error!(context.logs.root, "Entity without transform dropped an item, this shouldn't happen!"); continue; }
                         }

@@ -1,6 +1,6 @@
 [submodule "dep/amethyst"]
 	path = dep/amethyst
-	url = https://github.com/jaynus/jaynus/amethyst.git
+	url = https://github.com/jaynus/amethyst.git
 [submodule "dep/termpix"]
 	path = dep/termpix
 	url = https://github.com/hopey-dishwasher/termpix.git
@@ -9,7 +9,7 @@
 	url = https://github.com/jaynus/amethyst-imgui
 [submodule "dep/rlua"]
 	path = dep/rlua
-	url = https://github.com/jaynus/jaynus/rlua
+	url = https://github.com/jaynus/rlua
 [submodule "dep/voronoi"]
 	path = dep/voronoi
 	url = https://github.com/jaynus/rust_voronoi

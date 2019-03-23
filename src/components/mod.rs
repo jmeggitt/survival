@@ -1,4 +1,5 @@
 use amethyst::{
+    assets::Handle,
     ecs::{
         prelude::*,
     },
@@ -9,7 +10,6 @@ use amethyst::{
     },
     shrev::{EventChannel,},
 };
-use std::sync::Arc;
 use specs_derive::Component;
 use serde::{Serialize, Deserialize};
 use bitflags::*;
@@ -118,13 +118,13 @@ impl Component for FlaggedSpriteRender {
 #[storage(DenseVecStorage)]
 pub struct Container;
 
-#[derive(Component, Clone, Debug, Serialize, Deserialize)]
+#[derive(Component, Clone, Debug)]
 #[storage(DenseVecStorage)]
 pub struct Item {
-    pub details: Arc<crate::assets::item::Details>,
+    pub handle: Handle<crate::assets::item::Details>,
     pub properties: Vec<crate::assets::item::Property>,
 }
-impl PartialEq<Item> for Item { fn eq(&self, other: &Self) -> bool { self.details.name == other.details.name } }
+impl PartialEq<Item> for Item { fn eq(&self, other: &Self) -> bool { self.handle == other.handle } }
 
 #[derive(Component, Clone, Debug, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]

@@ -1,12 +1,15 @@
 #![allow(clippy::module_name_repetitions)]
 use std::sync::{Arc, Mutex};
 use amethyst::{
-    ecs::{ReadExpect, Entities, Write, Read, Resources, SystemData},
+    ecs::{Join, ReadExpect, Entities, Write, Read, Resources, SystemData, LazyUpdate},
     shrev::EventChannel,
 };
 use crate::settings::Context;
 use crate::systems::ui::ImGuiDraw;
 use crate::assets;
+use crate::initializers;
+use crate::initializers::SpawnType;
+use crate::components;
 
 use amethyst_imgui::imgui::ImString;
 
@@ -44,7 +47,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         Entities<'s>,
         Write<'s, EventChannel<ImGuiDraw>>,
 
-        Read<'s, assets::ItemStorage>
+        Read<'s, assets::ItemStorage>,
     );
 
     fn setup(&mut self, res: &mut Resources) {
@@ -70,7 +73,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
         let state = self.item_explorer_state.clone();
 
-        imgui_draw.single_write(Arc::new(move |ui: &amethyst_imgui::imgui::Ui| {
+        imgui_draw.single_write(Arc::new(move |ui: &amethyst_imgui::imgui::Ui, lazy: &LazyUpdate| {
             let state = state.clone();
             ui.window(imgui::im_str!("Item Explorer"))
             .size((300.0, 100.0), imgui::ImGuiCond::FirstUseEver)
@@ -91,8 +94,16 @@ impl<'s> amethyst::ecs::System<'s> for System {
                     );
 
                     ui.same_line(0.);
-                    if let Some(_) = state_lck.active_item.as_ref() {
-                        ui.input_text(im_str!("Seed"), &mut state_lck.edit_item.name).build();
+                    if ui.button(im_str!("Spawn"), (0., 0.)) {
+                        lazy.exec_mut(move |world| {
+
+                            let (_, player) = (&world.read_storage::<components::Player>(), &world.entities()).join().next().unwrap();
+
+                            initializers::spawn_item(world,
+                                                     SpawnType::Parent(player),
+                                                     "Container",
+                                                     None);
+                        });
                     }
                 })
         }));

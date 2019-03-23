@@ -26,6 +26,7 @@ pub mod actions;
 
 pub mod inventory;
 
+pub mod initializers;
 pub mod game_data;
 pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
 
@@ -80,9 +81,10 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
             RenderBundle::new(pipe, Some(display_config.clone()))
                 .with_sprite_sheet_processor()
                 .with_sprite_visibility_sorting(&[])
-                .with_hide_hierarchy_system(), // Let's us use the `Transparent` component
+                .with_hide_hierarchy_system(),
         )?
         .with_core(systems::UiSystem::default(), "ui", &["imgui_begin_frame", "ui_loader"])
+        .with_core(systems::ui::InventoryWindowSystem::default(), "inventory_window_system", &["ui"])
         .with_core(systems::ImguiEndFrameSystem::default(), "imgui_end_frame",
                    &["imgui_begin_frame", "ui", "debug"]) // All systems which use imgui must be here.
         .with_level(systems::DroppedItemSystem::default(), "ground_items", &[])

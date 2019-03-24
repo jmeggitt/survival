@@ -1,18 +1,18 @@
 #![allow(clippy::module_name_repetitions)]
 
-use amethyst::{
-    ecs::{Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entities},
-    core::transform::Transform,
-    core::components::Parent,
-};
-use crate::settings::Context;
-use crate::components;
-use crate::utils::{ComponentEventReader, HasChannel};
-use crate::actions::Action;
 use crate::actions;
+use crate::actions::Action;
+use crate::components;
+use crate::settings::Context;
+use crate::utils::{ComponentEventReader, HasChannel};
+use amethyst::{
+    core::components::Parent,
+    core::transform::Transform,
+    ecs::{Entities, Join, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
+};
 use slog::slog_error;
 
-use crate::tiles::{Tiles, TileEntities, ReadTiles};
+use crate::tiles::{ReadTiles, TileEntities, Tiles};
 
 #[derive(Default)]
 pub struct System {
@@ -37,16 +37,35 @@ impl<'s> amethyst::ecs::System<'s> for System {
         self.action_reader.setup(res);
     }
 
-    fn run(&mut self, (context, config, tiles, entities, items, transforms, mut actionables, _, tile_entities_map): Self::SystemData) {
+    fn run(
+        &mut self,
+        (
+            context,
+            config,
+            tiles,
+            entities,
+            items,
+            transforms,
+            mut actionables,
+            _,
+            tile_entities_map,
+        ): Self::SystemData,
+    ) {
         self.action_reader.maintain(&entities, &mut actionables);
         let mut events = Vec::new();
-        for (entity, transform, actionable) in (&entities, &transforms, &mut actionables, ).join() {
+        for (entity, transform, actionable) in (&entities, &transforms, &mut actionables).join() {
             for event in self.action_reader.read(entity, actionable) {
                 if let Action::TryPickup(target) = event {
                     match target {
                         actions::PickupTarget::Under => {
                             // Target there any other tile entities underneath us?
-                            for entity in &tile_entities_map.get(tiles.id_from_vector(tiles.world_to_tile(transform.translation(), &config))).unwrap().0 {
+                            for entity in &tile_entities_map
+                                .get(tiles.id_from_vector(
+                                    tiles.world_to_tile(transform.translation(), &config),
+                                ))
+                                .unwrap()
+                                .0
+                            {
                                 if let Some(_) = items.get(*entity) {
                                     // Its an item! We can get it.
                                     // TODO: allllll sorts of checks
@@ -54,9 +73,13 @@ impl<'s> amethyst::ecs::System<'s> for System {
                                     events.push((*entity, Action::DoPickup(*entity)));
                                 }
                             }
-                        },
-                        actions::PickupTarget::Location(_) => { slog_error!(context.logs.root, "Location Not implemented"); },
-                        actions::PickupTarget::Entity(_) => { slog_error!(context.logs.root, "Entity Not implemented"); },
+                        }
+                        actions::PickupTarget::Location(_) => {
+                            slog_error!(context.logs.root, "Location Not implemented");
+                        }
+                        actions::PickupTarget::Entity(_) => {
+                            slog_error!(context.logs.root, "Entity Not implemented");
+                        }
                     }
                 }
             }

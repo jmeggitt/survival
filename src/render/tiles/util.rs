@@ -8,8 +8,8 @@ use thread_profiler::profile_scope;
 
 use amethyst::assets::AssetStorage;
 use amethyst::core::{
-    math::Matrix4,
     ecs::prelude::{Join, Read, ReadStorage},
+    math::Matrix4,
     GlobalTransform,
 };
 
@@ -403,11 +403,7 @@ pub fn get_camera<'a>(
 }
 
 pub fn default_transparency() -> Option<(ColorMask, Blend, Option<DepthMode>)> {
-    Some((
-        ColorMask::all(),
-        ALPHA,
-        Some(DepthMode::LessEqualWrite),
-    ))
+    Some((ColorMask::all(), ALPHA, Some(DepthMode::LessEqualWrite)))
 }
 
 pub fn set_skinning_buffers(effect: &mut Effect, mesh: &Mesh) -> bool {

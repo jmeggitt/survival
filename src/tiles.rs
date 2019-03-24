@@ -1,10 +1,10 @@
 use amethyst::{
-    ecs::{Entity, Component, Read, Write, DenseVecStorage},
-    core::math::{Vector2, Vector4, Vector3},
+    core::math::{Vector2, Vector3, Vector4},
+    ecs::{Component, DenseVecStorage, Entity, Read, Write},
 };
 
-use specs_static::{Id, Storage};
 use specs_derive::Component;
+use specs_static::{Id, Storage};
 use std::collections::HashSet;
 
 #[derive(Component, Clone, Debug, Default)]
@@ -17,8 +17,9 @@ pub struct TileId(u32);
 impl TileId {
     #[inline]
     pub fn coords(self, dimensions: Vector2<u32>) -> (f32, f32) {
-        ( (self.0 % dimensions.y) as f32,
-          (self.0 / dimensions.y) as f32
+        (
+            (self.0 % dimensions.y) as f32,
+            (self.0 / dimensions.y) as f32,
         )
     }
 }
@@ -53,14 +54,26 @@ impl Tiles {
         TileId(vector.y * self.dimensions.y + vector.x)
     }
 
-    pub fn world_to_tile(self, vector: &Vector3<f32>, game_settings: &crate::settings::Config, ) -> Vector2<u32> {
-        Vector2::new((vector.x / 20. / game_settings.graphics.scale) as u32,
-        (vector.y / 20. / game_settings.graphics.scale).abs() as u32)
+    pub fn world_to_tile(
+        self,
+        vector: &Vector3<f32>,
+        game_settings: &crate::settings::Config,
+    ) -> Vector2<u32> {
+        Vector2::new(
+            (vector.x / 20. / game_settings.graphics.scale) as u32,
+            (vector.y / 20. / game_settings.graphics.scale).abs() as u32,
+        )
     }
 
-    pub fn world_to_id(self, vector: &Vector3<f32>, game_settings: &crate::settings::Config, ) -> TileId {
-        self.id_from_vector(Vector2::new((vector.x / 20. / game_settings.graphics.scale) as u32,
-                     (vector.y / 20. / game_settings.graphics.scale).abs() as u32))
+    pub fn world_to_id(
+        self,
+        vector: &Vector3<f32>,
+        game_settings: &crate::settings::Config,
+    ) -> TileId {
+        self.id_from_vector(Vector2::new(
+            (vector.x / 20. / game_settings.graphics.scale) as u32,
+            (vector.y / 20. / game_settings.graphics.scale).abs() as u32,
+        ))
     }
 
     pub fn iter_all(self) -> impl Iterator<Item = TileId> {
@@ -71,11 +84,10 @@ impl Tiles {
         RegionIter::new(self, region)
     }
 
-    pub fn dimensions(self, ) -> Vector2<u32> {
+    pub fn dimensions(self) -> Vector2<u32> {
         self.dimensions
     }
 }
-
 
 pub struct RegionIter {
     region: Vector4<u32>,

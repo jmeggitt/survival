@@ -1,16 +1,18 @@
 use amethyst::{
-    ecs::{World, Dispatcher, DispatcherBuilder, System},
-    DataInit,
-    Result,
-    core::{
-        bundle::SystemBundle,
-        ArcThreadPool
-    }
+    core::{bundle::SystemBundle, ArcThreadPool},
+    ecs::{Dispatcher, DispatcherBuilder, System, World},
+    DataInit, Result,
 };
 
-
-#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
-#[derive(strum_macros::EnumString, strum_macros::Display)]
+#[derive(
+    Clone,
+    Debug,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
+    strum_macros::EnumString,
+    strum_macros::Display,
+)]
 pub enum SurvivalState {
     Paused,
     Running,
@@ -31,14 +33,14 @@ pub struct SurvivalData<'a, 'b> {
 
 impl<'a, 'b> SurvivalData<'a, 'b> {
     /// Update game data
-    pub fn update(&mut self, world: &World, state: SurvivalState,) -> SurvivalState {
-       *world.res.fetch_mut::<SurvivalState>() = state;
+    pub fn update(&mut self, world: &World, state: SurvivalState) -> SurvivalState {
+        *world.res.fetch_mut::<SurvivalState>() = state;
 
         self.level_dispatcher.dispatch(&world.res);
         //self.overworld_dispatcher.dispatch(&world.res);
         self.core_dispatcher.dispatch(&world.res);
 
-         world.res.fetch::<SurvivalState>().clone()
+        world.res.fetch::<SurvivalState>().clone()
     }
 }
 
@@ -68,8 +70,8 @@ impl<'a, 'b> SurvivalDataBuilder<'a, 'b> {
     }
 
     pub fn with_core_bundle<B>(mut self, bundle: B) -> Result<Self>
-        where
-            B: SystemBundle<'a, 'b>,
+    where
+        B: SystemBundle<'a, 'b>,
     {
         bundle.build(&mut self.core_dispatcher)?;
 
@@ -77,24 +79,24 @@ impl<'a, 'b> SurvivalDataBuilder<'a, 'b> {
     }
 
     pub fn with_core<S>(mut self, system: S, name: &str, dependencies: &[&str]) -> Self
-        where
-                for<'c> S: System<'c> + Send + 'a,
+    where
+        for<'c> S: System<'c> + Send + 'a,
     {
         self.core_dispatcher.add(system, name, dependencies);
         self
     }
 
     pub fn with_level<S>(mut self, system: S, name: &str, dependencies: &[&str]) -> Self
-        where
-                for<'c> S: System<'c> + Send + 'a,
+    where
+        for<'c> S: System<'c> + Send + 'a,
     {
         self.level_dispatcher.add(system, name, dependencies);
         self
     }
 
     pub fn with_overworld<S>(mut self, system: S, name: &str, dependencies: &[&str]) -> Self
-        where
-                for<'c> S: System<'c> + Send + 'a,
+    where
+        for<'c> S: System<'c> + Send + 'a,
     {
         self.overworld_dispatcher.add(system, name, dependencies);
         self
@@ -122,6 +124,10 @@ impl<'a, 'b> DataInit<SurvivalData<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
 
         // Add the context state to the world
 
-        SurvivalData { core_dispatcher, level_dispatcher, overworld_dispatcher }
+        SurvivalData {
+            core_dispatcher,
+            level_dispatcher,
+            overworld_dispatcher,
+        }
     }
 }

@@ -1,8 +1,15 @@
-use amethyst::ecs::Entity;
 use amethyst::core::math::Vector3;
+use amethyst::ecs::Entity;
 
-#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize)]
-#[derive(strum_macros::EnumString, strum_macros::Display)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    serde::Deserialize,
+    serde::Serialize,
+    strum_macros::EnumString,
+    strum_macros::Display,
+)]
 pub enum Direction {
     N,
     NW,
@@ -13,7 +20,11 @@ pub enum Direction {
     E,
     W,
 }
-impl Default for Direction { fn default() -> Self { Direction::N } }
+impl Default for Direction {
+    fn default() -> Self {
+        Direction::N
+    }
+}
 
 #[derive(Clone, Copy)]
 pub enum PickupTarget {
@@ -33,10 +44,24 @@ pub enum Action {
     TryPickup(PickupTarget),
     DoPickup(Entity),
 }
-impl Default for Action { fn default() -> Self { Action::Wait } }
+impl Default for Action {
+    fn default() -> Self {
+        Action::Wait
+    }
+}
 
-#[derive(Clone, Hash, Eq, PartialEq, Copy, Debug, serde::Deserialize, serde::Serialize)]
-#[derive(strum_macros::EnumString, strum_macros::Display)]
+#[derive(
+    Clone,
+    Hash,
+    Eq,
+    PartialEq,
+    Copy,
+    Debug,
+    serde::Deserialize,
+    serde::Serialize,
+    strum_macros::EnumString,
+    strum_macros::Display,
+)]
 pub enum PlayerInputAction {
     MoveUp,
     MoveDown,

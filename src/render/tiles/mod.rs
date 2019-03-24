@@ -3,7 +3,6 @@ pub use self::interleaved::DrawFlat2D as Pass;
 mod interleaved;
 mod util;
 
-
 use gfx::{
     format::{ChannelType, Format, SurfaceType},
     pso::buffer::Element,
@@ -13,9 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use util::TextureType;
 
-use amethyst::renderer::{
-    Attribute, AttributeFormat, Attributes, VertexFormat, With, Color,
-};
+use amethyst::renderer::{Attribute, AttributeFormat, Attributes, Color, VertexFormat, With};
 
 static VERT_SRC: &[u8] = include_bytes!("sprite_v.glsl");
 static FRAG_SRC: &[u8] = include_bytes!("sprite_f.glsl");

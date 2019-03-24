@@ -7,33 +7,27 @@ use glsl_layout::Uniform;
 
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::{
+    ecs::prelude::{Read, ReadExpect, ReadStorage},
     math::Vector4,
-    ecs::prelude::{Read, ReadStorage, ReadExpect},
-    transform::{Transform, GlobalTransform},
+    transform::{GlobalTransform, Transform},
 };
 use amethyst::error::Error;
 
 use amethyst::renderer::{
-    ActiveCamera, Camera,
     get_camera,
     pipe::{
         pass::{Pass, PassData},
         DepthMode, Effect, NewEffect,
     },
-    Flipped, SpriteSheet,
-    Texture, TextureHandle,
-    Encoder, Factory,
-    Attributes, Query, VertexFormat,
-    DisplayConfig,
-    Color, Rgba,
-    Resources,
+    ActiveCamera, Attributes, Camera, Color, DisplayConfig, Encoder, Factory, Flipped, Query,
+    Resources, Rgba, SpriteSheet, Texture, TextureHandle, VertexFormat,
 };
 
-use crate::settings::Config;
 use crate::components::{FlaggedSpriteRender, TilePosition};
+use crate::settings::Config;
 
+use super::util::{add_texture, default_transparency, set_view_args, setup_textures, ViewArgs};
 use super::*;
-use super::util::{setup_textures, ViewArgs, set_view_args, add_texture, default_transparency,};
 
 use crate::tiles::*;
 
@@ -106,8 +100,7 @@ impl<'a> PassData<'a> for DrawFlat2D {
         ReadTiles<'a, FlaggedSpriteRender>,
         ReadTiles<'a, Flipped>,
         ReadTiles<'a, Rgba>,
-        ReadTiles<'a, GlobalTransform>
-
+        ReadTiles<'a, GlobalTransform>,
     );
 }
 
@@ -155,41 +148,45 @@ impl Pass for DrawFlat2D {
             tiles_sprites,
             tiles_flipped,
             tiles_rgba,
-            tile_globals
+            tile_globals,
         ): <Self as PassData<'a>>::Data,
     ) {
         let camera_g = get_camera(active, &camera, &global);
 
         let (_, g) = camera_g.as_ref().unwrap();
         let global: amethyst::core::math::Matrix4<f32> = g.0;
-        let camera_world_position = amethyst::core::math::Vector3::new(global[12], global[13], global[14]);
-        let camera_tile_position = tiles.world_to_tile(&camera_world_position.xyz(), &game_settings);
+        let camera_world_position =
+            amethyst::core::math::Vector3::new(global[12], global[13], global[14]);
+        let camera_tile_position =
+            tiles.world_to_tile(&camera_world_position.xyz(), &game_settings);
         //let (_, camera_tile_position) = (&camera, &tile_positions).join().next().unwrap();
-
 
         //let translation: amethyst::core::math::Translation3<f32> = amethyst::core::math::convert(transform);
 
         // Calculate the scale of how much we can view...from...what?
         // this should be resolution / (tile width * scale(
         // TODO: dont hardcode the tileset size multiplier, this should be stored in Tiles
-        let view_tiles = display_config.dimensions.unwrap().0 as f32 / (16. * game_settings.graphics.scale); // Hardcoded for now, these should be out of the sprites and into the Tiles object
+        let view_tiles =
+            display_config.dimensions.unwrap().0 as f32 / (16. * game_settings.graphics.scale); // Hardcoded for now, these should be out of the sprites and into the Tiles object
 
-        let view_x = (camera_tile_position.x as f32 - view_tiles - 16.).max(0.).min(tiles.dimensions().x as f32) as u32;
-        let view_y = (camera_tile_position.y as f32 - view_tiles - 16.).max(0.).min(tiles.dimensions().y as f32) as u32;
+        let view_x = (camera_tile_position.x as f32 - view_tiles - 16.)
+            .max(0.)
+            .min(tiles.dimensions().x as f32) as u32;
+        let view_y = (camera_tile_position.y as f32 - view_tiles - 16.)
+            .max(0.)
+            .min(tiles.dimensions().y as f32) as u32;
 
-        let view_e_x = (camera_tile_position.x as f32 + view_tiles).max(0.).min(tiles.dimensions().x as f32) as u32;
-        let view_e_y = (camera_tile_position.y as f32 + view_tiles).max(0.).min(tiles.dimensions().y as f32) as u32;
+        let view_e_x = (camera_tile_position.x as f32 + view_tiles)
+            .max(0.)
+            .min(tiles.dimensions().x as f32) as u32;
+        let view_e_y = (camera_tile_position.y as f32 + view_tiles)
+            .max(0.)
+            .min(tiles.dimensions().y as f32) as u32;
 
         //println!("Viewing: camera=({}, {}), {}, {}, {}, {}", camera_tile_position.x, camera_tile_position.y, view_x, view_y, view_e_x, view_e_y);
         //println!("World: {:?}", camera_world_position);
         // TODO: we should scale this to viewport from teh camera
-        for tile_id in tiles.iter_region(
-            Vector4::new(
-                view_x,
-                view_y,
-                view_e_x,
-                view_e_y)
-        ) {
+        for tile_id in tiles.iter_region(Vector4::new(view_x, view_y, view_e_x, view_e_y)) {
             let sprite_render = tiles_sprites.get(tile_id);
             if sprite_render.is_none() {
                 continue;
@@ -260,8 +257,9 @@ impl TextureDrawData {
 
     pub fn flipped(&self) -> &Option<Flipped> {
         match self {
-            TextureDrawData::Image { flipped, .. }
-            | TextureDrawData::Sprite { flipped, .. } => flipped,
+            TextureDrawData::Image { flipped, .. } | TextureDrawData::Sprite { flipped, .. } => {
+                flipped
+            }
         }
     }
 }

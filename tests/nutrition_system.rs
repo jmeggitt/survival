@@ -1,16 +1,10 @@
 #![cfg(test)]
 extern crate survival;
 
-use amethyst::{
-    SimpleState, Trans, StateData, GameData, SimpleTrans,
-};
-use amethyst_test::{
-    AmethystApplication,
-};
+use amethyst::{GameData, SimpleState, SimpleTrans, StateData, Trans};
+use amethyst_test::AmethystApplication;
 
-use survival::systems::{
-    NutritionSystem,
-};
+use survival::systems::NutritionSystem;
 
 #[derive(Default)]
 struct TestState {
@@ -24,7 +18,7 @@ impl SimpleState for TestState {
         self.iters += 1;
 
         if self.iters > 10 {
-            return Trans::Quit
+            return Trans::Quit;
         }
 
         Trans::None
@@ -42,13 +36,15 @@ fn time_system() -> amethyst::Result<()> {
     let root_log = slog::Logger::root(async_drain, slog::slog_o!());
 
     assert!(AmethystApplication::blank()
-        .with_setup( move |_| {
-
+        .with_setup(move |_| {})
+        .with_resource(survival::settings::Context {
+            spritesheet: None,
+            logs: survival::settings::Logs { root: root_log }
         })
-        .with_resource(survival::settings::Context { spritesheet: None, logs: survival::settings::Logs { root: root_log } })
         .with_system(NutritionSystem::default(), "nutrition_system", &[])
         // WTF? .with_state(|| TestState::default())
-        .run().is_ok());
+        .run()
+        .is_ok());
 
     Ok(())
 }

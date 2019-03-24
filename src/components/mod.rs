@@ -1,19 +1,14 @@
+use crate::utils::HasChannel;
 use amethyst::{
     assets::Handle,
-    ecs::{
-        prelude::*,
-    },
+    core::{components::Transform, math::Vector3},
+    ecs::prelude::*,
     renderer::SpriteSheetHandle,
-    core::{
-        components::Transform,
-        math::Vector3
-    },
-    shrev::{EventChannel,},
+    shrev::EventChannel,
 };
-use specs_derive::Component;
-use serde::{Serialize, Deserialize};
 use bitflags::*;
-use crate::utils::HasChannel;
+use serde::{Deserialize, Serialize};
+use specs_derive::Component;
 
 #[derive(Component, Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(NullStorage)]
@@ -48,35 +43,45 @@ impl HasChannel<crate::actions::Action> for Actionable {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
-#[derive(strum_macros::EnumString, strum_macros::Display)]
+#[derive(
+    Clone, Debug, PartialEq, Deserialize, Serialize, strum_macros::EnumString, strum_macros::Display,
+)]
 pub enum TreeFamily {
     Deciduous,
     Coniferous,
 }
 
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
-#[derive(strum_macros::EnumString, strum_macros::Display)]
+#[derive(
+    Clone, Debug, PartialEq, Deserialize, Serialize, strum_macros::EnumString, strum_macros::Display,
+)]
 pub enum TreeKind {
-    Pine,//(TreeFamily::Coniferous),
-    Fur,//(TreeFamily::Coniferous),
-    Spruce,//(TreeFamily::Coniferous),
-    Cedar,//(TreeFamily::Coniferous),
+    Pine,   //(TreeFamily::Coniferous),
+    Fur,    //(TreeFamily::Coniferous),
+    Spruce, //(TreeFamily::Coniferous),
+    Cedar,  //(TreeFamily::Coniferous),
 
-    Oak,//(TreeFamily::Deciduous),
-    Elm,//(TreeFamily::Deciduous),
-    Maple,//(TreeFamily::Deciduous),
-    Birch,//(TreeFamily::Deciduous),
-    Willow,//(TreeFamily::Deciduous)
+    Oak,    //(TreeFamily::Deciduous),
+    Elm,    //(TreeFamily::Deciduous),
+    Maple,  //(TreeFamily::Deciduous),
+    Birch,  //(TreeFamily::Deciduous),
+    Willow, //(TreeFamily::Deciduous)
 }
 
-#[derive(Component, Copy, Clone, Debug, Serialize, Deserialize)]
-#[derive(strum_macros::EnumString, strum_macros::Display)]
+#[derive(
+    Component,
+    Copy,
+    Clone,
+    Debug,
+    Serialize,
+    Deserialize,
+    strum_macros::EnumString,
+    strum_macros::Display,
+)]
 pub enum ObstructionType {
     Impassable,
-    Blocking { height: f32, },
+    Blocking { height: f32 },
     Vegetation(f32),
-    Liquid { depth: f32, current: f32, }
+    Liquid { depth: f32, current: f32 },
 }
 
 #[derive(Component, Default, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -95,11 +100,15 @@ pub struct Tree {
 #[storage(DenseVecStorage)]
 pub struct TimeAvailable(pub u64);
 impl TimeAvailable {
-    pub fn has(&self, time: u64) -> bool { self.0 >= time }
+    pub fn has(&self, time: u64) -> bool {
+        self.0 >= time
+    }
     pub fn consume(&mut self, time: u64) {
         self.0 -= time;
     }
-    pub fn add(&mut self, time: u64) { self.0 += time; }
+    pub fn add(&mut self, time: u64) {
+        self.0 += time;
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -124,7 +133,11 @@ pub struct Item {
     pub handle: Handle<crate::assets::item::Details>,
     pub properties: Vec<crate::assets::item::Property>,
 }
-impl PartialEq<Item> for Item { fn eq(&self, other: &Self) -> bool { self.handle == other.handle } }
+impl PartialEq<Item> for Item {
+    fn eq(&self, other: &Self) -> bool {
+        self.handle == other.handle
+    }
+}
 
 #[derive(Component, Clone, Debug, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]
@@ -132,11 +145,21 @@ pub struct TilePosition {
     pub coord: Vector3<u32>,
 }
 impl Default for TilePosition {
-    fn default() -> Self { Self { coord: Vector3::new(0, 0, 0), } }
+    fn default() -> Self {
+        Self {
+            coord: Vector3::new(0, 0, 0),
+        }
+    }
 }
 impl TilePosition {
-    pub fn new(coord: Vector3<u32>) -> Self { Self { coord, } }
-    pub fn from_transform(transform: &Transform, tiles: crate::tiles::Tiles, game_settings: &crate::settings::Config) -> Self {
+    pub fn new(coord: Vector3<u32>) -> Self {
+        Self { coord }
+    }
+    pub fn from_transform(
+        transform: &Transform,
+        tiles: crate::tiles::Tiles,
+        game_settings: &crate::settings::Config,
+    ) -> Self {
         let position = tiles.world_to_tile(transform.translation(), &game_settings);;
         Self {
             coord: Vector3::new(position.x as u32, position.y as u32, 0),
@@ -168,6 +191,4 @@ pub struct MaterialStatus {
 
 #[derive(Component, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[storage(DenseVecStorage)]
-pub struct Wearing {
-
-}
+pub struct Wearing {}

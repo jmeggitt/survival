@@ -1,15 +1,15 @@
 #![allow(clippy::module_name_repetitions)]
-use std::sync::{Arc, Mutex};
-use amethyst::{
-    ecs::{Join, ReadExpect, Entities, Write, Read, Resources, SystemData, LazyUpdate},
-    shrev::EventChannel,
-};
-use crate::settings::Context;
-use crate::systems::ui::ImGuiDraw;
 use crate::assets;
+use crate::components;
 use crate::initializers;
 use crate::initializers::SpawnType;
-use crate::components;
+use crate::settings::Context;
+use crate::systems::ui::ImGuiDraw;
+use amethyst::{
+    ecs::{Entities, Join, LazyUpdate, Read, ReadExpect, Resources, SystemData, Write},
+    shrev::EventChannel,
+};
+use std::sync::{Arc, Mutex};
 
 use amethyst_imgui::imgui::ImString;
 
@@ -19,7 +19,7 @@ struct UiEditItemState {
     pub desc: ImString,
 }
 
-#[derive(Clone,)]
+#[derive(Clone)]
 struct ItemExplorerUiState {
     pub last_current_item: i32,
     pub current_item: i32,
@@ -46,7 +46,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
         ReadExpect<'s, Context>,
         Entities<'s>,
         Write<'s, EventChannel<ImGuiDraw>>,
-
         Read<'s, assets::ItemStorage>,
     );
 
@@ -57,55 +56,79 @@ impl<'s> amethyst::ecs::System<'s> for System {
     }
 
     fn run(&mut self, (_, _, mut imgui_draw, item_storage): Self::SystemData) {
-        use amethyst_imgui::imgui as imgui;
-        use amethyst_imgui::imgui::{ImString, im_str};
+        use amethyst_imgui::imgui;
+        use amethyst_imgui::imgui::{im_str, ImString};
         use std::borrow::Borrow;
 
-        let items = item_storage.read().unwrap().data.keys().map(|k| { ImString::new(k.as_str()) }).collect::<Vec<_>>();
+        let items = item_storage
+            .read()
+            .unwrap()
+            .data
+            .keys()
+            .map(|k| ImString::new(k.as_str()))
+            .collect::<Vec<_>>();
 
         {
             let mut state_lck = self.item_explorer_state.lock().unwrap();
             if state_lck.last_current_item != state_lck.current_item {
-                state_lck.active_item = Some(item_storage.read().unwrap().data.values().nth(state_lck.current_item as usize).unwrap().clone());
+                state_lck.active_item = Some(
+                    item_storage
+                        .read()
+                        .unwrap()
+                        .data
+                        .values()
+                        .nth(state_lck.current_item as usize)
+                        .unwrap()
+                        .clone(),
+                );
                 //state_lck.edit_item.name = state_lck.active_item.unwrap().name;
             }
         }
 
         let state = self.item_explorer_state.clone();
 
-        imgui_draw.single_write(Arc::new(move |ui: &amethyst_imgui::imgui::Ui, lazy: &LazyUpdate| {
-            let state = state.clone();
-            ui.window(imgui::im_str!("Item Explorer"))
-            .size((300.0, 100.0), imgui::ImGuiCond::FirstUseEver)
-                .build(|| {
-                    let mut refs = vec![];
-                    for item in &items {
-                        refs.push(item.borrow());
-                    }
+        imgui_draw.single_write(Arc::new(
+            move |ui: &amethyst_imgui::imgui::Ui, lazy: &LazyUpdate| {
+                let state = state.clone();
+                ui.window(imgui::im_str!("Item Explorer"))
+                    .size((300.0, 100.0), imgui::ImGuiCond::FirstUseEver)
+                    .build(|| {
+                        let mut refs = vec![];
+                        for item in &items {
+                            refs.push(item.borrow());
+                        }
 
-                    let mut state_lck = state.lock().unwrap();
+                        let mut state_lck = state.lock().unwrap();
 
-                    state_lck.last_current_item = state_lck.current_item;
-                    ui.list_box(
-                        im_str!("Items"),
-                        &mut state_lck.current_item,
-                        refs.as_slice(),
-                        10,
-                    );
+                        state_lck.last_current_item = state_lck.current_item;
+                        ui.list_box(
+                            im_str!("Items"),
+                            &mut state_lck.current_item,
+                            refs.as_slice(),
+                            10,
+                        );
 
-                    ui.same_line(0.);
-                    if ui.button(im_str!("Spawn"), (0., 0.)) {
-                        lazy.exec_mut(move |world| {
+                        ui.same_line(0.);
+                        if ui.button(im_str!("Spawn"), (0., 0.)) {
+                            lazy.exec_mut(move |world| {
+                                let (_, player) = (
+                                    &world.read_storage::<components::Player>(),
+                                    &world.entities(),
+                                )
+                                    .join()
+                                    .next()
+                                    .unwrap();
 
-                            let (_, player) = (&world.read_storage::<components::Player>(), &world.entities()).join().next().unwrap();
-
-                            initializers::spawn_item(world,
-                                                     SpawnType::Parent(player),
-                                                     "Container",
-                                                     None);
-                        });
-                    }
-                })
-        }));
+                                initializers::spawn_item(
+                                    world,
+                                    SpawnType::Parent(player),
+                                    "Container",
+                                    None,
+                                );
+                            });
+                        }
+                    })
+            },
+        ));
     }
 }

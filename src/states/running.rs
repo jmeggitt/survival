@@ -1,10 +1,7 @@
-use amethyst::{
-    StateEvent, Trans, StateData,
-    assets::ProgressCounter,
-};
+use amethyst::{assets::ProgressCounter, StateData, StateEvent, Trans};
 
-use crate::SurvivalData;
 use crate::game_data::SurvivalState;
+use crate::SurvivalData;
 
 pub struct State {
     progress_counter: ProgressCounter,
@@ -23,9 +20,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         //slog_trace!(self.log, "Changed state to Running");
     }
 
-    fn on_pause(&mut self, _: StateData<'_, SurvivalData<'_, '_>>) {
-
-    }
+    fn on_pause(&mut self, _: StateData<'_, SurvivalData<'_, '_>>) {}
 
     fn handle_event(
         &mut self,

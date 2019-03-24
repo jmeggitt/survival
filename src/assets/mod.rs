@@ -4,17 +4,17 @@ pub mod item;
 
 pub mod loader;
 #[allow(unused_imports)]
-use loader::AssetLoader as AssetLoader;
+use loader::AssetLoader;
 
 use amethyst::{
+    assets::{Asset, AssetStorage, Handle, Loader, Source},
     ecs::World,
-    assets::{Asset, Source, Handle, Loader, AssetStorage},
-    error::{ResultExt, Error, format_err},
+    error::{format_err, Error, ResultExt},
 };
 use std::collections::HashMap;
-use std::sync::{Arc, RwLock, RwLockReadGuard};
-use std::path::{Path, PathBuf};
 use std::fs::File;
+use std::path::{Path, PathBuf};
+use std::sync::{Arc, RwLock, RwLockReadGuard};
 
 pub type StorageWrapper<T> = Arc<RwLock<Storage<T>>>;
 
@@ -22,8 +22,7 @@ pub use item::Details as Item;
 pub type ItemStorage = StorageWrapper<Item>;
 
 #[derive(Default, Clone, serde::Serialize, serde::Deserialize)]
-pub struct Storage<T>
-{
+pub struct Storage<T> {
     pub data: HashMap<String, T>,
     #[serde(skip_serializing, skip_deserializing)]
     pub handles: HashMap<String, Handle<T>>,
@@ -33,20 +32,19 @@ pub trait GetStorage<T> {
     fn borrow(&self) -> RwLockReadGuard<Storage<T>>;
 }
 impl<T> GetStorage<T> for Arc<RwLock<Storage<T>>> {
-    fn borrow(&self) -> RwLockReadGuard<Storage<T>>  {
+    fn borrow(&self) -> RwLockReadGuard<Storage<T>> {
         self.read().unwrap()
     }
 }
 
-
-pub struct StorageSource<T>
-{
+pub struct StorageSource<T> {
     storage: Arc<RwLock<Storage<T>>>,
     source: PathBuf,
 }
 impl<T> StorageSource<T>
-    where T: for<'a> serde::Deserialize<'a> + serde::Serialize + Send + Sync + Asset + Sized + Default,
-    <T as Asset>::Data: for<'a> serde::Deserialize<'a>
+where
+    T: for<'a> serde::Deserialize<'a> + serde::Serialize + Send + Sync + Asset + Sized + Default,
+    <T as Asset>::Data: for<'a> serde::Deserialize<'a>,
 {
     pub fn apply(source: &Path, world: &mut World) -> Result<Arc<RwLock<Storage<T>>>, Error> {
         let file = File::open(&source)
@@ -93,7 +91,8 @@ impl<T> StorageSource<T>
     }
 }
 impl<T> Source for StorageSource<T>
-    where T: serde::Serialize + serde::de::DeserializeOwned + Send + Sync + Asset + Sized + Default
+where
+    T: serde::Serialize + serde::de::DeserializeOwned + Send + Sync + Asset + Sized + Default,
 {
     fn modified(&self, path: &str) -> Result<u64, Error> {
         use std::fs::metadata;
@@ -111,7 +110,10 @@ impl<T> Source for StorageSource<T>
 
     fn load(&self, path: &str) -> Result<Vec<u8>, Error> {
         let borrow = self.storage.borrow();
-        let data = borrow.data.get(path).ok_or_else(|| format_err!("Failed to fetch item {:?}", path))?;
+        let data = borrow
+            .data
+            .get(path)
+            .ok_or_else(|| format_err!("Failed to fetch item {:?}", path))?;
         Ok(ron::ser::to_string(&data)?.as_bytes().to_vec())
     }
 

@@ -1,17 +1,19 @@
 #![allow(clippy::module_name_repetitions)]
 
-use amethyst::{
-    core::transform::Transform,
-    renderer::Camera,
-    ecs::{SystemData, Resources, Entities, ReadStorage, WriteStorage, Write, ReadExpect, Read, Join},
-    input::{InputHandler, InputEvent,},
-    shrev::{EventChannel, ReaderId},
-};
-use crate::game_data::SurvivalState;
-use crate::settings::Context;
-use crate::components;
 use crate::actions;
 use crate::actions::{Action, Direction, PlayerInputAction};
+use crate::components;
+use crate::game_data::SurvivalState;
+use crate::settings::Context;
+use amethyst::{
+    core::transform::Transform,
+    ecs::{
+        Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, Write, WriteStorage,
+    },
+    input::{InputEvent, InputHandler},
+    renderer::Camera,
+    shrev::{EventChannel, ReaderId},
+};
 
 #[derive(Default)]
 pub struct System {
@@ -33,16 +35,28 @@ impl<'s> amethyst::ecs::System<'s> for System {
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
 
-        self.input_reader = Some(Write::<EventChannel<InputEvent<PlayerInputAction>>>::fetch(&res).register_reader());
+        self.input_reader = Some(
+            Write::<EventChannel<InputEvent<PlayerInputAction>>>::fetch(&res).register_reader(),
+        );
     }
 
     #[allow(clippy::cast_possible_truncation)]
-    fn run(&mut self, (_, mut state, input, input_events, entities, players, mut actionables,
-        cameras, mut transforms,// for debuging
-    ): Self::SystemData) {
+    fn run(
+        &mut self,
+        (
+            _,
+            mut state,
+            input,
+            input_events,
+            entities,
+            players,
+            mut actionables,
+            cameras,
+            mut transforms, // for debuging
+        ): Self::SystemData,
+    ) {
         if *state == SurvivalState::Paused {
             for (_, _, actionable) in (&entities, &players, &mut actionables).join() {
-
                 let mut got_input = false;
 
                 // hold-down key actions go here
@@ -68,10 +82,11 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 }
                 if input.action_is_down(&PlayerInputAction::PickUp).unwrap() {
                     //slog_trace!(context.logs.root, "Got player input in direction: move_right");
-                    actionable.channel.single_write(Action::TryPickup(actions::PickupTarget::Under));
+                    actionable
+                        .channel
+                        .single_write(Action::TryPickup(actions::PickupTarget::Under));
                     got_input = true;
                 }
-
 
                 if input.action_is_down(&PlayerInputAction::ZoomIn).unwrap() {
                     if let Some((_, transform)) = (&cameras, &mut transforms).join().next() {
@@ -84,13 +99,12 @@ impl<'s> amethyst::ecs::System<'s> for System {
                     }
                 }
 
-
                 // Single shot event actions go here
                 if !got_input {
                     for event in input_events.read(self.input_reader.as_mut().unwrap()) {
                         if let InputEvent::ActionPressed(action) = event {
                             match action {
-                                _ => {},
+                                _ => {}
                             }
                         }
                     }
@@ -104,7 +118,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 // Set the camera position here too LOL
                 let mut player_translation = None;
                 if let Some((_, player_transform)) = (&players, &mut transforms).join().next() {
-                    player_translation = Some(*player_transform.translation() );
+                    player_translation = Some(*player_transform.translation());
                 }
 
                 if let Some((_, transform)) = (&cameras, &mut transforms).join().next() {
@@ -115,7 +129,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         transform.set_translation_z(1.0);
                     }
                 }
-
             }
         }
     }

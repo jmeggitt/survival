@@ -1,11 +1,9 @@
 #![allow(clippy::module_name_repetitions)]
 
-use amethyst::{
-    ecs::{Write, ReadExpect,},
-};
-use amethyst_imgui as am_imgui;
-use amethyst_imgui::imgui as imgui;
 use crate::settings::Context;
+use amethyst::ecs::{ReadExpect, Write};
+use amethyst_imgui as am_imgui;
+use amethyst_imgui::imgui;
 
 #[derive(Default)]
 pub struct BeginFrameSystem;
@@ -15,8 +13,7 @@ impl BeginFrameSystem {
         dimensions: &amethyst::renderer::ScreenDimensions,
         time: &amethyst::core::timing::Time,
         imgui_state: &mut Option<am_imgui::ImguiState>,
-    ) -> Option<&'ui imgui::Ui<'ui>>
-    {
+    ) -> Option<&'ui imgui::Ui<'ui>> {
         let dimensions: &amethyst::renderer::ScreenDimensions = &dimensions;
         let time: &amethyst::core::timing::Time = &time;
 
@@ -29,7 +26,14 @@ impl BeginFrameSystem {
             _ => return None,
         };
 
-        let frame = imgui.frame(imgui::FrameSize::new(f64::from(dimensions.width()), f64::from(dimensions.height()), dimensions.hidpi_factor()), time.delta_seconds());
+        let frame = imgui.frame(
+            imgui::FrameSize::new(
+                f64::from(dimensions.width()),
+                f64::from(dimensions.height()),
+                dimensions.hidpi_factor(),
+            ),
+            time.delta_seconds(),
+        );
         std::mem::forget(frame);
         unsafe { imgui::Ui::current_ui() }
     }
@@ -42,7 +46,7 @@ impl<'s> amethyst::ecs::System<'s> for BeginFrameSystem {
         Write<'s, Option<am_imgui::ImguiState>>,
     );
 
-    fn run(&mut self, (_, dimensions, time, mut imgui_state, ): Self::SystemData) {
+    fn run(&mut self, (_, dimensions, time, mut imgui_state): Self::SystemData) {
         self.open_frame(&dimensions, &time, &mut imgui_state);
     }
 }
@@ -65,12 +69,10 @@ impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
     }
 }
 
-
-
 struct ImguiLuaWrapper<'ui>(&'ui imgui::Ui<'ui>);
 impl<'ui> rlua::UserData for ImguiLuaWrapper<'ui> {
     fn add_methods<'lua, M: rlua::UserDataMethods<'lua, Self>>(methods: &mut M) {
-        methods.add_method("new_line", | _, im, ()| {
+        methods.add_method("new_line", |_, im, ()| {
             im.0.new_line();
             Ok(())
         });

@@ -1,15 +1,15 @@
 #![allow(clippy::module_name_repetitions)]
 
+use crate::actions::Action;
+use crate::components;
+use crate::settings::Context;
+use crate::utils::ComponentEventReader;
 use amethyst::{
     assets::AssetStorage,
-    ecs::{Resources, SystemData, Join, ReadStorage, WriteStorage, ReadExpect, Entities, Read},
-    core::transform::Transform,
     core::components::Parent,
+    core::transform::Transform,
+    ecs::{Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
 };
-use crate::settings::Context;
-use crate::components;
-use crate::utils::ComponentEventReader;
-use crate::actions::Action;
 
 use slog::slog_error;
 
@@ -26,7 +26,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
         WriteStorage<'s, components::FlaggedSpriteRender>,
         WriteStorage<'s, components::Actionable>,
         WriteStorage<'s, Parent>,
-
         Read<'s, AssetStorage<crate::assets::Item>>,
     );
 
@@ -36,9 +35,19 @@ impl<'s> amethyst::ecs::System<'s> for System {
         self.action_reader.setup(res);
     }
 
-    fn run(&mut self, (context, entities, items, mut transforms, mut sprites, mut actionables, mut parents,
-    item_storage,
-    ): Self::SystemData) {
+    fn run(
+        &mut self,
+        (
+            context,
+            entities,
+            items,
+            mut transforms,
+            mut sprites,
+            mut actionables,
+            mut parents,
+            item_storage,
+        ): Self::SystemData,
+    ) {
         self.action_reader.maintain(&entities, &mut actionables);
 
         // search for dropped items with a transform, but no sprite. Add the sprite.
@@ -50,16 +59,21 @@ impl<'s> amethyst::ecs::System<'s> for System {
             if sprites.get(entity).is_none() {
                 // Insert a sprite for it
                 if let Some(details) = item_storage.get(&item.handle) {
-                    sprites.insert(entity, components::FlaggedSpriteRender {
-                        sprite_sheet: sheet_handle.clone(),
-                        sprite_number: details.sprite_number,
-                    }).unwrap();
+                    sprites
+                        .insert(
+                            entity,
+                            components::FlaggedSpriteRender {
+                                sprite_sheet: sheet_handle.clone(),
+                                sprite_number: details.sprite_number,
+                            },
+                        )
+                        .unwrap();
                 }
             }
         }
 
         // check for pickup and drop events
-        for (entity, actionable) in (&entities, &mut actionables, ).join() {
+        for (entity, actionable) in (&entities, &mut actionables).join() {
             for event in self.action_reader.read(entity, actionable) {
                 match event {
                     Action::Drop(dropped_item) => {
@@ -69,25 +83,33 @@ impl<'s> amethyst::ecs::System<'s> for System {
                                 let item = items.get(entity).unwrap();
                                 if let Some(details) = item_storage.get(&item.handle) {
                                     transforms.insert(*dropped_item, transform.clone()).unwrap();
-                                    sprites.insert(entity, components::FlaggedSpriteRender {
-                                        sprite_sheet: sheet_handle.clone(),
-                                        sprite_number: details.sprite_number,
-                                    }).unwrap();
+                                    sprites
+                                        .insert(
+                                            entity,
+                                            components::FlaggedSpriteRender {
+                                                sprite_sheet: sheet_handle.clone(),
+                                                sprite_number: details.sprite_number,
+                                            },
+                                        )
+                                        .unwrap();
 
                                     // Remove the parent relationship
                                     parents.remove(*dropped_item);
                                 }
                             }
-                            None => { slog_error!(context.logs.root, "Entity without transform dropped an item, this shouldn't happen!"); continue; }
+                            None => {
+                                slog_error!(context.logs.root, "Entity without transform dropped an item, this shouldn't happen!");
+                                continue;
+                            }
                         }
-                    },
+                    }
                     Action::DoPickup(picked_item) => {
                         transforms.remove(*picked_item);
                         sprites.remove(*picked_item);
 
-                        parents.insert(*picked_item, Parent{ entity }).unwrap();
-                    },
-                    _ => {},
+                        parents.insert(*picked_item, Parent { entity }).unwrap();
+                    }
+                    _ => {}
                 }
             }
         }

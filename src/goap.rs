@@ -1,4 +1,4 @@
-use amethyst::ecs::{Entity, storage::UnprotectedStorage, DenseVecStorage, world::Index, World };
+use amethyst::ecs::{storage::UnprotectedStorage, world::Index, DenseVecStorage, Entity, World};
 
 #[derive(Clone)]
 pub struct Action {
@@ -11,7 +11,6 @@ impl PartialEq for Action {
     }
 }
 
-
 pub struct Planner {
     cur_action: Index,
     actions: DenseVecStorage<Action>,
@@ -22,7 +21,7 @@ impl Planner {
         Self::default()
     }
 
-    pub fn insert_action(&mut self, )-> Index {
+    pub fn insert_action(&mut self) -> Index {
         let action = self.cur_action;
 
         self.cur_action += 1;
@@ -33,17 +32,13 @@ impl Planner {
         if action > self.cur_action {
             return None;
         }
-        unsafe {
-            Some(self.actions.get(action))
-        }
+        unsafe { Some(self.actions.get(action)) }
     }
     pub fn get_mut(&mut self, action: Index) -> Option<&mut Action> {
         if action > self.cur_action {
             return None;
         }
-        unsafe {
-            Some(self.actions.get_mut(action))
-        }
+        unsafe { Some(self.actions.get_mut(action)) }
     }
 
     pub fn can_occur(&self, _action: Index, _entity: Entity, _world: &World) -> bool {
@@ -54,13 +49,10 @@ impl Planner {
         0
     }
 
-    pub fn apply(&self, _action: Index, _entity: Entity, _world: &mut World) {
-
-    }
+    pub fn apply(&self, _action: Index, _entity: Entity, _world: &mut World) {}
 }
 
-impl Default for Planner
-{
+impl Default for Planner {
     fn default() -> Self {
         Self {
             actions: DenseVecStorage::default(),

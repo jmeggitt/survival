@@ -4,15 +4,14 @@ use amethyst::{
     ecs::{Entity, SystemData},
     prelude::*,
     renderer::{
-        Camera, PngFormat, Projection,
-        SpriteRender, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle, Texture,
-        TextureMetadata, Transparent,
+        Camera, PngFormat, Projection, SpriteRender, SpriteSheet, SpriteSheetFormat,
+        SpriteSheetHandle, Texture, TextureMetadata, Transparent,
     },
     utils::application_root_dir,
 };
 
-use crate::tiles::{Tiles, WriteTiles};
 use crate::components::{Player, TilePosition};
+use crate::tiles::{Tiles, WriteTiles};
 
 fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> SpriteSheetHandle {
     let texture_handle = {
@@ -38,7 +37,12 @@ fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str) -> Sprit
 }
 
 // Initialize a sprite as a reference point at a fixed location
-fn init_reference_sprite(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate::tiles::Tiles, game_settings: &crate::settings::Config) -> Entity {
+fn init_reference_sprite(
+    world: &mut World,
+    sprite_sheet: &SpriteSheetHandle,
+    tiles: crate::tiles::Tiles,
+    game_settings: &crate::settings::Config,
+) -> Entity {
     let mut transform = Transform::default();
     transform.set_translation_x(100.0);
     transform.set_translation_y(0.0);
@@ -48,14 +52,23 @@ fn init_reference_sprite(world: &mut World, sprite_sheet: &SpriteSheetHandle, ti
     };
     world
         .create_entity()
-        .with(TilePosition::from_transform(&transform, tiles, game_settings))
+        .with(TilePosition::from_transform(
+            &transform,
+            tiles,
+            game_settings,
+        ))
         .with(transform)
         .with(sprite)
         .with(Transparent)
         .build()
 }
 
-fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate::tiles::Tiles, game_settings: &crate::settings::Config) -> Entity {
+fn init_player(
+    world: &mut World,
+    sprite_sheet: &SpriteSheetHandle,
+    tiles: crate::tiles::Tiles,
+    game_settings: &crate::settings::Config,
+) -> Entity {
     let mut transform = Transform::default();
     transform.set_translation_x(50.0);
     transform.set_translation_y(50.0);
@@ -65,7 +78,11 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate
     };
     world
         .create_entity()
-        .with(TilePosition::from_transform(&transform, tiles, game_settings))
+        .with(TilePosition::from_transform(
+            &transform,
+            tiles,
+            game_settings,
+        ))
         .with(transform)
         .with(Player)
         .with(sprite)
@@ -74,12 +91,21 @@ fn init_player(world: &mut World, sprite_sheet: &SpriteSheetHandle, tiles: crate
         .build()
 }
 
-fn init_camera(world: &mut World, parent: Entity, tiles: crate::tiles::Tiles, game_settings: &crate::settings::Config) {
+fn init_camera(
+    world: &mut World,
+    parent: Entity,
+    tiles: crate::tiles::Tiles,
+    game_settings: &crate::settings::Config,
+) {
     let mut transform = Transform::default();
     transform.set_translation_z(1.0);
     world
         .create_entity()
-        .with(TilePosition::from_transform(&transform, tiles, game_settings))
+        .with(TilePosition::from_transform(
+            &transform,
+            tiles,
+            game_settings,
+        ))
         .with(Camera::from(Projection::orthographic(
             -1000.0, 1000.0, -1000.0, 1000.0,
         )))
@@ -126,7 +152,7 @@ impl SimpleState for Example {
         //let mut imgui: Write<EventChannel<crate::systems::ui::ImguiDraw>> = SystemData::fetch(&world.res);
         //imgui.single_write(std::sync::Arc::new(|ui: &amethyst_imgui::imgui::Ui| {
         //    ui.show_demo_window(&mut true);
-       // }));
+        // }));
         Trans::None
     }
 
@@ -140,7 +166,12 @@ impl SimpleState for Example {
         //world.register_tile_comp::<TileEntities, TileId>();
 
         let tiles = Tiles::new(100, 100);
-        let game_settings = crate::settings::Config::load(application_root_dir().unwrap().join("resources").join("game_settings.ron"));
+        let game_settings = crate::settings::Config::load(
+            application_root_dir()
+                .unwrap()
+                .join("resources")
+                .join("game_settings.ron"),
+        );
 
         // Init the test entities and map
         {
@@ -150,34 +181,50 @@ impl SimpleState for Example {
             //    load_sprite_sheet(world, "Background.png", "Background.ron");
 
             // let _background = init_background_sprite(world, &background_sprite_sheet_handle);
-            let _reference = init_reference_sprite(world, &circle_sprite_sheet_handle, tiles, &game_settings);
+            let _reference =
+                init_reference_sprite(world, &circle_sprite_sheet_handle, tiles, &game_settings);
             let parent = init_player(world, &circle_sprite_sheet_handle, tiles, &game_settings);
             init_camera(world, parent, tiles, &game_settings);
 
-            let map_sprite_sheet_handle = load_sprite_sheet(world, "spritesheets/Bisasam_16x16.png", "spritesheets/Bisasam_16x16.ron");
-
+            let map_sprite_sheet_handle = load_sprite_sheet(
+                world,
+                "spritesheets/Bisasam_16x16.png",
+                "spritesheets/Bisasam_16x16.ron",
+            );
 
             {
-                let mut sprites: WriteTiles<crate::components::FlaggedSpriteRender> = SystemData::fetch(&world.res);
-                let mut transforms: WriteTiles<amethyst::core::transform::GlobalTransform> = SystemData::fetch(&world.res);
-                let mut tile_entities_map: WriteTiles<crate::tiles::TileEntities> = SystemData::fetch(&world.res);
+                let mut sprites: WriteTiles<crate::components::FlaggedSpriteRender> =
+                    SystemData::fetch(&world.res);
+                let mut transforms: WriteTiles<amethyst::core::transform::GlobalTransform> =
+                    SystemData::fetch(&world.res);
+                let mut tile_entities_map: WriteTiles<crate::tiles::TileEntities> =
+                    SystemData::fetch(&world.res);
                 for tile_id in tiles.iter_all() {
                     tile_entities_map.insert(tile_id, crate::tiles::TileEntities::default());
 
-                    sprites.insert(tile_id, crate::components::FlaggedSpriteRender {
-                        sprite_sheet: map_sprite_sheet_handle.clone(),
-                        sprite_number: 3,
-                    });
+                    sprites.insert(
+                        tile_id,
+                        crate::components::FlaggedSpriteRender {
+                            sprite_sheet: map_sprite_sheet_handle.clone(),
+                            sprite_number: 3,
+                        },
+                    );
 
                     let coords = tile_id.coords(tiles.dimensions());
                     let mut transform = Transform::default();
 
                     let width = 20.;
                     let height = 20.;
-                    transform.set_translation_xyz(coords.0 * width * game_settings.graphics.scale,
-                                      -1. * (coords.1 * height * game_settings.graphics.scale),
-                                      0.);
-                    transform.set_scale(game_settings.graphics.scale, game_settings.graphics.scale, 0.);
+                    transform.set_translation_xyz(
+                        coords.0 * width * game_settings.graphics.scale,
+                        -1. * (coords.1 * height * game_settings.graphics.scale),
+                        0.,
+                    );
+                    transform.set_scale(
+                        game_settings.graphics.scale,
+                        game_settings.graphics.scale,
+                        0.,
+                    );
 
                     //println!("Setting at: {}, {}: coord={},width={},scale={}", (coords.0 * width * game_settings.graphics.scale),
                     //         (coords.1 * height * game_settings.graphics.scale), coords.1, width, game_settings.graphics.scale);
@@ -214,6 +261,5 @@ impl SimpleState for Example {
             let entity = creator.create("ui/main_ui.ron", ());
             println!("Created ui: {}", entity.id());
         });
-
     }
 }

@@ -13,19 +13,16 @@ pub use serde as _serde;
 pub struct _SingleBit<T>(pub T);
 
 impl<'de, T> _serde::Deserialize<'de> for _SingleBit<T>
-    where
-        T: Default + _serde::de::Visitor<'de, Value = T>
+where
+    T: Default + _serde::de::Visitor<'de, Value = T>,
 {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: _serde::Deserializer<'de>
+    where
+        D: _serde::Deserializer<'de>,
     {
-        deserializer
-            .deserialize_identifier(T::default())
-            .map(Self)
+        deserializer.deserialize_identifier(T::default()).map(Self)
     }
 }
-
 
 #[macro_export]
 macro_rules! bitflags_serial {

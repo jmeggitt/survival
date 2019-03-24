@@ -1,19 +1,11 @@
 #![cfg(test)]
 extern crate survival;
 
-use amethyst::{
-    ecs::{Builder},
-    SimpleState, Trans, StateData, GameData, SimpleTrans,
-};
-use amethyst_test::{
-    AmethystApplication,
-};
+use amethyst::{ecs::Builder, GameData, SimpleState, SimpleTrans, StateData, Trans};
+use amethyst_test::AmethystApplication;
 
-use survival::systems::{
-    TimeSystem,
-    time::{TimeState}
-};
 use survival::components::TimeAvailable;
+use survival::systems::{time::TimeState, TimeSystem};
 #[derive(Default)]
 struct TestState {
     iters: u32,
@@ -26,7 +18,7 @@ impl SimpleState for TestState {
         self.iters += 1;
 
         if self.iters > 10 {
-            return Trans::Quit
+            return Trans::Quit;
         }
 
         Trans::None
@@ -44,15 +36,18 @@ fn time_system() -> amethyst::Result<()> {
     let root_log = slog::Logger::root(async_drain, slog::slog_o!());
 
     assert!(AmethystApplication::blank()
-        .with_setup( move |world| {
+        .with_setup(move |world| {
             world.create_entity().with(TimeAvailable::default()).build();
-
         })
-        .with_resource(survival::settings::Context { spritesheet: None, logs: survival::settings::Logs { root: root_log } })
+        .with_resource(survival::settings::Context {
+            spritesheet: None,
+            logs: survival::settings::Logs { root: root_log }
+        })
         .with_resource(TimeState::default())
         .with_system(TimeSystem, "time_system", &[])
-       // WTF? .with_state(|| TestState::default())
-        .run().is_ok());
+        // WTF? .with_state(|| TestState::default())
+        .run()
+        .is_ok());
 
     Ok(())
 }

@@ -1,18 +1,25 @@
 use amethyst::{
-    ecs::{World},
-    renderer::{Texture, TextureMetadata, PngFormat, SpriteSheetFormat, SpriteSheet, SpriteSheetHandle},
-    assets::{AssetStorage, Loader},
-    StateEvent, Trans, StateData,
     assets::ProgressCounter,
+    assets::{AssetStorage, Loader},
+    ecs::World,
+    renderer::{
+        PngFormat, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle, Texture, TextureMetadata,
+    },
+    StateData, StateEvent, Trans,
 };
 use specs_static::WorldExt;
 
 use slog::slog_trace;
 
-use crate::SurvivalData;
 use crate::settings;
+use crate::SurvivalData;
 
-fn load_sprite_sheet(world: &mut World, png_path: &str, ron_path: &str, progress_counter: &mut ProgressCounter) -> SpriteSheetHandle {
+fn load_sprite_sheet(
+    world: &mut World,
+    png_path: &str,
+    ron_path: &str,
+    progress_counter: &mut ProgressCounter,
+) -> SpriteSheetHandle {
     let texture_handle = {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
@@ -53,18 +60,29 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
 
         slog_trace!(self.log, "Changed state to first_load");
 
-        let default_sprite_sheet = load_sprite_sheet(world, "spritesheets/Bisasam_16x16.png", "spritesheets/Bisasam_16x16.ron", &mut self.progress_counter);
+        let default_sprite_sheet = load_sprite_sheet(
+            world,
+            "spritesheets/Bisasam_16x16.png",
+            "spritesheets/Bisasam_16x16.ron",
+            &mut self.progress_counter,
+        );
 
         // How do we pass this along?
         world.res.fetch_mut::<settings::Context>().spritesheet = Some(default_sprite_sheet);
 
-        crate::assets::StorageSource::<crate::assets::Item>::apply(&std::path::Path::new("resources/data/items.ron"), world).unwrap();
+        crate::assets::StorageSource::<crate::assets::Item>::apply(
+            &std::path::Path::new("resources/data/items.ron"),
+            world,
+        )
+        .unwrap();
 
         // Register tile components
         world.register_tile_comp::<crate::components::FlaggedSpriteRender, crate::tiles::TileId>();
         world.register_tile_comp::<amethyst::renderer::Flipped, crate::tiles::TileId>();
         world.register_tile_comp::<amethyst::renderer::Rgba, crate::tiles::TileId>();
-        world.register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>();
+        world
+            .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>(
+            );
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
 
         world.register_tile_comp::<crate::components::Impassable, crate::tiles::TileId>();

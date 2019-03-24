@@ -1,7 +1,7 @@
-use amethyst::assets::{Handle, AssetStorage, Asset, Format, Loader};
+use amethyst::assets::{Asset, AssetStorage, Format, Handle, Loader};
 use std::collections::HashMap;
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 
 /// Loads asset from the so-called asset packs
 /// It caches assets which you can manually load or unload on demand.
@@ -133,8 +133,8 @@ impl AssetLoader {
         ali: &AssetLoaderInternal<T>,
         storage: &'a AssetStorage<T>,
     ) -> Option<&'a T>
-        where
-            T: Asset,
+    where
+        T: Asset,
     {
         if let Some(h) = Self::get_asset_handle::<T>(path, ali) {
             storage.get(&h)
@@ -152,9 +152,9 @@ impl AssetLoader {
         storage: &'a mut AssetStorage<T>,
         loader: &Loader,
     ) -> Option<&'a T>
-        where
-            T: Asset,
-            F: Format<T> + 'static,
+    where
+        T: Asset,
+        F: Format<T> + 'static,
     {
         if let Some(h) = Self::get_asset_handle::<T>(path, ali) {
             return storage.get(&h);
@@ -175,9 +175,9 @@ impl AssetLoader {
         storage: &mut AssetStorage<T>,
         loader: &Loader,
     ) -> Option<Handle<T>>
-        where
-            T: Asset,
-            F: Format<T> + 'static,
+    where
+        T: Asset,
+        F: Format<T> + 'static,
     {
         if let Some(handle) = Self::get_asset_handle(path, ali) {
             return Some(handle);
@@ -263,7 +263,7 @@ mod test {
                     "{}/tests/assets/mod1/config/uniqueother",
                     env!("CARGO_MANIFEST_DIR")
                 )
-                    .to_string()
+                .to_string()
             )
         )
     }
@@ -273,7 +273,13 @@ mod test {
         let asset_loader = load_asset_loader();
         assert_eq!(
             asset_loader.resolve_path("config/ov1"),
-            Some(format!("{}/tests/assets/mod1/config/ov1", env!("CARGO_MANIFEST_DIR")).to_string())
+            Some(
+                format!(
+                    "{}/tests/assets/mod1/config/ov1",
+                    env!("CARGO_MANIFEST_DIR")
+                )
+                .to_string()
+            )
         )
     }
 

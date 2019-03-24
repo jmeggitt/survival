@@ -1,9 +1,9 @@
-use amethyst::shrev;
 use amethyst::ecs::{
-    Entity, Resources, WriteStorage, Component, SystemData, Entities, Join,
-    storage::{ComponentEvent, UnprotectedStorage},
     storage,
+    storage::{ComponentEvent, UnprotectedStorage},
+    Component, Entities, Entity, Join, Resources, SystemData, WriteStorage,
 };
+use amethyst::shrev;
 use hibitset::BitSet;
 
 pub trait HasChannel<E> {
@@ -15,8 +15,8 @@ pub trait HasChannel<E> {
 
 #[derive(Default)]
 pub struct ComponentEventReader<C, T>
-    where
-        T: 'static,
+where
+    T: 'static,
 {
     component_reader: Option<shrev::ReaderId<ComponentEvent>>,
     action_readers: std::collections::HashMap<Entity, shrev::ReaderId<T>>,
@@ -25,17 +25,29 @@ pub struct ComponentEventReader<C, T>
 }
 
 impl<C, T> ComponentEventReader<C, T>
-    where
-        T: amethyst::shrev::Event + 'static,
-        C: Component + HasChannel<T> + Sized,
-        <C as Component>::Storage: UnprotectedStorage<C> + storage::Tracked + Sized + Send + Sync + 'static,
+where
+    T: amethyst::shrev::Event + 'static,
+    C: Component + HasChannel<T> + Sized,
+    <C as Component>::Storage:
+        UnprotectedStorage<C> + storage::Tracked + Sized + Send + Sync + 'static,
 {
-    pub fn setup(&mut self, res: &mut Resources, ) {
-        self.component_reader = Some(WriteStorage::<C>::fetch(&res).channel_mut().register_reader());
+    pub fn setup(&mut self, res: &mut Resources) {
+        self.component_reader = Some(
+            WriteStorage::<C>::fetch(&res)
+                .channel_mut()
+                .register_reader(),
+        );
     }
 
-    pub fn subscribe(&mut self, entity: Entity, storage: &mut WriteStorage<C>, ) {
-        self.action_readers.insert(entity, storage.get_mut(entity).unwrap().channel_mut().register_reader());
+    pub fn subscribe(&mut self, entity: Entity, storage: &mut WriteStorage<C>) {
+        self.action_readers.insert(
+            entity,
+            storage
+                .get_mut(entity)
+                .unwrap()
+                .channel_mut()
+                .register_reader(),
+        );
     }
 
     pub fn unsubscribe(&mut self, entity: Entity) {
@@ -46,7 +58,10 @@ impl<C, T> ComponentEventReader<C, T>
         let mut comp_remove = BitSet::new();
         let mut comp_new = BitSet::new();
 
-        for event in storage.channel().read(self.component_reader.as_mut().unwrap()) {
+        for event in storage
+            .channel()
+            .read(self.component_reader.as_mut().unwrap())
+        {
             match event {
                 ComponentEvent::Inserted(id) => {
                     self.components.add(*id);
@@ -54,8 +69,8 @@ impl<C, T> ComponentEventReader<C, T>
                 }
                 ComponentEvent::Removed(id) => {
                     comp_remove.add(*id);
-                },
-                _ => {},
+                }
+                _ => {}
             }
         }
 
@@ -68,11 +83,25 @@ impl<C, T> ComponentEventReader<C, T>
         }
     }
 
-    pub fn read_storage<'a>(&mut self, entity: Entity, storage: &'a mut WriteStorage<'a, C>) -> shrev::EventIterator<'a, T> {
-        storage.get(entity).unwrap().channel().read(self.action_readers.get_mut(&entity).unwrap())
+    pub fn read_storage<'a>(
+        &mut self,
+        entity: Entity,
+        storage: &'a mut WriteStorage<'a, C>,
+    ) -> shrev::EventIterator<'a, T> {
+        storage
+            .get(entity)
+            .unwrap()
+            .channel()
+            .read(self.action_readers.get_mut(&entity).unwrap())
     }
 
-    pub fn read<'a>(&mut self, entity: Entity, component: &'a mut C) -> shrev::EventIterator<'a, T> {
-        component.channel().read(self.action_readers.get_mut(&entity).unwrap())
+    pub fn read<'a>(
+        &mut self,
+        entity: Entity,
+        component: &'a mut C,
+    ) -> shrev::EventIterator<'a, T> {
+        component
+            .channel()
+            .read(self.action_readers.get_mut(&entity).unwrap())
     }
 }

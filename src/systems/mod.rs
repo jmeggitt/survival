@@ -9,7 +9,6 @@ pub use time::System as TimeSystem;
 pub mod script;
 pub use script::System as ScriptSystem;
 
-
 pub use ui::imgui::BeginFrameSystem as ImguiBeginFrameSystem;
 pub use ui::imgui::EndFrameSystem as ImguiEndFrameSystem;
 pub use ui::ui::System as UiSystem;
@@ -28,7 +27,6 @@ pub use initiative::System as InitiativeSystem;
 
 pub mod wearing;
 pub use wearing::System as WearingSystem;
-
 
 pub mod dropped_item;
 pub use dropped_item::System as DroppedItemSystem;

@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(default)]
@@ -12,7 +12,7 @@ pub struct Graphics {
     pub scale: f32,
 }
 
-#[derive(Clone, Debug,)]
+#[derive(Clone, Debug)]
 pub struct Logs {
     pub root: slog::Logger,
 }

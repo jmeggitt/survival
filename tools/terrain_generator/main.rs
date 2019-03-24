@@ -2,15 +2,18 @@ extern crate amethyst;
 extern crate amethyst_imgui;
 
 use amethyst::{
-    assets::{Loader, AssetStorage, HotReloadBundle},
-    ecs::{Write, ReadExpect, Entity, Resources, SystemData},
-    prelude::*,
+    assets::{AssetStorage, HotReloadBundle, Loader},
     core::{Transform, TransformBundle},
-    renderer::{Camera, Projection, Texture, PngFormat, TextureHandle, TextureMetadata, DisplayConfig, DrawFlat2D, Pipeline, RenderBundle, Stage, },
+    ecs::{Entity, ReadExpect, Resources, SystemData, Write},
+    prelude::*,
+    renderer::{
+        Camera, DisplayConfig, DrawFlat2D, Pipeline, PngFormat, Projection, RenderBundle, Stage,
+        Texture, TextureHandle, TextureMetadata,
+    },
     utils::application_root_dir,
 };
 
-use amethyst_imgui::{ImguiState, imgui, imgui::{im_str}};
+use amethyst_imgui::{imgui, imgui::im_str, ImguiState};
 use survival::mapgen::{CellData, Generator, GeneratorConfig, IslandGeneratorSettings};
 
 #[derive(Default)]
@@ -21,8 +24,7 @@ impl ImguiBeginFrameSystem {
         dimensions: &amethyst::renderer::ScreenDimensions,
         time: &amethyst::core::timing::Time,
         imgui_state: &mut Option<ImguiState>,
-    ) -> Option<&'ui imgui::Ui<'ui>>
-    {
+    ) -> Option<&'ui imgui::Ui<'ui>> {
         let dimensions: &amethyst::renderer::ScreenDimensions = &dimensions;
         let time: &amethyst::core::timing::Time = &time;
 
@@ -35,7 +37,14 @@ impl ImguiBeginFrameSystem {
             _ => return None,
         };
 
-        let frame = imgui.frame(imgui::FrameSize::new(f64::from(dimensions.width()), f64::from(dimensions.height()), 1.), time.delta_seconds());
+        let frame = imgui.frame(
+            imgui::FrameSize::new(
+                f64::from(dimensions.width()),
+                f64::from(dimensions.height()),
+                1.,
+            ),
+            time.delta_seconds(),
+        );
         std::mem::forget(frame);
         unsafe { imgui::Ui::current_ui() }
     }
@@ -47,11 +56,10 @@ impl<'s> amethyst::ecs::System<'s> for ImguiBeginFrameSystem {
         Write<'s, Option<ImguiState>>,
     );
 
-    fn run(&mut self, (dimensions, time, mut imgui_state, ): Self::SystemData) {
+    fn run(&mut self, (dimensions, time, mut imgui_state): Self::SystemData) {
         self.open_frame(&dimensions, &time, &mut imgui_state);
     }
 }
-
 
 struct UiState {
     seed: imgui::ImString,
@@ -102,7 +110,7 @@ impl<'s> amethyst::ecs::System<'s> for ImguiEndFrameSystem {
                 .size((300.0, 100.0), imgui::ImGuiCond::FirstUseEver)
                 .build(|| {
                     if ui.button(im_str!("Regenerate Island"), (0.0, 0.0)) {
-                        use sha2::{Sha256, Digest};
+                        use sha2::{Digest, Sha256};
                         use std::ops::Deref;
 
                         let mut hasher = Sha256::new();
@@ -121,21 +129,31 @@ impl<'s> amethyst::ecs::System<'s> for ImguiEndFrameSystem {
                             num_lloyd: self.num_lloyd as usize,
                         };
 
-                        generate_new_map(arrayref::array_ref![result.deref(), 0, 32], &config, &settings).unwrap();
+                        generate_new_map(
+                            arrayref::array_ref![result.deref(), 0, 32],
+                            &config,
+                            &settings,
+                        )
+                        .unwrap();
                     }
                     ui.input_text(im_str!("Seed"), &mut self.state.seed).build();
                     ui.separator();
-                    ui.slider_float(im_str!("Box Size"), &mut self.box_size, 1.0, 5000.0).build();
-                    ui.slider_int(im_str!("Points #"), &mut self.num_points, 1, 20000).build();
-                    ui.slider_int(im_str!("Lloyd Reductions"), &mut self.num_lloyd, 1, 20).build();
+                    ui.slider_float(im_str!("Box Size"), &mut self.box_size, 1.0, 5000.0)
+                        .build();
+                    ui.slider_int(im_str!("Points #"), &mut self.num_points, 1, 20000)
+                        .build();
+                    ui.slider_int(im_str!("Lloyd Reductions"), &mut self.num_lloyd, 1, 20)
+                        .build();
                     ui.separator();
-                    ui.slider_float(im_str!("Start Height"), &mut self.height, 0.1, 1.0).build();
-                    ui.slider_float(im_str!("Radius"), &mut self.radius, 0.1, 0.99999).build();
-                    ui.slider_float(im_str!("Sharpness"), &mut self.sharpness, 0.1, 2.0).build();
+                    ui.slider_float(im_str!("Start Height"), &mut self.height, 0.1, 1.0)
+                        .build();
+                    ui.slider_float(im_str!("Radius"), &mut self.radius, 0.1, 0.99999)
+                        .build();
+                    ui.slider_float(im_str!("Sharpness"), &mut self.sharpness, 0.1, 2.0)
+                        .build();
                 });
         }
     }
-
 }
 
 struct Example;
@@ -148,7 +166,11 @@ impl SimpleState for Example {
         init_camera(world);
     }
 
-    fn handle_event(&mut self, data: StateData<'_, GameData<'_, '_>>, event: StateEvent, ) -> Trans<GameData<'static, 'static>, StateEvent> {
+    fn handle_event(
+        &mut self,
+        data: StateData<'_, GameData<'_, '_>>,
+        event: StateEvent,
+    ) -> Trans<GameData<'static, 'static>, StateEvent> {
         amethyst_imgui::handle_imgui_events(data.world, &event);
 
         Trans::None
@@ -169,7 +191,11 @@ fn main() -> amethyst::Result<()> {
 
     let game_data = GameDataBuilder::default()
         .with(ImguiBeginFrameSystem::default(), "imgui_begin_frame", &[])
-        .with(ImguiEndFrameSystem::default(), "imgui_end_frame", &["imgui_begin_frame"])
+        .with(
+            ImguiEndFrameSystem::default(),
+            "imgui_end_frame",
+            &["imgui_begin_frame"],
+        )
         .with_bundle(TransformBundle::new())?
         .with_bundle(RenderBundle::new(pipe, Some(config)).with_sprite_sheet_processor())?
         .with_bundle(HotReloadBundle::default())?;
@@ -180,21 +206,25 @@ fn main() -> amethyst::Result<()> {
     Ok(())
 }
 
-fn generate_new_map(seed : &[u8; 32], config: &GeneratorConfig, settings: &IslandGeneratorSettings) -> amethyst::Result<()> {
+fn generate_new_map(
+    seed: &[u8; 32],
+    config: &GeneratorConfig,
+    settings: &IslandGeneratorSettings,
+) -> amethyst::Result<()> {
     use rand::SeedableRng;
 
     let mut generator = Generator::new(rand::rngs::StdRng::from_seed(*seed));
 
+    let mut cells = generator.gen_voronoi::<CellData>(&config);
+    generator.create_island(config, settings, &mut cells);
 
-
-    let mut cells = generator.gen_voronoi::<CellData>(
-        &config
-    );
-    generator.create_island(config,
-                            settings,
-                            &mut cells);
-
-    generator.save_heightmap_image(&config, &application_root_dir()?.join("tools/terrain_generator/resources/map.png"), &cells).unwrap();
+    generator
+        .save_heightmap_image(
+            &config,
+            &application_root_dir()?.join("tools/terrain_generator/resources/map.png"),
+            &cells,
+        )
+        .unwrap();
 
     Ok(())
 }

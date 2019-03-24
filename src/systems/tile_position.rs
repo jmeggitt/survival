@@ -1,22 +1,20 @@
 use amethyst::{
-    core::{
-        Transform,
-        math::Vector3,
+    core::{math::Vector3, Transform},
+    ecs::{
+        storage::ComponentEvent, Entities, Join, ReadExpect, ReadStorage, Resources, SystemData,
+        WriteStorage,
     },
-    ecs::{ Resources,
-           storage::ComponentEvent, Entities,
-           ReadExpect, SystemData, Join, ReadStorage, WriteStorage},
     shrev::ReaderId,
 };
 use hibitset::BitSet;
 
 use crate::{
-    tiles::{Tiles, WriteTiles, TileEntities},
-    settings::{Context, Config},
-    components::{TilePosition},
+    components::TilePosition,
+    settings::{Config, Context},
+    tiles::{TileEntities, Tiles, WriteTiles},
 };
 
-use slog::{slog_error};
+use slog::slog_error;
 
 #[derive(Default)]
 pub struct System {
@@ -31,14 +29,27 @@ impl<'s> amethyst::ecs::System<'s> for System {
         ReadExpect<'s, Tiles>,
         WriteTiles<'s, TileEntities>,
         ReadStorage<'s, Transform>,
-        WriteStorage<'s, TilePosition>
+        WriteStorage<'s, TilePosition>,
     );
 
-    fn run(&mut self, (entities, context, game_settings, tiles,
-        mut tile_entities_map, transforms, mut tile_positions): Self::SystemData) {
+    fn run(
+        &mut self,
+        (
+            entities,
+            context,
+            game_settings,
+            tiles,
+            mut tile_entities_map,
+            transforms,
+            mut tile_positions,
+        ): Self::SystemData,
+    ) {
         self.dirty.clear();
 
-        for event in transforms.channel().read(self.transform_reader.as_mut().unwrap()) {
+        for event in transforms
+            .channel()
+            .read(self.transform_reader.as_mut().unwrap())
+        {
             match event {
                 ComponentEvent::Modified(id) | ComponentEvent::Inserted(id) => {
                     //slog_trace!(context.logs.root, "New Transform component");
@@ -49,7 +60,9 @@ impl<'s> amethyst::ecs::System<'s> for System {
         }
 
         // parallel update dirty transforms
-        for (entity, transform, tile_position, _) in (&entities, &transforms, &mut tile_positions, &self.dirty).join() {
+        for (entity, transform, tile_position, _) in
+            (&entities, &transforms, &mut tile_positions, &self.dirty).join()
+        {
             let new_position = tiles.world_to_tile(transform.translation(), &game_settings);
 
             // Did they actually move tiles? LOL
@@ -58,21 +71,35 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 //tile_position.coord.x, tile_position.coord.y,
                 //new_position.x, new_position.y);
 
-                if let Some(entities_list) = tile_entities_map.get_mut(tiles.id_from_vector(tile_position.coord.xy())) {
+                if let Some(entities_list) =
+                    tile_entities_map.get_mut(tiles.id_from_vector(tile_position.coord.xy()))
+                {
                     entities_list.0.remove(&entity);
                 } else {
-                    slog_error!(context.logs.root, "({}, {}) - E:{} - Invalid tile for a position removal!?",
-                    tile_position.coord.x, tile_position.coord.y, entity.id());
+                    slog_error!(
+                        context.logs.root,
+                        "({}, {}) - E:{} - Invalid tile for a position removal!?",
+                        tile_position.coord.x,
+                        tile_position.coord.y,
+                        entity.id()
+                    );
                 }
 
                 // Finally, update the tileposition on the entity
                 tile_position.coord = Vector3::new(new_position.x as u32, new_position.y as u32, 0);
 
-                if let Some(entities_list) = tile_entities_map.get_mut(tiles.id_from_vector(new_position.xy())) {
+                if let Some(entities_list) =
+                    tile_entities_map.get_mut(tiles.id_from_vector(new_position.xy()))
+                {
                     entities_list.0.insert(entity);
                 } else {
-                    slog_error!(context.logs.root, "({}, {}) - E:{} - Invalid tile for a position insertion!?",
-                    new_position.x, new_position.y, entity.id());
+                    slog_error!(
+                        context.logs.root,
+                        "({}, {}) - E:{} - Invalid tile for a position insertion!?",
+                        new_position.x,
+                        new_position.y,
+                        entity.id()
+                    );
                 }
             }
         }

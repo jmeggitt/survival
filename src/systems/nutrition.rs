@@ -1,15 +1,15 @@
 #![allow(clippy::module_name_repetitions)]
+use crate::settings::Context;
 use amethyst::{
-    ecs::{Entity, Component, Read, DenseVecStorage, Resources, SystemData, ReadExpect, WriteStorage,  },
+    ecs::{
+        Component, DenseVecStorage, Entity, Read, ReadExpect, Resources, SystemData, WriteStorage,
+    },
     shrev::{EventChannel, ReaderId},
 };
 use specs_derive::Component;
-use crate::settings::Context;
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
-enum Vitamin {
-
-}
+enum Vitamin {}
 
 #[derive(Clone, Copy, serde::Serialize, serde::Deserialize)]
 pub struct Food {
@@ -82,10 +82,11 @@ impl<'s> amethyst::ecs::System<'s> for System {
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
 
-        self.consume_reader_id = Some(res.fetch_mut::<EventChannel<(Entity, Food)>>().register_reader());
+        self.consume_reader_id = Some(
+            res.fetch_mut::<EventChannel<(Entity, Food)>>()
+                .register_reader(),
+        );
     }
 
-    fn run(&mut self, _: Self::SystemData) {
-
-    }
+    fn run(&mut self, _: Self::SystemData) {}
 }

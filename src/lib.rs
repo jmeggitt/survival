@@ -1,4 +1,4 @@
-#![warn(clippy::pedantic, clippy::all)]
+//#![warn(clippy::pedantic, clippy::all)]
 #![allow(
     clippy::type_complexity,
     clippy::empty_enum,

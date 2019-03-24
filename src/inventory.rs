@@ -79,7 +79,7 @@ pub fn draw_inventory<C, I>(
     parent: Entity,
     hierarchy: &ParentHierarchy,
     container_storage: C,
-    item_storage: I,
+    item_storage: &I,
     details_storage: &AssetStorage<crate::assets::Item>,
 ) -> String
 where
@@ -95,7 +95,7 @@ where
             println!("Handle = {:?}", item.handle);
             if let Some(details) = details_storage.get(&item.handle) {
                 println!("details found");
-                if let Some(_) = container_storage.get(*child) {
+                if container_storage.get(*child).is_some() {
                     println!("Container found");
                     inv += &format!("- {}\t50/100\n", details.name);
                 }

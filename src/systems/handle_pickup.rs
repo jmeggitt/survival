@@ -66,7 +66,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                                 .unwrap()
                                 .0
                             {
-                                if let Some(_) = items.get(*entity) {
+                                if items.get(*entity).is_some() {
                                     // Its an item! We can get it.
                                     // TODO: allllll sorts of checks
                                     // rebroadcast the DoPickup event

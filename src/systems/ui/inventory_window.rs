@@ -56,17 +56,14 @@ impl<'s> amethyst::ecs::System<'s> for System {
         ): Self::SystemData,
     ) {
         for player_input in input_events.read(self.input_reader_id.as_mut().unwrap()) {
-            match player_input {
-                InputEvent::ActionPressed(PlayerInputAction::ToggleInventory) => {
-                    if let Some(inventory) = finder.find("inventory_window") {
-                        if hidden_storage.contains(inventory) {
-                            hidden_storage.remove(inventory);
-                        } else {
-                            hidden_storage.insert(inventory, HiddenPropagate).unwrap();
-                        }
+            if let InputEvent::ActionPressed(PlayerInputAction::ToggleInventory) = player_input {
+                if let Some(inventory) = finder.find("inventory_window") {
+                    if hidden_storage.contains(inventory) {
+                        hidden_storage.remove(inventory);
+                    } else {
+                        hidden_storage.insert(inventory, HiddenPropagate).unwrap();
                     }
                 }
-                _ => {}
             }
         }
 
@@ -78,7 +75,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                     player,
                     &hierarchy,
                     container_storage,
-                    item_storage,
+                    &item_storage,
                     &item_details,
                 );
             }

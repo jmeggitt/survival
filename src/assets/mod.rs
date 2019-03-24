@@ -70,7 +70,7 @@ where
             println!("enter");
             {
                 let mut borrow = storage.write().unwrap();
-                let keys = borrow.data.keys().map(|k| k.clone()).collect::<Vec<_>>();
+                let keys = borrow.data.keys().cloned().collect::<Vec<_>>();
                 for key in &keys {
                     let handle = loader.load_from(
                         key.as_str(),

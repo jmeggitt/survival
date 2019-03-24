@@ -6,7 +6,7 @@ pub trait EventSystem<'a> {
 
     fn run(data: &Self::SystemData, event: &mut Self::Event) -> bool;
 
-    fn invalidate(data: &Self::SystemData, event: &mut Self::Event) {}
+    fn invalidate(_data: &Self::SystemData, _event: &mut Self::Event) {}
 }
 
 impl<'a, E, A, B> EventSystem<'a> for (A, B)

@@ -5,7 +5,7 @@ use amethyst::{
         components::Parent,
         math::{Vector2, Vector3},
     },
-    ecs::{Builder, Entity, EntityBuilder, World},
+    ecs::{Builder, Entity, World},
 };
 
 #[derive(Copy, Clone, Debug, strum_macros::Display)]

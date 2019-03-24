@@ -11,7 +11,7 @@ pub use script::System as ScriptSystem;
 
 pub use ui::imgui::BeginFrameSystem as ImguiBeginFrameSystem;
 pub use ui::imgui::EndFrameSystem as ImguiEndFrameSystem;
-pub use ui::ui::System as UiSystem;
+pub use ui::System as UiSystem;
 
 pub mod nutrition;
 pub use nutrition::System as NutritionSystem;

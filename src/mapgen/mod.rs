@@ -210,9 +210,9 @@ where
                 let x = a.x.cmp(&b.x);
                 let y = a.x.cmp(&b.y);
                 if x == Ordering::Equal && y == Ordering::Equal {
-                    return Ordering::Equal;
+                    Ordering::Equal
                 } else {
-                    return x;
+                    x
                 }
             });
 
@@ -242,7 +242,7 @@ where
     ) -> std::io::Result<()> {
         let mut imgbuf = image::ImageBuffer::new(config.box_size as u32, config.box_size as u32);
 
-        for (n, (point, cell)) in cells.iter().enumerate() {
+        for (_, cell) in cells.iter() {
             let mut points = cell
                 .polygon
                 .iter()

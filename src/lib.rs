@@ -33,6 +33,8 @@ pub mod inventory;
 pub mod game_data;
 pub mod initializers;
 
+pub mod specs_static;
+
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
 pub fn run() -> amethyst::Result<()> {

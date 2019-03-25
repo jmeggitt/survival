@@ -7,7 +7,6 @@ edition = "2018"
 [dependencies]
 amethyst = { path = "dep/amethyst", features = ["nightly", "saveload"] }
 amethyst-imgui = { path = "dep/amethyst-imgui" }
-specs-static = { path = "specs-static" }
 specs-derive = "*"
 
 rayon = { version = "1.0.0" }

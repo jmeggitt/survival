@@ -5,7 +5,7 @@ use amethyst::{
     ecs::{Component, DenseVecStorage, Entity, Read, Write},
 };
 use specs_derive::Component;
-use specs_static::{Id, Storage};
+use crate::specs_static::{Id, Storage};
 
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]

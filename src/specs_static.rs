@@ -197,7 +197,7 @@ impl<'a, C, D, I> Join for &'a mut Storage<C, D, I>
         // to abstract mutable/immutable state at the moment, so we have to hack
         // our way through it.
         #[allow(trivial_casts)]
-        let value: *mut Self::Value = value as *mut Self::Value;
+            let value: *mut Self::Value = value as *mut Self::Value;
         (*value).get_mut(id)
     }
 }

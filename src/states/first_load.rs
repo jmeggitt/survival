@@ -1,6 +1,5 @@
 use amethyst::{
-    assets::ProgressCounter,
-    assets::{AssetStorage, Loader},
+    assets::{ProgressCounter, AssetStorage, Loader},
     ecs::World,
     renderer::{
         PngFormat, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle, Texture, TextureMetadata,
@@ -8,7 +7,7 @@ use amethyst::{
     StateData, StateEvent, Trans,
 };
 use log::trace;
-use specs_static::WorldExt;
+use crate::specs_static::WorldExt;
 
 use crate::settings;
 use crate::states::Level;

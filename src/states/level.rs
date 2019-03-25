@@ -5,7 +5,7 @@ use amethyst::{
     renderer::{Camera, Projection, Rgba, SpriteRender, SpriteSheetHandle, Transparent},
     StateData, StateEvent, Trans,
 };
-use slog::slog_trace;
+use log::trace;
 
 use crate::components::{Actionable, FlaggedSpriteRender, Player, TilePosition, TimeAvailable};
 use crate::settings;
@@ -69,14 +69,13 @@ fn init_camera(world: &mut World, _: Entity, tiles: Tiles, game_settings: &setti
 
 pub struct State {
     progress_counter: ProgressCounter,
-    log: slog::Logger,
 }
 
 impl State {
-    pub fn new(root_logger: slog::Logger) -> Self {
+    pub fn new() -> Self {
         Self {
             progress_counter: ProgressCounter::default(),
-            log: root_logger,
+//            log: root_logger,
         }
     }
 }
@@ -84,13 +83,13 @@ impl State {
 impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
     fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
         let world = data.world;
-        slog_trace!(self.log, "Changed state to Level");
+        trace!("Changed state to Level");
 
         // Load the level
         let tiles = Tiles::new(100, 100);
         {
             let context = world.res.fetch::<settings::Context>().clone();
-            let map_sprite_sheet_handle = context.spritesheet.as_ref().unwrap();
+            let map_sprite_sheet_handle = context.as_ref().unwrap();
             let game_settings = world.res.fetch::<settings::Config>().clone();
 
             let player = init_player(world, map_sprite_sheet_handle, tiles, &game_settings);
@@ -157,7 +156,7 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         _: StateData<'_, SurvivalData<'_, '_>>,
         _: StateEvent,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
-        slog_trace!(self.log, "Event Level");
+        trace!("Event Level");
         Trans::None
     }
 
@@ -166,6 +165,6 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         _: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
         // Just swap straight to Paused
-        Trans::Push(Box::new(super::Paused::new(self.log.clone())))
+        Trans::Push(Box::new(super::Paused::new()))
     }
 }

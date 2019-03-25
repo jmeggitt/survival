@@ -49,7 +49,7 @@ pub mod initializers;
 
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
-pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
+pub fn run() -> amethyst::Result<()> {
     let root = application_root_dir()?.join("resources");
 
     let display_config = DisplayConfig::load(root.join("display_config.ron"));
@@ -64,12 +64,14 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
     );
 
     let game_config = crate::settings::Config::load(root.join("game_settings.ron"));
-    let game_context = crate::settings::Context {
-        logs: crate::settings::Logs {
-            root: root_logger.clone(),
-        },
-        spritesheet: None,
-    };
+//    let game_context = crate::settings::Context {
+//        logs: crate::settings::Logs {
+//            root: root_logger.clone(),
+//        },
+//        spritesheet: None,
+//    };
+
+    let game_context = None;
 
     let game_data = SurvivalDataBuilder::new(game_context, display_config.clone(), game_config)
         .with_core_bundle(TransformBundle::new())?
@@ -123,7 +125,7 @@ pub fn run(root_logger: &slog::Logger) -> amethyst::Result<()> {
         .with_level(systems::TimeSystem::default(), "time", &[])
         .with_level(systems::InitiativeSystem::default(), "initiative", &[]);
 
-    let mut game = Application::build(root, crate::states::FirstLoad::new(root_logger.clone()))?
+    let mut game = Application::build(root, crate::states::FirstLoad::new())?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)
         .build(game_data)?;
 

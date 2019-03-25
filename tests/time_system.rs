@@ -27,14 +27,6 @@ impl SimpleState for TestState {
 
 #[test]
 fn time_system() -> amethyst::Result<()> {
-    use slog::Drain;
-
-    // Make sure to save the guard, see documentation for more information
-    let decorator = slog_term::TermDecorator::new().force_color().build();
-    let drain = slog_term::FullFormat::new(decorator).build().fuse();
-    let async_drain = slog_async::Async::new(drain).build().fuse();
-    let root_log = slog::Logger::root(async_drain, slog::slog_o!());
-
     assert!(AmethystApplication::blank()
         .with_setup(move |world| {
             world.create_entity().with(TimeAvailable::default()).build();

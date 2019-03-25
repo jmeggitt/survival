@@ -1,5 +1,3 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::ecs::{Entities, Entity, Join, ReadExpect, ReadStorage, Write, WriteStorage};
 
 use crate::components;
@@ -33,7 +31,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         for (_, _, time_comp) in (&entities, &players, &mut time_avialables).join() {
             if time_comp.0 > 0 {
                 // Player did time.
-                //slog_trace!(context.logs.root, "Player performed action consuming {} time", time_comp.0);
+                //trace!(context.logs.root, "Player performed action consuming {} time", time_comp.0);
                 time_consumed = time_comp.0;
                 time_state.current_time += time_consumed;
 
@@ -43,7 +41,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
         // Update all time comps with the time consumed
         if time_consumed > 0 {
-            // slog_trace!(context.logs.root, "Adding time available to all AI: {}", time_consumed);
+            // trace!(context.logs.root, "Adding time available to all AI: {}", time_consumed);
             for (entity, time_comp) in (&entities, &mut time_avialables).join() {
                 if players.get(entity).is_none() {
                     time_comp.add(time_consumed);

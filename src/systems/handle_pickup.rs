@@ -1,16 +1,13 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::{
     core::components::Parent,
     core::transform::Transform,
     ecs::{Entities, Join, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
 };
-use slog::slog_error;
+use log::error;
 
 use crate::actions;
 use crate::actions::Action;
 use crate::components;
-use crate::settings::Context;
 use crate::tiles::{ReadTiles, TileEntities, Tiles};
 use crate::utils::{ComponentEventReader, HasChannel};
 
@@ -22,7 +19,6 @@ pub struct System {
 impl<'s> amethyst::ecs::System<'s> for System {
     #[allow(clippy::type_complexity)]
     type SystemData = (
-        ReadExpect<'s, Context>,
         ReadExpect<'s, crate::settings::Config>,
         ReadExpect<'s, Tiles>,
         Entities<'s>,
@@ -42,7 +38,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
     fn run(
         &mut self,
         (
-            context,
             config,
             tiles,
             entities,
@@ -77,10 +72,10 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             }
                         }
                         actions::PickupTarget::Location(_) => {
-                            slog_error!(context.logs.root, "Location Not implemented");
+                            error!("Location Not implemented");
                         }
                         actions::PickupTarget::Entity(_) => {
-                            slog_error!(context.logs.root, "Entity Not implemented");
+                            error!("Entity Not implemented");
                         }
                     }
                 }

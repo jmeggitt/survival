@@ -1,5 +1,3 @@
-//#![allow(clippy::module_name_repetitions)]
-
 use amethyst::{
     assets::AssetStorage,
     core::ParentHierarchy,

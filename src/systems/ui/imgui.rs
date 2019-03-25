@@ -1,5 +1,3 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::ecs::{ReadExpect, Write};
 use amethyst_imgui as am_imgui;
 use amethyst_imgui::imgui;

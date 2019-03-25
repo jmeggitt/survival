@@ -1,5 +1,3 @@
-//#![allow(clippy::module_name_repetitions)]
-
 use amethyst::{
     core::transform::Transform,
     ecs::{
@@ -65,27 +63,27 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
                 // hold-down key actions go here
                 if input.action_is_down(&PlayerInputAction::MoveUp).unwrap() {
-                    //slog_trace!(context.logs.root, "Got player input in direction: move_up");
+                    //trace!(context.logs.root, "Got player input in direction: move_up");
                     actionable.channel.single_write(Action::Move(Direction::N));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::MoveDown).unwrap() {
-                    //slog_trace!(context.logs.root, "Got player input in direction: move_down");
+                    //trace!(context.logs.root, "Got player input in direction: move_down");
                     actionable.channel.single_write(Action::Move(Direction::S));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::MoveLeft).unwrap() {
-                    //slog_trace!(context.logs.root, "Got player input in direction: move_left");
+                    //trace!(context.logs.root, "Got player input in direction: move_left");
                     actionable.channel.single_write(Action::Move(Direction::W));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::MoveRight).unwrap() {
-                    //slog_trace!(context.logs.root, "Got player input in direction: move_left");
+                    //trace!(context.logs.root, "Got player input in direction: move_left");
                     actionable.channel.single_write(Action::Move(Direction::E));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::PickUp).unwrap() {
-                    //slog_trace!(context.logs.root, "Got player input in direction: move_right");
+                    //trace!(context.logs.root, "Got player input in direction: move_right");
                     actionable
                         .channel
                         .single_write(Action::TryPickup(actions::PickupTarget::Under));

@@ -1,5 +1,3 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::ecs::{ReadExpect, Resources, SystemData, Write, WriteStorage};
 
 use crate::components;
@@ -28,7 +26,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
             SurvivalState::Running => {
                 // Handle monster initiative, and handing it back to the player.
                 *state = SurvivalState::Paused;
-                //slog_trace!(context.logs.root, "AI turn finished, pausing");
+                //trace!(context.logs.root, "AI turn finished, pausing");
             }
             _ => {}
         }

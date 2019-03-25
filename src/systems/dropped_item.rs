@@ -1,12 +1,10 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::{
     assets::AssetStorage,
     core::components::Parent,
     core::transform::Transform,
     ecs::{Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
 };
-use slog::slog_error;
+use log::error;
 
 use crate::actions::Action;
 use crate::components;
@@ -55,7 +53,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         // search for dropped items with a transform, but no sprite. Add the sprite.
         // This is just to cover our ass for wierd cases...right?
 
-        let sheet_handle = context.spritesheet.as_ref().unwrap();
+        let sheet_handle = context.as_ref().unwrap();
         for (entity, item, _) in (&entities, &items, &transforms).join() {
             // If the item doesn't have a sprite, add it
             if sprites.get(entity).is_none() {
@@ -100,7 +98,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                                 }
                             }
                             None => {
-                                slog_error!(context.logs.root, "Entity without transform dropped an item, this shouldn't happen!");
+                                error!("Entity without transform dropped an item, this shouldn't happen!");
                                 continue;
                             }
                         }

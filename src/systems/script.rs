@@ -1,5 +1,3 @@
-#![allow(clippy::module_name_repetitions)]
-
 use std::sync::{Arc, Mutex};
 
 use amethyst::ecs::{ReadExpect, Resources, SystemData};

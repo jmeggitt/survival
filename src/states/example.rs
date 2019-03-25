@@ -116,14 +116,12 @@ fn init_camera(
 
 pub struct Example {
     progress_counter: ProgressCounter,
-    log: slog::Logger,
 }
 
 impl Example {
-    pub fn new(root_logger: slog::Logger) -> Self {
+    pub fn new() -> Self {
         Self {
             progress_counter: ProgressCounter::default(),
-            log: root_logger,
         }
     }
 }

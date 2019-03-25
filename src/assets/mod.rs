@@ -9,6 +9,8 @@ use amethyst::{
     error::{format_err, Error, ResultExt},
 };
 
+use log::error;
+
 pub use item::Details as Item;
 #[allow(unused_imports)]
 use loader::AssetLoader;
@@ -54,7 +56,14 @@ where
         let file = File::open(&source)
             .with_context(|_| format_err!("Failed to open file {:?}", source))?;
 
-        let storage: Arc<RwLock<Storage<T>>> = Arc::new(RwLock::new(ron::de::from_reader(file)?));
+        let ron = match ron::de::from_reader(file) {
+            Ok(v) => v,
+            Err(e) => {
+                error!("Unable to parse ron file {:?} with error {}", source, e);
+                panic!("{:?}", e);
+            }
+        };
+        let storage: Arc<RwLock<Storage<T>>> = Arc::new(RwLock::new(ron));
 
         {
             world.add_resource(AssetStorage::<T>::default());

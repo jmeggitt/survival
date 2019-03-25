@@ -1,5 +1,3 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::{
     core::{Parent, ParentHierarchy},
     ecs::{Entities, ReadExpect, WriteStorage},

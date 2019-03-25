@@ -26,9 +26,7 @@ strum = "*"
 strum_macros = "*"
 
 # Logging
-slog = { version = "2", features = ["max_level_trace"] }
-slog-async = "*"
-slog-term = "*"
+log = "0.4.6"
 
 # For Mapgen/procedural
 voronoi = { path = "dep/voronoi" }

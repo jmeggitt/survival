@@ -12,13 +12,4 @@ pub struct Graphics {
     pub scale: f32,
 }
 
-#[derive(Clone, Debug)]
-pub struct Logs {
-    pub root: slog::Logger,
-}
-
-#[derive(Clone, Debug)]
-pub struct Context {
-    pub logs: Logs,
-    pub spritesheet: Option<amethyst::renderer::SpriteSheetHandle>,
-}
+pub type Context = Option<amethyst::renderer::SpriteSheetHandle>;

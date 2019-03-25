@@ -7,11 +7,11 @@ use amethyst::{
     shrev::ReaderId,
 };
 use hibitset::BitSet;
-use slog::slog_error;
+use log::error;
 
 use crate::{
     components::TilePosition,
-    settings::{Config, Context},
+    settings::Config,
     tiles::{TileEntities, Tiles, WriteTiles},
 };
 
@@ -25,7 +25,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
     #[allow(clippy::type_complexity)]
     type SystemData = (
         Entities<'s>,
-        ReadExpect<'s, Context>,
         ReadExpect<'s, Config>,
         ReadExpect<'s, Tiles>,
         WriteTiles<'s, TileEntities>,
@@ -37,7 +36,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
         &mut self,
         (
             entities,
-            context,
             game_settings,
             tiles,
             mut tile_entities_map,
@@ -53,7 +51,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
         {
             match event {
                 ComponentEvent::Modified(id) | ComponentEvent::Inserted(id) => {
-                    //slog_trace!(context.logs.root, "New Transform component");
                     self.dirty.add(*id);
                 }
                 ComponentEvent::Removed(_) => (),
@@ -68,7 +65,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
             // Did they actually move tiles? LOL
             if tile_position.coord.xy() != new_position {
-                //slog_trace!(context.logs.root, "TileMove E:{}: ({},{}) -> ({},{}) ", entity.id(),
+                //trace!(context.logs.root, "TileMove E:{}: ({},{}) -> ({},{}) ", entity.id(),
                 //tile_position.coord.x, tile_position.coord.y,
                 //new_position.x, new_position.y);
 
@@ -77,8 +74,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 {
                     entities_list.0.remove(&entity);
                 } else {
-                    slog_error!(
-                        context.logs.root,
+                    error!(
                         "({}, {}) - E:{} - Invalid tile for a position removal!?",
                         tile_position.coord.x,
                         tile_position.coord.y,
@@ -94,8 +90,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 {
                     entities_list.0.insert(entity);
                 } else {
-                    slog_error!(
-                        context.logs.root,
+                    error!(
                         "({}, {}) - E:{} - Invalid tile for a position insertion!?",
                         new_position.x,
                         new_position.y,

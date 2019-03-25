@@ -1,17 +1,15 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::{
     core::components::Transform,
     ecs::{Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
 };
-use slog::{slog_error, slog_warn};
 
 use crate::actions::{Action, Direction};
 use crate::components;
 use crate::settings::Config;
-use crate::settings::Context;
 use crate::tiles::{ReadTiles, Tiles};
 use crate::utils::ComponentEventReader;
+
+use log::{warn, error};
 
 #[derive(Default)]
 pub struct System {
@@ -21,7 +19,6 @@ pub struct System {
 impl<'s> amethyst::ecs::System<'s> for System {
     #[allow(clippy::type_complexity)]
     type SystemData = (
-        ReadExpect<'s, Context>,
         Read<'s, Config>,
         ReadExpect<'s, Tiles>,
         Entities<'s>,
@@ -42,7 +39,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
     fn run(
         &mut self,
         (
-            context,
             game_config,
             tiles,
             entities,
@@ -62,7 +58,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
             for event in self.action_reader.read(entity, actionable) {
                 if let Action::Move(direction) = event {
                     if crate::systems::time::has_time(1, entity, time_comp, &players) {
-                        //slog_trace!(context.logs.root, "Moving entity: {}", direction);
                         // Once its confirmed they can do it, run it
                         crate::systems::time::consume_time(1, entity, time_comp, &players);
 
@@ -82,9 +77,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             Direction::W => {
                                 target.move_left(5.0);
                             }
-                            _ => {
-                                slog_error!(context.logs.root, "Unsupported direction");
-                            }
+                            _ => error!("Unsupported direction!")
                         }
 
                         // Can we actually go to the target?
@@ -95,12 +88,9 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             .is_some()
                         {
                             // We cant do the move!
-                            slog_warn!(
-                                context.logs.root,
-                                "Attempted to move to impassable tile: ({},{})",
-                                target_tile.x,
-                                target_tile.y
-                            );
+                            warn!("Attempted to move to impassable tile: ({},{})",
+                                  target_tile.x,
+                                  target_tile.y);
                             continue;
                         }
 

@@ -95,7 +95,7 @@ impl AssetLoader {
         if final_path.exists() {
             Some(abs.clone())
         } else {
-            // TODO: slog switch warn!("Failed to find file at path: {}", abs);
+            // TODO: log switch warn!("Failed to find file at path: {}", abs);
             None
         }
     }
@@ -114,7 +114,7 @@ impl AssetLoader {
                         .collect(),
                 );
             } else {
-                // TODO: slog switch error!("Failed to find base_path directory for asset loading: {}",self.base_path);
+                // TODO: log switch error!("Failed to find base_path directory for asset loading: {}",self.base_path);
             }
         }
 

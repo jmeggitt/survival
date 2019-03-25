@@ -1,5 +1,3 @@
-#![allow(clippy::module_name_repetitions)]
-
 use amethyst::{
     ecs::{
         Component, DenseVecStorage, Entity, Read, ReadExpect, Resources, SystemData, WriteStorage,

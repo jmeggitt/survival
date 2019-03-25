@@ -28,7 +28,6 @@ impl Default for SurvivalState {
 
 pub struct SurvivalData<'a, 'b> {
     level_dispatcher: Dispatcher<'a, 'b>,
-    overworld_dispatcher: Dispatcher<'a, 'b>,
     core_dispatcher: Dispatcher<'a, 'b>,
 }
 
@@ -38,7 +37,6 @@ impl<'a, 'b> SurvivalData<'a, 'b> {
         *world.res.fetch_mut::<SurvivalState>() = state;
 
         self.level_dispatcher.dispatch(&world.res);
-        //self.overworld_dispatcher.dispatch(&world.res);
         self.core_dispatcher.dispatch(&world.res);
 
         world.res.fetch::<SurvivalState>().clone()
@@ -47,7 +45,6 @@ impl<'a, 'b> SurvivalData<'a, 'b> {
 
 pub struct SurvivalDataBuilder<'a, 'b> {
     pub level_dispatcher: DispatcherBuilder<'a, 'b>,
-    pub overworld_dispatcher: DispatcherBuilder<'a, 'b>,
     pub core_dispatcher: DispatcherBuilder<'a, 'b>,
     pub context: crate::settings::Context,
     pub display_config: amethyst::renderer::DisplayConfig,
@@ -65,7 +62,6 @@ impl<'a, 'b> SurvivalDataBuilder<'a, 'b> {
             display_config,
             game_config,
             level_dispatcher: DispatcherBuilder::new(),
-            overworld_dispatcher: DispatcherBuilder::new(),
             core_dispatcher: DispatcherBuilder::new(),
         }
     }
@@ -94,14 +90,6 @@ impl<'a, 'b> SurvivalDataBuilder<'a, 'b> {
         self.level_dispatcher.add(system, name, dependencies);
         self
     }
-
-    pub fn with_overworld<S>(mut self, system: S, name: &str, dependencies: &[&str]) -> Self
-    where
-        for<'c> S: System<'c> + Send + 'a,
-    {
-        self.overworld_dispatcher.add(system, name, dependencies);
-        self
-    }
 }
 
 impl<'a, 'b> DataInit<SurvivalData<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
@@ -117,18 +105,15 @@ impl<'a, 'b> DataInit<SurvivalData<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
         // create dispatchers
         let mut core_dispatcher = self.core_dispatcher.with_pool(pool.clone()).build();
         let mut level_dispatcher = self.level_dispatcher.with_pool(pool.clone()).build();
-        let mut overworld_dispatcher = self.overworld_dispatcher.with_pool(pool.clone()).build();
 
         core_dispatcher.setup(&mut world.res);
         level_dispatcher.setup(&mut world.res);
-        overworld_dispatcher.setup(&mut world.res);
 
         // Add the context state to the world
 
         SurvivalData {
             core_dispatcher,
             level_dispatcher,
-            overworld_dispatcher,
         }
     }
 }

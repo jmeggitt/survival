@@ -151,8 +151,8 @@ impl PartialEq<Item> for Item {
     }
 }
 
-#[derive(Component, Clone, Debug, Serialize, Deserialize)]
 //#[storage(DenseVecStorage)]
+#[derive(Component, Clone, Debug, Serialize, Deserialize)]
 pub struct TilePosition {
     pub coord: Vector3<u32>,
 //    pub x: u32,

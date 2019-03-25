@@ -70,14 +70,3 @@ impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
         };
     }
 }
-
-//struct ImguiLuaWrapper<'ui>(&'ui imgui::Ui<'ui>);
-//
-//impl<'ui> rlua::UserData for ImguiLuaWrapper<'ui> {
-//    fn add_methods<'lua, M: rlua::UserDataMethods<'lua, Self>>(methods: &mut M) {
-//        methods.add_method("new_line", |_, im, ()| {
-//            im.0.new_line();
-//            Ok(())
-//        });
-//    }
-//}

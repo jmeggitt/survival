@@ -5,7 +5,6 @@ pub use initiative::System as InitiativeSystem;
 pub use input::System as InputSystem;
 pub use movement::System as MovementSystem;
 pub use nutrition::System as NutritionSystem;
-//pub use script::System as ScriptSystem;
 pub use tile_position::System as TilePositionSystem;
 pub use time::System as TimeSystem;
 pub use ui::imgui::BeginFrameSystem as ImguiBeginFrameSystem;
@@ -18,8 +17,6 @@ pub mod ui;
 pub mod tile_position;
 
 pub mod time;
-
-//pub mod script;
 
 pub mod nutrition;
 

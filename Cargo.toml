@@ -41,7 +41,6 @@ sha2 = "*"
 arrayref = "*"
 
 # Game Related
-rlua = { path = "dep/rlua" }
 petgraph = { version="*", features = ["serde-1"] }
 
 # Serialization

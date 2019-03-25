@@ -152,9 +152,11 @@ impl PartialEq<Item> for Item {
 }
 
 #[derive(Component, Clone, Debug, Serialize, Deserialize)]
-#[storage(DenseVecStorage)]
+//#[storage(DenseVecStorage)]
 pub struct TilePosition {
     pub coord: Vector3<u32>,
+//    pub x: u32,
+//    pub y: u32,
 }
 
 impl Default for TilePosition {
@@ -167,7 +169,7 @@ impl Default for TilePosition {
 
 impl TilePosition {
     pub fn new(coord: Vector3<u32>) -> Self {
-        Self { coord }
+        TilePosition { coord }
     }
     pub fn from_transform(
         transform: &Transform,
@@ -175,8 +177,8 @@ impl TilePosition {
         game_settings: &crate::settings::Config,
     ) -> Self {
         let position = tiles.world_to_tile(transform.translation(), &game_settings);
-        ;
-        Self {
+
+        TilePosition {
             coord: Vector3::new(position.x as u32, position.y as u32, 0),
         }
     }

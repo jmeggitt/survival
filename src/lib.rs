@@ -7,8 +7,7 @@ use amethyst::{
     prelude::*,
     renderer::{DisplayConfig, DrawFlat2D, Pipeline, PosNormTex, RenderBundle, Stage},
     ui::UiBundle,
-    utils::application_root_dir,
-    utils::{fps_counter::FPSCounterBundle, scene::BasicScenePrefab},
+    utils::{application_root_dir, fps_counter::FPSCounterBundle, scene::BasicScenePrefab},
 };
 
 pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
@@ -35,6 +34,9 @@ pub mod initializers;
 
 pub mod specs_static;
 
+use actions::PlayerInputAction;
+use crate::render::tiles::Pass;
+
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
 pub fn run() -> amethyst::Result<()> {
@@ -44,19 +46,19 @@ pub fn run() -> amethyst::Result<()> {
 
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
-            .clear_target([0.1, 0.1, 0.1, 1.0], 1.0)
-            .with_pass(crate::render::tiles::Pass::new())
+            .clear_target([1.0; 4], 1.0)
+            .with_pass(Pass::new())
             .with_pass(DrawFlat2D::new())
             .with_pass(amethyst::ui::DrawUi::new())
             .with_pass(amethyst_imgui::DrawUi::default().docking()),
     );
 
-    let game_config = crate::settings::Config::load(root.join("game_settings.ron"));
+    let game_config = settings::Config::load(root.join("game_settings.ron"));
 
     let game_data = SurvivalDataBuilder::new(None, display_config.clone(), game_config)
         .with_core_bundle(TransformBundle::new())?
         .with_core_bundle(
-            InputBundle::<actions::PlayerInputAction, actions::PlayerInputAction>::new()
+            InputBundle::<PlayerInputAction, PlayerInputAction>::new()
                 .with_bindings_from_file(root.join("input.ron"))?,
         )?
         .with_core(
@@ -71,8 +73,8 @@ pub fn run() -> amethyst::Result<()> {
         )
         .with_core_bundle(HotReloadBundle::default())?
         .with_core_bundle(UiBundle::<
-            actions::PlayerInputAction,
-            actions::PlayerInputAction,
+            PlayerInputAction,
+            PlayerInputAction,
         >::new())?
         .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with_core_bundle(FPSCounterBundle::default())?

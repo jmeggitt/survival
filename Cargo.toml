@@ -34,7 +34,6 @@ noise = "*"
 rand = "*"
 ordered-float = "*"
 num-traits = "*"
-tiled = "*"
 itertools = "*"
 image = "0.21.0"
 imageproc = "0.18.0"
@@ -43,7 +42,6 @@ arrayref = "*"
 
 # Game Related
 rlua = { path = "dep/rlua" }
-pathfinding = "*"
 petgraph = { version="*", features = ["serde-1"] }
 
 # Serialization

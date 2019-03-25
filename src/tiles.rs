@@ -1,11 +1,11 @@
 use std::collections::HashSet;
 
+use crate::specs_static::{Id, Storage};
 use amethyst::{
     core::math::{Vector2, Vector3, Vector4},
     ecs::{Component, DenseVecStorage, Entity, Read, Write},
 };
 use specs_derive::Component;
-use crate::specs_static::{Id, Storage};
 
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]
@@ -125,7 +125,5 @@ impl Iterator for RegionIter {
     }
 }
 
-//#[allow(clippy::module_name_repetitions)]
 pub type ReadTiles<'a, C> = Read<'a, Storage<C, <C as Component>::Storage, TileId>>;
-//#[allow(clippy::module_name_repetitions)]
 pub type WriteTiles<'a, C> = Write<'a, Storage<C, <C as Component>::Storage, TileId>>;

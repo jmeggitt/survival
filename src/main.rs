@@ -1,5 +1,4 @@
 #![feature(custom_attribute)]
-//#![allow(dead_code)]
 
 use amethyst::LoggerConfig;
 

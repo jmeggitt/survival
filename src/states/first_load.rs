@@ -1,5 +1,6 @@
+use crate::specs_static::WorldExt;
 use amethyst::{
-    assets::{ProgressCounter, AssetStorage, Loader},
+    assets::{AssetStorage, Loader, ProgressCounter},
     ecs::World,
     renderer::{
         PngFormat, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle, Texture, TextureMetadata,
@@ -7,7 +8,6 @@ use amethyst::{
     StateData, StateEvent, Trans,
 };
 use log::trace;
-use crate::specs_static::WorldExt;
 
 use crate::settings;
 use crate::states::Level;
@@ -19,18 +19,16 @@ fn load_sprite_sheet(
     ron_path: &str,
     progress_counter: &mut ProgressCounter,
 ) -> SpriteSheetHandle {
-    let texture_handle = {
-        let loader = world.read_resource::<Loader>();
-        let texture_storage = world.read_resource::<AssetStorage<Texture>>();
-        loader.load(
-            png_path,
-            PngFormat,
-            TextureMetadata::srgb_scale(),
-            (),
-            &texture_storage,
-        )
-    };
     let loader = world.read_resource::<Loader>();
+    let texture_storage = world.read_resource::<AssetStorage<Texture>>();
+    let texture_handle = loader.load(
+        png_path,
+        PngFormat,
+        TextureMetadata::srgb_scale(),
+        (),
+        &texture_storage,
+    );
+
     let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
     loader.load(
         ron_path,
@@ -54,8 +52,8 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for FirstLoad {
 
         let default_sprite_sheet = load_sprite_sheet(
             world,
-            "spritesheets/Bisasam_16x16.png",
-            "spritesheets/Bisasam_16x16.ron",
+            "spritesheets/tileset_16x16.png",
+            "spritesheets/tileset_16x16.ron",
             &mut self.progress_counter,
         );
 

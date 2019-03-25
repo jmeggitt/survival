@@ -1,0 +1,5382 @@
+(
+    texture_width: 512,
+    texture_height: 384,
+    sprites: [
+        (
+            x: 0,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [0]
+        (
+            x: 0,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [1]
+        (
+            x: 0,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [2]
+        (
+            x: 0,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [3]
+        (
+            x: 0,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [4]
+        (
+            x: 0,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [5]
+        (
+            x: 0,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [6]
+        (
+            x: 0,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [7]
+        (
+            x: 0,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [8]
+        (
+            x: 0,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [9]
+        (
+            x: 0,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [10]
+        (
+            x: 0,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [11]
+        (
+            x: 0,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [12]
+        (
+            x: 0,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [13]
+        (
+            x: 0,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [14]
+        (
+            x: 0,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [15]
+        (
+            x: 0,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [16]
+        (
+            x: 0,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [17]
+        (
+            x: 0,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [18]
+        (
+            x: 0,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [19]
+        (
+            x: 0,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [20]
+        (
+            x: 0,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [21]
+        (
+            x: 0,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [22]
+        (
+            x: 0,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [23]
+        (
+            x: 16,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [24]
+        (
+            x: 16,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [25]
+        (
+            x: 16,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [26]
+        (
+            x: 16,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [27]
+        (
+            x: 16,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [28]
+        (
+            x: 16,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [29]
+        (
+            x: 16,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [30]
+        (
+            x: 16,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [31]
+        (
+            x: 16,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [32]
+        (
+            x: 16,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [33]
+        (
+            x: 16,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [34]
+        (
+            x: 16,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [35]
+        (
+            x: 16,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [36]
+        (
+            x: 16,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [37]
+        (
+            x: 16,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [38]
+        (
+            x: 16,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [39]
+        (
+            x: 16,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [40]
+        (
+            x: 16,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [41]
+        (
+            x: 16,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [42]
+        (
+            x: 16,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [43]
+        (
+            x: 16,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [44]
+        (
+            x: 16,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [45]
+        (
+            x: 16,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [46]
+        (
+            x: 16,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [47]
+        (
+            x: 32,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [48]
+        (
+            x: 32,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [49]
+        (
+            x: 32,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [50]
+        (
+            x: 32,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [51]
+        (
+            x: 32,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [52]
+        (
+            x: 32,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [53]
+        (
+            x: 32,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [54]
+        (
+            x: 32,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [55]
+        (
+            x: 32,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [56]
+        (
+            x: 32,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [57]
+        (
+            x: 32,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [58]
+        (
+            x: 32,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [59]
+        (
+            x: 32,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [60]
+        (
+            x: 32,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [61]
+        (
+            x: 32,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [62]
+        (
+            x: 32,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [63]
+        (
+            x: 32,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [64]
+        (
+            x: 32,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [65]
+        (
+            x: 32,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [66]
+        (
+            x: 32,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [67]
+        (
+            x: 32,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [68]
+        (
+            x: 32,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [69]
+        (
+            x: 32,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [70]
+        (
+            x: 32,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [71]
+        (
+            x: 48,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [72]
+        (
+            x: 48,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [73]
+        (
+            x: 48,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [74]
+        (
+            x: 48,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [75]
+        (
+            x: 48,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [76]
+        (
+            x: 48,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [77]
+        (
+            x: 48,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [78]
+        (
+            x: 48,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [79]
+        (
+            x: 48,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [80]
+        (
+            x: 48,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [81]
+        (
+            x: 48,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [82]
+        (
+            x: 48,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [83]
+        (
+            x: 48,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [84]
+        (
+            x: 48,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [85]
+        (
+            x: 48,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [86]
+        (
+            x: 48,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [87]
+        (
+            x: 48,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [88]
+        (
+            x: 48,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [89]
+        (
+            x: 48,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [90]
+        (
+            x: 48,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [91]
+        (
+            x: 48,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [92]
+        (
+            x: 48,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [93]
+        (
+            x: 48,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [94]
+        (
+            x: 48,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [95]
+        (
+            x: 64,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [96]
+        (
+            x: 64,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [97]
+        (
+            x: 64,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [98]
+        (
+            x: 64,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [99]
+        (
+            x: 64,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [100]
+        (
+            x: 64,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [101]
+        (
+            x: 64,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [102]
+        (
+            x: 64,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [103]
+        (
+            x: 64,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [104]
+        (
+            x: 64,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [105]
+        (
+            x: 64,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [106]
+        (
+            x: 64,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [107]
+        (
+            x: 64,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [108]
+        (
+            x: 64,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [109]
+        (
+            x: 64,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [110]
+        (
+            x: 64,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [111]
+        (
+            x: 64,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [112]
+        (
+            x: 64,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [113]
+        (
+            x: 64,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [114]
+        (
+            x: 64,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [115]
+        (
+            x: 64,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [116]
+        (
+            x: 64,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [117]
+        (
+            x: 64,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [118]
+        (
+            x: 64,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [119]
+        (
+            x: 80,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [120]
+        (
+            x: 80,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [121]
+        (
+            x: 80,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [122]
+        (
+            x: 80,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [123]
+        (
+            x: 80,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [124]
+        (
+            x: 80,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [125]
+        (
+            x: 80,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [126]
+        (
+            x: 80,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [127]
+        (
+            x: 80,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [128]
+        (
+            x: 80,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [129]
+        (
+            x: 80,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [130]
+        (
+            x: 80,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [131]
+        (
+            x: 80,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [132]
+        (
+            x: 80,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [133]
+        (
+            x: 80,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [134]
+        (
+            x: 80,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [135]
+        (
+            x: 80,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [136]
+        (
+            x: 80,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [137]
+        (
+            x: 80,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [138]
+        (
+            x: 80,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [139]
+        (
+            x: 80,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [140]
+        (
+            x: 80,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [141]
+        (
+            x: 80,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [142]
+        (
+            x: 80,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [143]
+        (
+            x: 96,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [144]
+        (
+            x: 96,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [145]
+        (
+            x: 96,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [146]
+        (
+            x: 96,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [147]
+        (
+            x: 96,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [148]
+        (
+            x: 96,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [149]
+        (
+            x: 96,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [150]
+        (
+            x: 96,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [151]
+        (
+            x: 96,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [152]
+        (
+            x: 96,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [153]
+        (
+            x: 96,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [154]
+        (
+            x: 96,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [155]
+        (
+            x: 96,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [156]
+        (
+            x: 96,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [157]
+        (
+            x: 96,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [158]
+        (
+            x: 96,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [159]
+        (
+            x: 96,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [160]
+        (
+            x: 96,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [161]
+        (
+            x: 96,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [162]
+        (
+            x: 96,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [163]
+        (
+            x: 96,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [164]
+        (
+            x: 96,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [165]
+        (
+            x: 96,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [166]
+        (
+            x: 96,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [167]
+        (
+            x: 112,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [168]
+        (
+            x: 112,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [169]
+        (
+            x: 112,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [170]
+        (
+            x: 112,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [171]
+        (
+            x: 112,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [172]
+        (
+            x: 112,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [173]
+        (
+            x: 112,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [174]
+        (
+            x: 112,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [175]
+        (
+            x: 112,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [176]
+        (
+            x: 112,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [177]
+        (
+            x: 112,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [178]
+        (
+            x: 112,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [179]
+        (
+            x: 112,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [180]
+        (
+            x: 112,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [181]
+        (
+            x: 112,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [182]
+        (
+            x: 112,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [183]
+        (
+            x: 112,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [184]
+        (
+            x: 112,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [185]
+        (
+            x: 112,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [186]
+        (
+            x: 112,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [187]
+        (
+            x: 112,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [188]
+        (
+            x: 112,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [189]
+        (
+            x: 112,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [190]
+        (
+            x: 112,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [191]
+        (
+            x: 128,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [192]
+        (
+            x: 128,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [193]
+        (
+            x: 128,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [194]
+        (
+            x: 128,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [195]
+        (
+            x: 128,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [196]
+        (
+            x: 128,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [197]
+        (
+            x: 128,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [198]
+        (
+            x: 128,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [199]
+        (
+            x: 128,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [200]
+        (
+            x: 128,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [201]
+        (
+            x: 128,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [202]
+        (
+            x: 128,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [203]
+        (
+            x: 128,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [204]
+        (
+            x: 128,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [205]
+        (
+            x: 128,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [206]
+        (
+            x: 128,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [207]
+        (
+            x: 128,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [208]
+        (
+            x: 128,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [209]
+        (
+            x: 128,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [210]
+        (
+            x: 128,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [211]
+        (
+            x: 128,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [212]
+        (
+            x: 128,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [213]
+        (
+            x: 128,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [214]
+        (
+            x: 128,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [215]
+        (
+            x: 144,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [216]
+        (
+            x: 144,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [217]
+        (
+            x: 144,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [218]
+        (
+            x: 144,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [219]
+        (
+            x: 144,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [220]
+        (
+            x: 144,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [221]
+        (
+            x: 144,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [222]
+        (
+            x: 144,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [223]
+        (
+            x: 144,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [224]
+        (
+            x: 144,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [225]
+        (
+            x: 144,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [226]
+        (
+            x: 144,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [227]
+        (
+            x: 144,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [228]
+        (
+            x: 144,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [229]
+        (
+            x: 144,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [230]
+        (
+            x: 144,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [231]
+        (
+            x: 144,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [232]
+        (
+            x: 144,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [233]
+        (
+            x: 144,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [234]
+        (
+            x: 144,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [235]
+        (
+            x: 144,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [236]
+        (
+            x: 144,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [237]
+        (
+            x: 144,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [238]
+        (
+            x: 144,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [239]
+        (
+            x: 160,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [240]
+        (
+            x: 160,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [241]
+        (
+            x: 160,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [242]
+        (
+            x: 160,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [243]
+        (
+            x: 160,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [244]
+        (
+            x: 160,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [245]
+        (
+            x: 160,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [246]
+        (
+            x: 160,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [247]
+        (
+            x: 160,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [248]
+        (
+            x: 160,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [249]
+        (
+            x: 160,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [250]
+        (
+            x: 160,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [251]
+        (
+            x: 160,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [252]
+        (
+            x: 160,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [253]
+        (
+            x: 160,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [254]
+        (
+            x: 160,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [255]
+        (
+            x: 160,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [256]
+        (
+            x: 160,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [257]
+        (
+            x: 160,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [258]
+        (
+            x: 160,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [259]
+        (
+            x: 160,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [260]
+        (
+            x: 160,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [261]
+        (
+            x: 160,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [262]
+        (
+            x: 160,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [263]
+        (
+            x: 176,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [264]
+        (
+            x: 176,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [265]
+        (
+            x: 176,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [266]
+        (
+            x: 176,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [267]
+        (
+            x: 176,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [268]
+        (
+            x: 176,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [269]
+        (
+            x: 176,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [270]
+        (
+            x: 176,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [271]
+        (
+            x: 176,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [272]
+        (
+            x: 176,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [273]
+        (
+            x: 176,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [274]
+        (
+            x: 176,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [275]
+        (
+            x: 176,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [276]
+        (
+            x: 176,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [277]
+        (
+            x: 176,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [278]
+        (
+            x: 176,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [279]
+        (
+            x: 176,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [280]
+        (
+            x: 176,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [281]
+        (
+            x: 176,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [282]
+        (
+            x: 176,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [283]
+        (
+            x: 176,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [284]
+        (
+            x: 176,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [285]
+        (
+            x: 176,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [286]
+        (
+            x: 176,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [287]
+        (
+            x: 192,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [288]
+        (
+            x: 192,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [289]
+        (
+            x: 192,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [290]
+        (
+            x: 192,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [291]
+        (
+            x: 192,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [292]
+        (
+            x: 192,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [293]
+        (
+            x: 192,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [294]
+        (
+            x: 192,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [295]
+        (
+            x: 192,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [296]
+        (
+            x: 192,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [297]
+        (
+            x: 192,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [298]
+        (
+            x: 192,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [299]
+        (
+            x: 192,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [300]
+        (
+            x: 192,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [301]
+        (
+            x: 192,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [302]
+        (
+            x: 192,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [303]
+        (
+            x: 192,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [304]
+        (
+            x: 192,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [305]
+        (
+            x: 192,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [306]
+        (
+            x: 192,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [307]
+        (
+            x: 192,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [308]
+        (
+            x: 192,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [309]
+        (
+            x: 192,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [310]
+        (
+            x: 192,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [311]
+        (
+            x: 208,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [312]
+        (
+            x: 208,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [313]
+        (
+            x: 208,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [314]
+        (
+            x: 208,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [315]
+        (
+            x: 208,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [316]
+        (
+            x: 208,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [317]
+        (
+            x: 208,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [318]
+        (
+            x: 208,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [319]
+        (
+            x: 208,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [320]
+        (
+            x: 208,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [321]
+        (
+            x: 208,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [322]
+        (
+            x: 208,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [323]
+        (
+            x: 208,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [324]
+        (
+            x: 208,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [325]
+        (
+            x: 208,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [326]
+        (
+            x: 208,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [327]
+        (
+            x: 208,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [328]
+        (
+            x: 208,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [329]
+        (
+            x: 208,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [330]
+        (
+            x: 208,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [331]
+        (
+            x: 208,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [332]
+        (
+            x: 208,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [333]
+        (
+            x: 208,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [334]
+        (
+            x: 208,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [335]
+        (
+            x: 224,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [336]
+        (
+            x: 224,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [337]
+        (
+            x: 224,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [338]
+        (
+            x: 224,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [339]
+        (
+            x: 224,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [340]
+        (
+            x: 224,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [341]
+        (
+            x: 224,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [342]
+        (
+            x: 224,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [343]
+        (
+            x: 224,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [344]
+        (
+            x: 224,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [345]
+        (
+            x: 224,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [346]
+        (
+            x: 224,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [347]
+        (
+            x: 224,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [348]
+        (
+            x: 224,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [349]
+        (
+            x: 224,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [350]
+        (
+            x: 224,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [351]
+        (
+            x: 224,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [352]
+        (
+            x: 224,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [353]
+        (
+            x: 224,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [354]
+        (
+            x: 224,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [355]
+        (
+            x: 224,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [356]
+        (
+            x: 224,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [357]
+        (
+            x: 224,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [358]
+        (
+            x: 224,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [359]
+        (
+            x: 240,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [360]
+        (
+            x: 240,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [361]
+        (
+            x: 240,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [362]
+        (
+            x: 240,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [363]
+        (
+            x: 240,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [364]
+        (
+            x: 240,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [365]
+        (
+            x: 240,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [366]
+        (
+            x: 240,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [367]
+        (
+            x: 240,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [368]
+        (
+            x: 240,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [369]
+        (
+            x: 240,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [370]
+        (
+            x: 240,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [371]
+        (
+            x: 240,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [372]
+        (
+            x: 240,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [373]
+        (
+            x: 240,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [374]
+        (
+            x: 240,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [375]
+        (
+            x: 240,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [376]
+        (
+            x: 240,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [377]
+        (
+            x: 240,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [378]
+        (
+            x: 240,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [379]
+        (
+            x: 240,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [380]
+        (
+            x: 240,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [381]
+        (
+            x: 240,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [382]
+        (
+            x: 240,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [383]
+        (
+            x: 256,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [384]
+        (
+            x: 256,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [385]
+        (
+            x: 256,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [386]
+        (
+            x: 256,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [387]
+        (
+            x: 256,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [388]
+        (
+            x: 256,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [389]
+        (
+            x: 256,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [390]
+        (
+            x: 256,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [391]
+        (
+            x: 256,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [392]
+        (
+            x: 256,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [393]
+        (
+            x: 256,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [394]
+        (
+            x: 256,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [395]
+        (
+            x: 256,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [396]
+        (
+            x: 256,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [397]
+        (
+            x: 256,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [398]
+        (
+            x: 256,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [399]
+        (
+            x: 256,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [400]
+        (
+            x: 256,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [401]
+        (
+            x: 256,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [402]
+        (
+            x: 256,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [403]
+        (
+            x: 256,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [404]
+        (
+            x: 256,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [405]
+        (
+            x: 256,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [406]
+        (
+            x: 256,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [407]
+        (
+            x: 272,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [408]
+        (
+            x: 272,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [409]
+        (
+            x: 272,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [410]
+        (
+            x: 272,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [411]
+        (
+            x: 272,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [412]
+        (
+            x: 272,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [413]
+        (
+            x: 272,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [414]
+        (
+            x: 272,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [415]
+        (
+            x: 272,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [416]
+        (
+            x: 272,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [417]
+        (
+            x: 272,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [418]
+        (
+            x: 272,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [419]
+        (
+            x: 272,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [420]
+        (
+            x: 272,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [421]
+        (
+            x: 272,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [422]
+        (
+            x: 272,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [423]
+        (
+            x: 272,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [424]
+        (
+            x: 272,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [425]
+        (
+            x: 272,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [426]
+        (
+            x: 272,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [427]
+        (
+            x: 272,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [428]
+        (
+            x: 272,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [429]
+        (
+            x: 272,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [430]
+        (
+            x: 272,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [431]
+        (
+            x: 288,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [432]
+        (
+            x: 288,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [433]
+        (
+            x: 288,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [434]
+        (
+            x: 288,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [435]
+        (
+            x: 288,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [436]
+        (
+            x: 288,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [437]
+        (
+            x: 288,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [438]
+        (
+            x: 288,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [439]
+        (
+            x: 288,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [440]
+        (
+            x: 288,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [441]
+        (
+            x: 288,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [442]
+        (
+            x: 288,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [443]
+        (
+            x: 288,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [444]
+        (
+            x: 288,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [445]
+        (
+            x: 288,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [446]
+        (
+            x: 288,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [447]
+        (
+            x: 288,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [448]
+        (
+            x: 288,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [449]
+        (
+            x: 288,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [450]
+        (
+            x: 288,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [451]
+        (
+            x: 288,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [452]
+        (
+            x: 288,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [453]
+        (
+            x: 288,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [454]
+        (
+            x: 288,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [455]
+        (
+            x: 304,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [456]
+        (
+            x: 304,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [457]
+        (
+            x: 304,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [458]
+        (
+            x: 304,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [459]
+        (
+            x: 304,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [460]
+        (
+            x: 304,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [461]
+        (
+            x: 304,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [462]
+        (
+            x: 304,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [463]
+        (
+            x: 304,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [464]
+        (
+            x: 304,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [465]
+        (
+            x: 304,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [466]
+        (
+            x: 304,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [467]
+        (
+            x: 304,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [468]
+        (
+            x: 304,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [469]
+        (
+            x: 304,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [470]
+        (
+            x: 304,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [471]
+        (
+            x: 304,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [472]
+        (
+            x: 304,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [473]
+        (
+            x: 304,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [474]
+        (
+            x: 304,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [475]
+        (
+            x: 304,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [476]
+        (
+            x: 304,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [477]
+        (
+            x: 304,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [478]
+        (
+            x: 304,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [479]
+        (
+            x: 320,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [480]
+        (
+            x: 320,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [481]
+        (
+            x: 320,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [482]
+        (
+            x: 320,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [483]
+        (
+            x: 320,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [484]
+        (
+            x: 320,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [485]
+        (
+            x: 320,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [486]
+        (
+            x: 320,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [487]
+        (
+            x: 320,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [488]
+        (
+            x: 320,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [489]
+        (
+            x: 320,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [490]
+        (
+            x: 320,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [491]
+        (
+            x: 320,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [492]
+        (
+            x: 320,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [493]
+        (
+            x: 320,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [494]
+        (
+            x: 320,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [495]
+        (
+            x: 320,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [496]
+        (
+            x: 320,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [497]
+        (
+            x: 320,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [498]
+        (
+            x: 320,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [499]
+        (
+            x: 320,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [500]
+        (
+            x: 320,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [501]
+        (
+            x: 320,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [502]
+        (
+            x: 320,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [503]
+        (
+            x: 336,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [504]
+        (
+            x: 336,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [505]
+        (
+            x: 336,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [506]
+        (
+            x: 336,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [507]
+        (
+            x: 336,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [508]
+        (
+            x: 336,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [509]
+        (
+            x: 336,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [510]
+        (
+            x: 336,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [511]
+        (
+            x: 336,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [512]
+        (
+            x: 336,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [513]
+        (
+            x: 336,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [514]
+        (
+            x: 336,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [515]
+        (
+            x: 336,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [516]
+        (
+            x: 336,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [517]
+        (
+            x: 336,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [518]
+        (
+            x: 336,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [519]
+        (
+            x: 336,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [520]
+        (
+            x: 336,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [521]
+        (
+            x: 336,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [522]
+        (
+            x: 336,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [523]
+        (
+            x: 336,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [524]
+        (
+            x: 336,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [525]
+        (
+            x: 336,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [526]
+        (
+            x: 336,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [527]
+        (
+            x: 352,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [528]
+        (
+            x: 352,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [529]
+        (
+            x: 352,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [530]
+        (
+            x: 352,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [531]
+        (
+            x: 352,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [532]
+        (
+            x: 352,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [533]
+        (
+            x: 352,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [534]
+        (
+            x: 352,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [535]
+        (
+            x: 352,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [536]
+        (
+            x: 352,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [537]
+        (
+            x: 352,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [538]
+        (
+            x: 352,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [539]
+        (
+            x: 352,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [540]
+        (
+            x: 352,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [541]
+        (
+            x: 352,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [542]
+        (
+            x: 352,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [543]
+        (
+            x: 352,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [544]
+        (
+            x: 352,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [545]
+        (
+            x: 352,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [546]
+        (
+            x: 352,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [547]
+        (
+            x: 352,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [548]
+        (
+            x: 352,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [549]
+        (
+            x: 352,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [550]
+        (
+            x: 352,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [551]
+        (
+            x: 368,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [552]
+        (
+            x: 368,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [553]
+        (
+            x: 368,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [554]
+        (
+            x: 368,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [555]
+        (
+            x: 368,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [556]
+        (
+            x: 368,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [557]
+        (
+            x: 368,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [558]
+        (
+            x: 368,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [559]
+        (
+            x: 368,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [560]
+        (
+            x: 368,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [561]
+        (
+            x: 368,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [562]
+        (
+            x: 368,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [563]
+        (
+            x: 368,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [564]
+        (
+            x: 368,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [565]
+        (
+            x: 368,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [566]
+        (
+            x: 368,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [567]
+        (
+            x: 368,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [568]
+        (
+            x: 368,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [569]
+        (
+            x: 368,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [570]
+        (
+            x: 368,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [571]
+        (
+            x: 368,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [572]
+        (
+            x: 368,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [573]
+        (
+            x: 368,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [574]
+        (
+            x: 368,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [575]
+        (
+            x: 384,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [576]
+        (
+            x: 384,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [577]
+        (
+            x: 384,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [578]
+        (
+            x: 384,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [579]
+        (
+            x: 384,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [580]
+        (
+            x: 384,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [581]
+        (
+            x: 384,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [582]
+        (
+            x: 384,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [583]
+        (
+            x: 384,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [584]
+        (
+            x: 384,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [585]
+        (
+            x: 384,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [586]
+        (
+            x: 384,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [587]
+        (
+            x: 384,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [588]
+        (
+            x: 384,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [589]
+        (
+            x: 384,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [590]
+        (
+            x: 384,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [591]
+        (
+            x: 384,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [592]
+        (
+            x: 384,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [593]
+        (
+            x: 384,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [594]
+        (
+            x: 384,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [595]
+        (
+            x: 384,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [596]
+        (
+            x: 384,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [597]
+        (
+            x: 384,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [598]
+        (
+            x: 384,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [599]
+        (
+            x: 400,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [600]
+        (
+            x: 400,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [601]
+        (
+            x: 400,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [602]
+        (
+            x: 400,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [603]
+        (
+            x: 400,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [604]
+        (
+            x: 400,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [605]
+        (
+            x: 400,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [606]
+        (
+            x: 400,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [607]
+        (
+            x: 400,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [608]
+        (
+            x: 400,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [609]
+        (
+            x: 400,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [610]
+        (
+            x: 400,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [611]
+        (
+            x: 400,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [612]
+        (
+            x: 400,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [613]
+        (
+            x: 400,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [614]
+        (
+            x: 400,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [615]
+        (
+            x: 400,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [616]
+        (
+            x: 400,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [617]
+        (
+            x: 400,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [618]
+        (
+            x: 400,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [619]
+        (
+            x: 400,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [620]
+        (
+            x: 400,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [621]
+        (
+            x: 400,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [622]
+        (
+            x: 400,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [623]
+        (
+            x: 416,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [624]
+        (
+            x: 416,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [625]
+        (
+            x: 416,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [626]
+        (
+            x: 416,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [627]
+        (
+            x: 416,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [628]
+        (
+            x: 416,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [629]
+        (
+            x: 416,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [630]
+        (
+            x: 416,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [631]
+        (
+            x: 416,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [632]
+        (
+            x: 416,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [633]
+        (
+            x: 416,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [634]
+        (
+            x: 416,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [635]
+        (
+            x: 416,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [636]
+        (
+            x: 416,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [637]
+        (
+            x: 416,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [638]
+        (
+            x: 416,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [639]
+        (
+            x: 416,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [640]
+        (
+            x: 416,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [641]
+        (
+            x: 416,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [642]
+        (
+            x: 416,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [643]
+        (
+            x: 416,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [644]
+        (
+            x: 416,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [645]
+        (
+            x: 416,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [646]
+        (
+            x: 416,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [647]
+        (
+            x: 432,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [648]
+        (
+            x: 432,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [649]
+        (
+            x: 432,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [650]
+        (
+            x: 432,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [651]
+        (
+            x: 432,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [652]
+        (
+            x: 432,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [653]
+        (
+            x: 432,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [654]
+        (
+            x: 432,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [655]
+        (
+            x: 432,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [656]
+        (
+            x: 432,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [657]
+        (
+            x: 432,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [658]
+        (
+            x: 432,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [659]
+        (
+            x: 432,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [660]
+        (
+            x: 432,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [661]
+        (
+            x: 432,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [662]
+        (
+            x: 432,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [663]
+        (
+            x: 432,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [664]
+        (
+            x: 432,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [665]
+        (
+            x: 432,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [666]
+        (
+            x: 432,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [667]
+        (
+            x: 432,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [668]
+        (
+            x: 432,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [669]
+        (
+            x: 432,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [670]
+        (
+            x: 432,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [671]
+        (
+            x: 448,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [672]
+        (
+            x: 448,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [673]
+        (
+            x: 448,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [674]
+        (
+            x: 448,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [675]
+        (
+            x: 448,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [676]
+        (
+            x: 448,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [677]
+        (
+            x: 448,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [678]
+        (
+            x: 448,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [679]
+        (
+            x: 448,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [680]
+        (
+            x: 448,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [681]
+        (
+            x: 448,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [682]
+        (
+            x: 448,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [683]
+        (
+            x: 448,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [684]
+        (
+            x: 448,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [685]
+        (
+            x: 448,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [686]
+        (
+            x: 448,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [687]
+        (
+            x: 448,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [688]
+        (
+            x: 448,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [689]
+        (
+            x: 448,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [690]
+        (
+            x: 448,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [691]
+        (
+            x: 448,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [692]
+        (
+            x: 448,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [693]
+        (
+            x: 448,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [694]
+        (
+            x: 448,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [695]
+        (
+            x: 464,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [696]
+        (
+            x: 464,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [697]
+        (
+            x: 464,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [698]
+        (
+            x: 464,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [699]
+        (
+            x: 464,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [700]
+        (
+            x: 464,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [701]
+        (
+            x: 464,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [702]
+        (
+            x: 464,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [703]
+        (
+            x: 464,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [704]
+        (
+            x: 464,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [705]
+        (
+            x: 464,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [706]
+        (
+            x: 464,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [707]
+        (
+            x: 464,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [708]
+        (
+            x: 464,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [709]
+        (
+            x: 464,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [710]
+        (
+            x: 464,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [711]
+        (
+            x: 464,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [712]
+        (
+            x: 464,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [713]
+        (
+            x: 464,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [714]
+        (
+            x: 464,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [715]
+        (
+            x: 464,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [716]
+        (
+            x: 464,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [717]
+        (
+            x: 464,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [718]
+        (
+            x: 464,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [719]
+        (
+            x: 480,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [720]
+        (
+            x: 480,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [721]
+        (
+            x: 480,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [722]
+        (
+            x: 480,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [723]
+        (
+            x: 480,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [724]
+        (
+            x: 480,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [725]
+        (
+            x: 480,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [726]
+        (
+            x: 480,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [727]
+        (
+            x: 480,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [728]
+        (
+            x: 480,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [729]
+        (
+            x: 480,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [730]
+        (
+            x: 480,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [731]
+        (
+            x: 480,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [732]
+        (
+            x: 480,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [733]
+        (
+            x: 480,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [734]
+        (
+            x: 480,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [735]
+        (
+            x: 480,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [736]
+        (
+            x: 480,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [737]
+        (
+            x: 480,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [738]
+        (
+            x: 480,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [739]
+        (
+            x: 480,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [740]
+        (
+            x: 480,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [741]
+        (
+            x: 480,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [742]
+        (
+            x: 480,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [743]
+        (
+            x: 496,
+            y: 0,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [744]
+        (
+            x: 496,
+            y: 16,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [745]
+        (
+            x: 496,
+            y: 32,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [746]
+        (
+            x: 496,
+            y: 48,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [747]
+        (
+            x: 496,
+            y: 64,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [748]
+        (
+            x: 496,
+            y: 80,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [749]
+        (
+            x: 496,
+            y: 96,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [750]
+        (
+            x: 496,
+            y: 112,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [751]
+        (
+            x: 496,
+            y: 128,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [752]
+        (
+            x: 496,
+            y: 144,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [753]
+        (
+            x: 496,
+            y: 160,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [754]
+        (
+            x: 496,
+            y: 176,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [755]
+        (
+            x: 496,
+            y: 192,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [756]
+        (
+            x: 496,
+            y: 208,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [757]
+        (
+            x: 496,
+            y: 224,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [758]
+        (
+            x: 496,
+            y: 240,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [759]
+        (
+            x: 496,
+            y: 256,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [760]
+        (
+            x: 496,
+            y: 272,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [761]
+        (
+            x: 496,
+            y: 288,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [762]
+        (
+            x: 496,
+            y: 304,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [763]
+        (
+            x: 496,
+            y: 320,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [764]
+        (
+            x: 496,
+            y: 336,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [765]
+        (
+            x: 496,
+            y: 352,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [766]
+        (
+            x: 496,
+            y: 368,
+            width: 16,
+            height: 16,
+            offsets: None,
+        ),// [767]
+    ],
+)

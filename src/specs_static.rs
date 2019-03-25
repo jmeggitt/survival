@@ -3,9 +3,9 @@
 use std::hash::Hash;
 use std::marker::PhantomData;
 
-use amethyst::ecs::prelude::*;
 use amethyst::core::shrev::EventChannel;
-use amethyst::ecs::storage::{ComponentEvent, UnprotectedStorage, TryDefault};
+use amethyst::ecs::prelude::*;
+use amethyst::ecs::storage::{ComponentEvent, TryDefault, UnprotectedStorage};
 
 type Index = u32;
 
@@ -52,7 +52,8 @@ pub struct Storage<C, D: UnprotectedStorage<C>, I> {
 }
 
 impl<C, D: UnprotectedStorage<C>, I> Default for Storage<C, D, I>
-    where D: TryDefault
+where
+    D: TryDefault,
 {
     fn default() -> Self {
         Self {
@@ -64,19 +65,17 @@ impl<C, D: UnprotectedStorage<C>, I> Default for Storage<C, D, I>
 }
 
 impl<C, D, I> Storage<C, D, I>
-    where
-        C: Component,
-        D: UnprotectedStorage<C>,
-        I: Id,
+where
+    C: Component,
+    D: UnprotectedStorage<C>,
+    I: Id,
 {
     /// Tries to retrieve a component by its `Id`.
     /// This will only check whether a component is inserted or not, without doing
     /// any liveness checks for the id.
     pub fn get(&self, id: I) -> Option<&C> {
         if self.bitset.contains(id.id()) {
-            unsafe {
-                Some(self.data.get(id.id()))
-            }
+            unsafe { Some(self.data.get(id.id())) }
         } else {
             None
         }
@@ -87,9 +86,7 @@ impl<C, D, I> Storage<C, D, I>
     /// any liveness checks for the id.
     pub fn get_mut(&mut self, id: I) -> Option<&mut C> {
         if self.bitset.contains(id.id()) {
-            unsafe {
-                Some(self.data.get_mut(id.id()))
-            }
+            unsafe { Some(self.data.get_mut(id.id())) }
         } else {
             None
         }
@@ -100,9 +97,7 @@ impl<C, D, I> Storage<C, D, I>
     /// In contrast to entities, **there are no invalid ids.**
     pub fn insert(&mut self, id: I, comp: C) -> Option<C> {
         let old = if self.bitset.add(id.id()) {
-            unsafe {
-                Some(self.data.remove(id.id()))
-            }
+            unsafe { Some(self.data.remove(id.id())) }
         } else {
             None
         };
@@ -114,12 +109,11 @@ impl<C, D, I> Storage<C, D, I>
         old
     }
     pub fn insert_default(&mut self, id: I) -> Option<C>
-        where C: Component + Default
+    where
+        C: Component + Default,
     {
         let old = if self.bitset.add(id.id()) {
-            unsafe {
-                Some(self.data.remove(id.id()))
-            }
+            unsafe { Some(self.data.remove(id.id())) }
         } else {
             None
         };
@@ -134,9 +128,7 @@ impl<C, D, I> Storage<C, D, I>
     /// Removes the component at `id`.
     pub fn remove(&mut self, id: I) -> Option<C> {
         if self.bitset.remove(id.id()) {
-            unsafe {
-                Some(self.data.remove(id.id()))
-            }
+            unsafe { Some(self.data.remove(id.id())) }
         } else {
             None
         }
@@ -144,17 +136,22 @@ impl<C, D, I> Storage<C, D, I>
 }
 
 impl<C, D, I> Tracked for Storage<C, D, I>
-    where D: Tracked + UnprotectedStorage<C>,
-          C: Component
+where
+    D: Tracked + UnprotectedStorage<C>,
+    C: Component,
 {
-    fn channel(&self) -> &EventChannel<ComponentEvent> { self.data.channel() }
+    fn channel(&self) -> &EventChannel<ComponentEvent> {
+        self.data.channel()
+    }
 
-    fn channel_mut(&mut self) -> &mut EventChannel<ComponentEvent> { self.data.channel_mut() }
+    fn channel_mut(&mut self) -> &mut EventChannel<ComponentEvent> {
+        self.data.channel_mut()
+    }
 }
 
 impl<C, D, I> Drop for Storage<C, D, I>
-    where
-        D: UnprotectedStorage<C>,
+where
+    D: UnprotectedStorage<C>,
 {
     fn drop(&mut self) {
         unsafe {
@@ -164,8 +161,8 @@ impl<C, D, I> Drop for Storage<C, D, I>
 }
 
 impl<'a, C, D, I> Join for &'a Storage<C, D, I>
-    where
-        D: UnprotectedStorage<C>,
+where
+    D: UnprotectedStorage<C>,
 {
     type Type = &'a C;
     type Value = &'a D;
@@ -181,8 +178,8 @@ impl<'a, C, D, I> Join for &'a Storage<C, D, I>
 }
 
 impl<'a, C, D, I> Join for &'a mut Storage<C, D, I>
-    where
-        D: UnprotectedStorage<C>,
+where
+    D: UnprotectedStorage<C>,
 {
     type Type = &'a mut C;
     type Value = &'a mut D;
@@ -197,7 +194,7 @@ impl<'a, C, D, I> Join for &'a mut Storage<C, D, I>
         // to abstract mutable/immutable state at the moment, so we have to hack
         // our way through it.
         #[allow(trivial_casts)]
-            let value: *mut Self::Value = value as *mut Self::Value;
+        let value: *mut Self::Value = value as *mut Self::Value;
         (*value).get_mut(id)
     }
 }
@@ -208,18 +205,18 @@ pub trait WorldExt {
     /// This will be done automatically if your storage has a `Default` and you're fetching it with
     /// `Read` / `Write`.
     fn register_tile_comp<C, I>(&mut self)
-        where
-            C: Component + Send + Sync,
-            C::Storage: Default,
-            I: Id;
+    where
+        C: Component + Send + Sync,
+        C::Storage: Default,
+        I: Id;
 }
 
 impl WorldExt for World {
     fn register_tile_comp<C, I>(&mut self)
-        where
-            C: Component + Send + Sync,
-            C::Storage: Default,
-            I: Id,
+    where
+        C: Component + Send + Sync,
+        C::Storage: Default,
+        I: Id,
     {
         self.add_resource(Storage::<C, C::Storage, I>::default());
     }

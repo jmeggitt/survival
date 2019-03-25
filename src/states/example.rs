@@ -118,6 +118,7 @@ pub struct Example {
     progress_counter: ProgressCounter,
     log: slog::Logger,
 }
+
 impl Example {
     pub fn new(root_logger: slog::Logger) -> Self {
         Self {
@@ -126,6 +127,7 @@ impl Example {
         }
     }
 }
+
 impl SimpleState for Example {
     fn handle_event(
         &mut self,

@@ -7,9 +7,8 @@ use amethyst::{
     },
     StateData, StateEvent, Trans,
 };
-use specs_static::WorldExt;
-
 use slog::slog_trace;
+use specs_static::WorldExt;
 
 use crate::settings;
 use crate::SurvivalData;
@@ -46,6 +45,7 @@ pub struct State {
     progress_counter: ProgressCounter,
     log: slog::Logger,
 }
+
 impl State {
     pub fn new(root_logger: slog::Logger) -> Self {
         Self {
@@ -54,6 +54,7 @@ impl State {
         }
     }
 }
+
 impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
     fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
         let world = data.world;

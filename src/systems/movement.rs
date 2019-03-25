@@ -1,24 +1,25 @@
 #![allow(clippy::module_name_repetitions)]
-use crate::settings::Context;
+
 use amethyst::{
     core::components::Transform,
     ecs::{Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
 };
+use slog::{slog_error, slog_warn};
 
 use crate::actions::{Action, Direction};
 use crate::components;
-use crate::utils::ComponentEventReader;
-
-use slog::{slog_error, slog_warn};
-
 use crate::settings::Config;
+use crate::settings::Context;
 use crate::tiles::{ReadTiles, Tiles};
+use crate::utils::ComponentEventReader;
 
 #[derive(Default)]
 pub struct System {
     action_reader: ComponentEventReader<components::Actionable, Action>,
 }
+
 impl<'s> amethyst::ecs::System<'s> for System {
+    #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'s, Context>,
         Read<'s, Config>,

@@ -1,18 +1,18 @@
-use bitflags::*;
+use std::collections::HashMap;
+use std::sync::Arc;
 
 use amethyst::{
     assets::{Asset, Handle},
     ecs::VecStorage,
 };
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::sync::Arc;
+use bitflags::*;
+use serde::{Serialize, Deserialize};
 
 bitflags! {
     #[derive(Serialize, Deserialize)]
     pub struct ItemFlag: u64 {
-        const Container = 1;
-        const Tool      = 1 << 1;
+        const CONTAINER = 1;
+        const TOOL      = 1 << 1;
     }
 }
 impl Default for ItemFlag {
@@ -24,8 +24,8 @@ impl Default for ItemFlag {
 bitflags! {
     #[derive(Serialize, Deserialize)]
     pub struct ContainerCanHold: u8 {
-        const Liquid = 1 ;
-        const Solid  = 1 << 1;
+        const LIQUID = 1 ;
+        const SOLID  = 1 << 1;
     }
 }
 impl Default for ContainerCanHold {
@@ -63,6 +63,7 @@ pub struct Details {
     pub properties: Vec<Property>,
     pub interactions: crate::components::InteractionType,
 }
+
 impl PartialEq for Details {
     fn eq(&self, other: &Self) -> bool {
         self.name == other.name
@@ -106,7 +107,7 @@ pub fn write_test_collection() {
             long_description: "Test Collection Item 2".to_owned(),
             flags: ItemFlag::Container,
             properties: vec![Property::Container {
-                can_hold: ContainerCanHold::Solid,
+                can_hold: ContainerCanHold::SOLID,
             }],
             ..Default::default()
         }),

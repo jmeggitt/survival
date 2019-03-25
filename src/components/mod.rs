@@ -1,4 +1,3 @@
-use crate::utils::HasChannel;
 use amethyst::{
     assets::Handle,
     core::{components::Transform, math::Vector3},
@@ -9,6 +8,8 @@ use amethyst::{
 use bitflags::*;
 use serde::{Deserialize, Serialize};
 use specs_derive::Component;
+
+use crate::utils::HasChannel;
 
 #[derive(Component, Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(NullStorage)]
@@ -30,9 +31,11 @@ pub struct Actionable {
     #[serde(skip_serializing, skip_deserializing)]
     pub channel: EventChannel<crate::actions::Action>,
 }
+
 impl Component for Actionable {
     type Storage = FlaggedStorage<Self, DenseVecStorage<Self>>;
 }
+
 impl HasChannel<crate::actions::Action> for Actionable {
     fn channel(&self) -> &EventChannel<crate::actions::Action> {
         &self.channel
@@ -55,15 +58,22 @@ pub enum TreeFamily {
     Clone, Debug, PartialEq, Deserialize, Serialize, strum_macros::EnumString, strum_macros::Display,
 )]
 pub enum TreeKind {
-    Pine,   //(TreeFamily::Coniferous),
-    Fur,    //(TreeFamily::Coniferous),
-    Spruce, //(TreeFamily::Coniferous),
-    Cedar,  //(TreeFamily::Coniferous),
+    Pine,
+    //(TreeFamily::Coniferous),
+    Fur,
+    //(TreeFamily::Coniferous),
+    Spruce,
+    //(TreeFamily::Coniferous),
+    Cedar, //(TreeFamily::Coniferous),
 
-    Oak,    //(TreeFamily::Deciduous),
-    Elm,    //(TreeFamily::Deciduous),
-    Maple,  //(TreeFamily::Deciduous),
-    Birch,  //(TreeFamily::Deciduous),
+    Oak,
+    //(TreeFamily::Deciduous),
+    Elm,
+    //(TreeFamily::Deciduous),
+    Maple,
+    //(TreeFamily::Deciduous),
+    Birch,
+    //(TreeFamily::Deciduous),
     Willow, //(TreeFamily::Deciduous)
 }
 
@@ -99,6 +109,7 @@ pub struct Tree {
 #[derive(Component, Default, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[storage(DenseVecStorage)]
 pub struct TimeAvailable(pub u64);
+
 impl TimeAvailable {
     pub fn has(&self, time: u64) -> bool {
         self.0 >= time
@@ -133,6 +144,7 @@ pub struct Item {
     pub handle: Handle<crate::assets::item::Details>,
     pub properties: Vec<crate::assets::item::Property>,
 }
+
 impl PartialEq<Item> for Item {
     fn eq(&self, other: &Self) -> bool {
         self.handle == other.handle
@@ -144,6 +156,7 @@ impl PartialEq<Item> for Item {
 pub struct TilePosition {
     pub coord: Vector3<u32>,
 }
+
 impl Default for TilePosition {
     fn default() -> Self {
         Self {
@@ -151,6 +164,7 @@ impl Default for TilePosition {
         }
     }
 }
+
 impl TilePosition {
     pub fn new(coord: Vector3<u32>) -> Self {
         Self { coord }
@@ -160,7 +174,8 @@ impl TilePosition {
         tiles: crate::tiles::Tiles,
         game_settings: &crate::settings::Config,
     ) -> Self {
-        let position = tiles.world_to_tile(transform.translation(), &game_settings);;
+        let position = tiles.world_to_tile(transform.translation(), &game_settings);
+        ;
         Self {
             coord: Vector3::new(position.x as u32, position.y as u32, 0),
         }
@@ -169,15 +184,14 @@ impl TilePosition {
 
 bitflags_serial! {
     pub struct InteractionType: u64 {
-        const None =                0;
-        const Chop =                1 << 1;
-        const Pickup =              1 << 2;
-        const Dig  =                1 << 3;
-        const Hit =                 1 << 4;
-        const LightFire =           1 << 5;
-        const Cut =                 1 << 6;
-        const Hammer =              1 << 7;
-
+        const NONE =                0;
+        const CHOP =                1 << 1;
+        const PICKUP =              1 << 2;
+        const DIG  =                1 << 3;
+        const HIT =                 1 << 4;
+        const IGNITE =              1 << 5;
+        const CUT =                 1 << 6;
+        const HAMMER =              1 << 7;
     }
 }
 

@@ -1,12 +1,14 @@
 #![allow(clippy::module_name_repetitions)]
 
-use crate::settings::Context;
 use amethyst::ecs::{ReadExpect, Write};
 use amethyst_imgui as am_imgui;
 use amethyst_imgui::imgui;
 
+use crate::settings::Context;
+
 #[derive(Default)]
 pub struct BeginFrameSystem;
+
 impl BeginFrameSystem {
     pub fn open_frame<'ui>(
         &mut self,
@@ -38,6 +40,7 @@ impl BeginFrameSystem {
         unsafe { imgui::Ui::current_ui() }
     }
 }
+
 impl<'s> amethyst::ecs::System<'s> for BeginFrameSystem {
     type SystemData = (
         ReadExpect<'s, Context>,
@@ -53,6 +56,7 @@ impl<'s> amethyst::ecs::System<'s> for BeginFrameSystem {
 
 #[derive(Default)]
 pub struct EndFrameSystem;
+
 impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
     type SystemData = ();
 
@@ -70,6 +74,7 @@ impl<'s> amethyst::ecs::System<'s> for EndFrameSystem {
 }
 
 struct ImguiLuaWrapper<'ui>(&'ui imgui::Ui<'ui>);
+
 impl<'ui> rlua::UserData for ImguiLuaWrapper<'ui> {
     fn add_methods<'lua, M: rlua::UserDataMethods<'lua, Self>>(methods: &mut M) {
         methods.add_method("new_line", |_, im, ()| {

@@ -1,7 +1,8 @@
-use amethyst::assets::{Asset, AssetStorage, Format, Handle, Loader};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
+
+use amethyst::assets::{Asset, AssetStorage, Format, Handle, Loader};
 
 /// Loads asset from the so-called asset packs
 /// It caches assets which you can manually load or unload on demand.

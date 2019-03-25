@@ -19,6 +19,7 @@ pub enum SurvivalState {
     // Unused
     Level,
 }
+
 impl Default for SurvivalState {
     fn default() -> Self {
         SurvivalState::Paused

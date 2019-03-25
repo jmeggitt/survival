@@ -1,24 +1,26 @@
-pub mod body;
-
-pub mod item;
-
-pub mod loader;
-#[allow(unused_imports)]
-use loader::AssetLoader;
+use std::collections::HashMap;
+use std::fs::File;
+use std::path::{Path, PathBuf};
+use std::sync::{Arc, RwLock, RwLockReadGuard};
 
 use amethyst::{
     assets::{Asset, AssetStorage, Handle, Loader, Source},
     ecs::World,
     error::{format_err, Error, ResultExt},
 };
-use std::collections::HashMap;
-use std::fs::File;
-use std::path::{Path, PathBuf};
-use std::sync::{Arc, RwLock, RwLockReadGuard};
+
+pub use item::Details as Item;
+#[allow(unused_imports)]
+use loader::AssetLoader;
+
+pub mod body;
+
+pub mod item;
+
+pub mod loader;
 
 pub type StorageWrapper<T> = Arc<RwLock<Storage<T>>>;
 
-pub use item::Details as Item;
 pub type ItemStorage = StorageWrapper<Item>;
 
 #[derive(Default, Clone, serde::Serialize, serde::Deserialize)]
@@ -31,6 +33,7 @@ pub struct Storage<T> {
 pub trait GetStorage<T> {
     fn borrow(&self) -> RwLockReadGuard<Storage<T>>;
 }
+
 impl<T> GetStorage<T> for Arc<RwLock<Storage<T>>> {
     fn borrow(&self) -> RwLockReadGuard<Storage<T>> {
         self.read().unwrap()
@@ -41,6 +44,7 @@ pub struct StorageSource<T> {
     storage: Arc<RwLock<Storage<T>>>,
     source: PathBuf,
 }
+
 impl<T> StorageSource<T>
 where
     T: for<'a> serde::Deserialize<'a> + serde::Serialize + Send + Sync + Asset + Sized + Default,
@@ -90,6 +94,7 @@ where
         Ok(storage)
     }
 }
+
 impl<T> Source for StorageSource<T>
 where
     T: serde::Serialize + serde::de::DeserializeOwned + Send + Sync + Asset + Sized + Default,

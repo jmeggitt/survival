@@ -1,23 +1,25 @@
 #![allow(clippy::module_name_repetitions)]
 
-use crate::actions::Action;
-use crate::components;
-use crate::settings::Context;
-use crate::utils::ComponentEventReader;
 use amethyst::{
     assets::AssetStorage,
     core::components::Parent,
     core::transform::Transform,
     ecs::{Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
 };
-
 use slog::slog_error;
+
+use crate::actions::Action;
+use crate::components;
+use crate::settings::Context;
+use crate::utils::ComponentEventReader;
 
 #[derive(Default)]
 pub struct System {
     action_reader: ComponentEventReader<components::Actionable, Action>,
 }
+
 impl<'s> amethyst::ecs::System<'s> for System {
+    #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'s, Context>,
         Entities<'s>,

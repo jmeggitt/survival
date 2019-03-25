@@ -1,19 +1,17 @@
 use std::mem;
 
-use gfx_core::state::{Blend, ColorMask};
-use glsl_layout::*;
-
-#[cfg(feature = "profiler")]
-use thread_profiler::profile_scope;
-
 use amethyst::assets::AssetStorage;
 use amethyst::core::{
     ecs::prelude::{Join, Read, ReadStorage},
     math::Matrix4,
     GlobalTransform,
 };
-
 use amethyst::renderer::*;
+use gfx_core::state::{Blend, ColorMask};
+use glsl_layout::*;
+
+#[cfg(feature = "profiler")]
+use thread_profiler::profile_scope;
 
 static ATTRIBUTES: [Attributes<'static>; 2] = [
     Separate::<JointIds>::ATTRIBUTES,

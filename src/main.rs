@@ -1,5 +1,5 @@
 #![warn(clippy::pedantic, clippy::all)]
-#![allow(non_upper_case_globals)]
+//#![allow(non_upper_case_globals)]
 #![feature(custom_attribute, concat_idents)]
 #![allow(dead_code)]
 

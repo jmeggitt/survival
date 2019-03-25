@@ -1,11 +1,12 @@
-#![allow(clippy::module_name_repetitions)]
+//#![allow(clippy::module_name_repetitions)]
 
-use crate::components;
 use amethyst::{
     assets::AssetStorage,
     core::ParentHierarchy,
     ecs::{storage::GenericReadStorage, BitSet, Entity, Join},
 };
+
+use crate::components;
 
 pub fn in_container<S>(item: Entity, hierarchy: &ParentHierarchy, container_storage: &S) -> bool
 where

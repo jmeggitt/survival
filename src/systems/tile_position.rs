@@ -7,6 +7,7 @@ use amethyst::{
     shrev::ReaderId,
 };
 use hibitset::BitSet;
+use slog::slog_error;
 
 use crate::{
     components::TilePosition,
@@ -14,14 +15,14 @@ use crate::{
     tiles::{TileEntities, Tiles, WriteTiles},
 };
 
-use slog::slog_error;
-
 #[derive(Default)]
 pub struct System {
     transform_reader: Option<ReaderId<ComponentEvent>>,
     dirty: BitSet,
 }
+
 impl<'s> amethyst::ecs::System<'s> for System {
+    #[allow(clippy::type_complexity)]
     type SystemData = (
         Entities<'s>,
         ReadExpect<'s, Context>,

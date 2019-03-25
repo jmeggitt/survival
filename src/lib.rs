@@ -1,18 +1,31 @@
 //#![warn(clippy::pedantic, clippy::all)]
-#![allow(
-    clippy::type_complexity,
-    clippy::empty_enum,
-    clippy::default_trait_access
-)]
-#![allow(
-    clippy::cast_sign_loss,
-    clippy::cast_precision_loss,
-    clippy::cast_possible_truncation,
-    clippy::similar_names
-)] // TODO: revisit these
-#![allow(non_upper_case_globals)]
+//#![allow(
+//    clippy::type_complexity,
+//    clippy::empty_enum,
+//    clippy::default_trait_access
+//)]
+//#![allow(
+//    clippy::cast_sign_loss,
+//    clippy::cast_precision_loss,
+//    clippy::cast_possible_truncation,
+//    clippy::similar_names
+//)] // TODO: revisit these
+//#![allow(non_upper_case_globals)]
 #![feature(custom_attribute)]
 #![allow(dead_code)]
+
+use amethyst::{
+    assets::{HotReloadBundle, PrefabLoaderSystem},
+    core::{frame_limiter::FrameRateLimitStrategy, TransformBundle},
+    input::InputBundle,
+    prelude::*,
+    renderer::{DisplayConfig, DrawFlat2D, Pipeline, PosNormTex, RenderBundle, Stage},
+    ui::UiBundle,
+    utils::application_root_dir,
+    utils::{fps_counter::FPSCounterBundle, scene::BasicScenePrefab},
+};
+
+pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
 
 #[macro_use]
 pub mod bitflags_serial;
@@ -36,18 +49,6 @@ pub mod inventory;
 
 pub mod game_data;
 pub mod initializers;
-pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
-
-use amethyst::{
-    assets::{HotReloadBundle, PrefabLoaderSystem},
-    core::{frame_limiter::FrameRateLimitStrategy, TransformBundle},
-    input::InputBundle,
-    prelude::*,
-    renderer::{DisplayConfig, DrawFlat2D, Pipeline, PosNormTex, RenderBundle, Stage},
-    ui::UiBundle,
-    utils::application_root_dir,
-    utils::{fps_counter::FPSCounterBundle, scene::BasicScenePrefab},
-};
 
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 

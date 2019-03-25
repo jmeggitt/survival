@@ -20,6 +20,7 @@ pub enum Direction {
     E,
     W,
 }
+
 impl Default for Direction {
     fn default() -> Self {
         Direction::N
@@ -44,6 +45,7 @@ pub enum Action {
     TryPickup(PickupTarget),
     DoPickup(Entity),
 }
+
 impl Default for Action {
     fn default() -> Self {
         Action::Wait

@@ -1,17 +1,19 @@
 #![allow(clippy::module_name_repetitions)]
+
+use std::sync::{Arc, Mutex};
+
+use amethyst::{
+    ecs::{Entities, Join, LazyUpdate, Read, ReadExpect, Resources, SystemData, Write},
+    shrev::EventChannel,
+};
+use amethyst_imgui::imgui::ImString;
+
 use crate::assets;
 use crate::components;
 use crate::initializers;
 use crate::initializers::SpawnType;
 use crate::settings::Context;
 use crate::systems::ui::ImGuiDraw;
-use amethyst::{
-    ecs::{Entities, Join, LazyUpdate, Read, ReadExpect, Resources, SystemData, Write},
-    shrev::EventChannel,
-};
-use std::sync::{Arc, Mutex};
-
-use amethyst_imgui::imgui::ImString;
 
 #[derive(Clone, Default, Debug)]
 struct UiEditItemState {
@@ -26,6 +28,7 @@ struct ItemExplorerUiState {
     pub active_item: Option<assets::Item>,
     pub edit_item: UiEditItemState,
 }
+
 impl Default for ItemExplorerUiState {
     fn default() -> Self {
         Self {
@@ -41,6 +44,7 @@ impl Default for ItemExplorerUiState {
 pub struct System {
     item_explorer_state: Arc<Mutex<ItemExplorerUiState>>,
 }
+
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,

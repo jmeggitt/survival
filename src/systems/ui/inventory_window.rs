@@ -1,9 +1,5 @@
 #![allow(clippy::module_name_repetitions)]
 
-use crate::actions::PlayerInputAction;
-use crate::assets;
-use crate::components;
-use crate::settings::Context;
 use amethyst::{
     assets::AssetStorage,
     core::ParentHierarchy,
@@ -17,6 +13,11 @@ use amethyst::{
     ui::{UiCreator, UiFinder, UiText},
 };
 
+use crate::actions::PlayerInputAction;
+use crate::assets;
+use crate::components;
+use crate::settings::Context;
+
 #[derive(Default)]
 pub struct System {
     main_ui: Option<Entity>,
@@ -25,6 +26,7 @@ pub struct System {
 }
 
 impl<'s> amethyst::ecs::System<'s> for System {
+    #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'s, Context>,
         Entities<'s>,

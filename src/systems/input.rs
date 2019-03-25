@@ -1,10 +1,5 @@
-#![allow(clippy::module_name_repetitions)]
+//#![allow(clippy::module_name_repetitions)]
 
-use crate::actions;
-use crate::actions::{Action, Direction, PlayerInputAction};
-use crate::components;
-use crate::game_data::SurvivalState;
-use crate::settings::Context;
 use amethyst::{
     core::transform::Transform,
     ecs::{
@@ -15,11 +10,19 @@ use amethyst::{
     shrev::{EventChannel, ReaderId},
 };
 
+use crate::actions;
+use crate::actions::{Action, Direction, PlayerInputAction};
+use crate::components;
+use crate::game_data::SurvivalState;
+use crate::settings::Context;
+
 #[derive(Default)]
 pub struct System {
     input_reader: Option<ReaderId<InputEvent<PlayerInputAction>>>,
 }
+
 impl<'s> amethyst::ecs::System<'s> for System {
+    #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'s, Context>,
         Write<'s, SurvivalState>,
@@ -57,6 +60,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
     ) {
         if *state == SurvivalState::Paused {
             for (_, _, actionable) in (&entities, &players, &mut actionables).join() {
+                // TODO refactor to use match
                 let mut got_input = false;
 
                 // hold-down key actions go here

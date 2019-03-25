@@ -1,10 +1,5 @@
 //! Flat forward drawing pass that mimics a blit.
 
-use derivative::Derivative;
-use gfx::pso::buffer::ElemStride;
-use gfx_core::state::{Blend, ColorMask};
-use glsl_layout::Uniform;
-
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::{
     ecs::prelude::{Read, ReadExpect, ReadStorage},
@@ -12,7 +7,6 @@ use amethyst::core::{
     transform::{GlobalTransform, Transform},
 };
 use amethyst::error::Error;
-
 use amethyst::renderer::{
     get_camera,
     pipe::{
@@ -22,14 +16,17 @@ use amethyst::renderer::{
     ActiveCamera, Attributes, Camera, Color, DisplayConfig, Encoder, Factory, Flipped, Query,
     Resources, Rgba, SpriteSheet, Texture, TextureHandle, VertexFormat,
 };
+use derivative::Derivative;
+use gfx::pso::buffer::ElemStride;
+use gfx_core::state::{Blend, ColorMask};
+use glsl_layout::Uniform;
 
 use crate::components::{FlaggedSpriteRender, TilePosition};
 use crate::settings::Config;
+use crate::tiles::*;
 
 use super::util::{add_texture, default_transparency, set_view_args, setup_textures, ViewArgs};
 use super::*;
-
-use crate::tiles::*;
 
 type Slice = gfx::Slice<Resources>;
 

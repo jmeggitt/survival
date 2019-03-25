@@ -1,6 +1,8 @@
 #![allow(clippy::module_name_repetitions)]
-use amethyst::ecs::{ReadExpect, Resources, SystemData};
+
 use std::sync::{Arc, Mutex};
+
+use amethyst::ecs::{ReadExpect, Resources, SystemData};
 
 use crate::settings::Context;
 
@@ -11,6 +13,7 @@ pub struct ScriptRuntime {
 
 #[derive(Default)]
 pub struct System;
+
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (ReadExpect<'s, Context>,);
 
@@ -24,6 +27,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
 #[cfg(test)]
 mod tests {
     use rlua::{Function, Lua};
+
     #[test]
     fn rlua_test_1() {
         let lua = Lua::new();

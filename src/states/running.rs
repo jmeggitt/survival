@@ -7,6 +7,7 @@ pub struct State {
     progress_counter: ProgressCounter,
     log: slog::Logger,
 }
+
 impl State {
     pub fn new(root_logger: slog::Logger) -> Self {
         Self {
@@ -15,6 +16,7 @@ impl State {
         }
     }
 }
+
 impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
     fn on_start(&mut self, _: StateData<'_, SurvivalData<'_, '_>>) {
         //slog_trace!(self.log, "Changed state to Running");

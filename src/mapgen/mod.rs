@@ -1,7 +1,7 @@
-use ordered_float::OrderedFloat;
-use rand::Rng;
 use std::collections::{HashMap, HashSet};
 
+use ordered_float::OrderedFloat;
+use rand::Rng;
 use rayon::prelude::*;
 
 pub struct GeneratorConfig {
@@ -9,6 +9,7 @@ pub struct GeneratorConfig {
     pub num_lloyd: usize,
     pub box_size: f64,
 }
+
 impl Default for GeneratorConfig {
     fn default() -> Self {
         Self {
@@ -18,6 +19,7 @@ impl Default for GeneratorConfig {
         }
     }
 }
+
 pub type Point = amethyst::core::math::Point2<f64>;
 pub type IndexPoint = amethyst::core::math::Point2<OrderedFloat<f64>>;
 
@@ -67,6 +69,7 @@ pub struct IslandGeneratorSettings {
     pub radius: f64,
     pub sharpness: f64,
 }
+
 impl Default for IslandGeneratorSettings {
     fn default() -> Self {
         Self {
@@ -277,8 +280,9 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rand::SeedableRng;
+
+    use super::*;
 
     #[test]
     pub fn rng_sample_test() {
@@ -297,6 +301,7 @@ mod tests {
 
         assert_eq!(samples1, samples2);
     }
+
     #[test]
     pub fn voronoi_1() {
         use std::path::Path;
@@ -323,7 +328,6 @@ mod tests {
             .save_heightmap_image(&config, &Path::new("/tmp/test.png"), &cells)
             .unwrap();
     }
-
 }
 
 // Generate dt

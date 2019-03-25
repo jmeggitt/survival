@@ -1,5 +1,5 @@
 #![allow(clippy::module_name_repetitions)]
-use crate::settings::Context;
+
 use amethyst::{
     ecs::{
         Component, DenseVecStorage, Entity, Read, ReadExpect, Resources, SystemData, WriteStorage,
@@ -7,6 +7,8 @@ use amethyst::{
     shrev::{EventChannel, ReaderId},
 };
 use specs_derive::Component;
+
+use crate::settings::Context;
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 enum Vitamin {}
@@ -48,6 +50,7 @@ pub struct Nutrition {
 
     pub config: NutritionConfig,
 }
+
 impl Default for Nutrition {
     fn default() -> Self {
         Self {
@@ -72,7 +75,9 @@ impl Default for Nutrition {
 pub struct System {
     consume_reader_id: Option<ReaderId<(Entity, Food)>>,
 }
+
 impl<'s> amethyst::ecs::System<'s> for System {
+    #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'s, Context>,
         Read<'s, EventChannel<(Entity, Food)>>,

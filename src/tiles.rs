@@ -1,11 +1,11 @@
+use std::collections::HashSet;
+
 use amethyst::{
     core::math::{Vector2, Vector3, Vector4},
     ecs::{Component, DenseVecStorage, Entity, Read, Write},
 };
-
 use specs_derive::Component;
 use specs_static::{Id, Storage};
-use std::collections::HashSet;
 
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]
@@ -95,6 +95,7 @@ pub struct RegionIter {
     cur: Vector2<u32>,
     stride: u32,
 }
+
 impl RegionIter {
     pub fn new(tiles: Tiles, region: Vector4<u32>) -> Self {
         Self {
@@ -105,6 +106,7 @@ impl RegionIter {
         }
     }
 }
+
 impl Iterator for RegionIter {
     type Item = TileId;
 
@@ -123,7 +125,7 @@ impl Iterator for RegionIter {
     }
 }
 
-#[allow(clippy::module_name_repetitions)]
+//#[allow(clippy::module_name_repetitions)]
 pub type ReadTiles<'a, C> = Read<'a, Storage<C, <C as Component>::Storage, TileId>>;
-#[allow(clippy::module_name_repetitions)]
+//#[allow(clippy::module_name_repetitions)]
 pub type WriteTiles<'a, C> = Write<'a, Storage<C, <C as Component>::Storage, TileId>>;

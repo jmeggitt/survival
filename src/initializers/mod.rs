@@ -1,5 +1,3 @@
-use crate::assets;
-use crate::components;
 use amethyst::{
     core::{
         components::Parent,
@@ -7,6 +5,9 @@ use amethyst::{
     },
     ecs::{Builder, Entity, World},
 };
+
+use crate::assets;
+use crate::components;
 
 #[derive(Copy, Clone, Debug, strum_macros::Display)]
 pub enum SpawnType {
@@ -32,7 +33,7 @@ pub fn spawn_item(
                 .get(name)
                 .unwrap()
                 .flags
-                .contains(assets::item::ItemFlag::Container),
+                .contains(assets::item::ItemFlag::CONTAINER),
         )
     };
 

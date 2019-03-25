@@ -1,8 +1,4 @@
-pub use self::interleaved::DrawFlat2D as Pass;
-
-mod interleaved;
-mod util;
-
+use amethyst::renderer::{Attribute, AttributeFormat, Attributes, Color, VertexFormat, With};
 use gfx::{
     format::{ChannelType, Format, SurfaceType},
     pso::buffer::Element,
@@ -12,7 +8,10 @@ use serde::{Deserialize, Serialize};
 
 use util::TextureType;
 
-use amethyst::renderer::{Attribute, AttributeFormat, Attributes, Color, VertexFormat, With};
+pub use self::interleaved::DrawFlat2D as Pass;
+
+mod interleaved;
+mod util;
 
 static VERT_SRC: &[u8] = include_bytes!("sprite_v.glsl");
 static FRAG_SRC: &[u8] = include_bytes!("sprite_f.glsl");
@@ -21,6 +20,7 @@ static TEXTURES: [TextureType; 1] = [TextureType::Albedo];
 
 #[derive(Clone, Debug)]
 enum DirX {}
+
 impl Attribute for DirX {
     const NAME: &'static str = "dir_x";
     const FORMAT: Format = Format(SurfaceType::R32_G32, ChannelType::Float);
@@ -30,6 +30,7 @@ impl Attribute for DirX {
 
 #[derive(Clone, Debug)]
 enum DirY {}
+
 impl Attribute for DirY {
     const NAME: &'static str = "dir_y";
     const FORMAT: Format = Format(SurfaceType::R32_G32, ChannelType::Float);
@@ -39,6 +40,7 @@ impl Attribute for DirY {
 
 #[derive(Clone, Debug)]
 enum Pos {}
+
 impl Attribute for Pos {
     const NAME: &'static str = "pos";
     const FORMAT: Format = Format(SurfaceType::R32_G32, ChannelType::Float);
@@ -48,6 +50,7 @@ impl Attribute for Pos {
 
 #[derive(Clone, Debug)]
 enum OffsetU {}
+
 impl Attribute for OffsetU {
     const NAME: &'static str = "u_offset";
     const FORMAT: Format = Format(SurfaceType::R32_G32, ChannelType::Float);
@@ -57,6 +60,7 @@ impl Attribute for OffsetU {
 
 #[derive(Clone, Debug)]
 enum OffsetV {}
+
 impl Attribute for OffsetV {
     const NAME: &'static str = "v_offset";
     const FORMAT: Format = Format(SurfaceType::R32_G32, ChannelType::Float);
@@ -66,6 +70,7 @@ impl Attribute for OffsetV {
 
 #[derive(Clone, Debug)]
 enum Depth {}
+
 impl Attribute for Depth {
     const NAME: &'static str = "depth";
     const FORMAT: Format = Format(SurfaceType::R32, ChannelType::Float);

@@ -1,8 +1,9 @@
 #![allow(clippy::module_name_repetitions)]
 
+use amethyst::ecs::{Entities, Entity, Join, ReadExpect, ReadStorage, Write, WriteStorage};
+
 use crate::components;
 use crate::settings::Context;
-use amethyst::ecs::{Entities, Entity, Join, ReadExpect, ReadStorage, Write, WriteStorage};
 
 #[derive(Default, Copy, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct TimeState {
@@ -11,6 +12,7 @@ pub struct TimeState {
 
 #[derive(Default)]
 pub struct System;
+
 impl<'s> amethyst::ecs::System<'s> for System {
     type SystemData = (
         ReadExpect<'s, Context>,

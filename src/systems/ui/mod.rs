@@ -29,6 +29,7 @@ pub struct System {
 }
 
 impl<'s> amethyst::ecs::System<'s> for System {
+    #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'s, Context>,
         Read<'s, EventChannel<ImGuiDraw>>,

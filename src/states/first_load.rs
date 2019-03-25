@@ -11,6 +11,7 @@ use log::trace;
 use specs_static::WorldExt;
 
 use crate::settings;
+use crate::states::Level;
 use crate::SurvivalData;
 
 fn load_sprite_sheet(
@@ -41,19 +42,12 @@ fn load_sprite_sheet(
     )
 }
 
-pub struct State {
+#[derive(Default)]
+pub struct FirstLoad {
     progress_counter: ProgressCounter,
 }
 
-impl State {
-    pub fn new() -> Self {
-        Self {
-            progress_counter: ProgressCounter::default(),
-        }
-    }
-}
-
-impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
+impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for FirstLoad {
     fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
         let world = data.world;
 
@@ -100,6 +94,6 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         &mut self,
         _: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
-        Trans::Switch(Box::new(super::Level::new()))
+        Trans::Switch(Box::new(Level))
     }
 }

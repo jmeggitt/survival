@@ -1,5 +1,5 @@
 use amethyst::{
-    assets::{AssetStorage, Loader, ProgressCounter},
+    assets::{AssetStorage, Loader},
     core::{Parent, Transform},
     ecs::{Entity, SystemData},
     prelude::*,
@@ -114,17 +114,7 @@ fn init_camera(
         .build();
 }
 
-pub struct Example {
-    progress_counter: ProgressCounter,
-}
-
-impl Example {
-    pub fn new() -> Self {
-        Self {
-            progress_counter: ProgressCounter::default(),
-        }
-    }
-}
+pub struct Example;
 
 impl SimpleState for Example {
     fn handle_event(

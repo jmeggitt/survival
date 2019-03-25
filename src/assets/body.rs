@@ -8,7 +8,7 @@ use amethyst::{
 use bitflags::*;
 use petgraph;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]
 pub struct MaterialLayer;

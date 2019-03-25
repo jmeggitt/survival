@@ -1,8 +1,9 @@
-#![warn(clippy::pedantic, clippy::all)]
-#![feature(custom_attribute, concat_idents)]
-#![allow(dead_code)]
+#![feature(custom_attribute)]
+//#![allow(dead_code)]
+
+use amethyst::LoggerConfig;
 
 fn main() -> amethyst::Result<()> {
-    amethyst::start_logger(Default::default());
+    amethyst::start_logger(LoggerConfig::default());
     survival::run()
 }

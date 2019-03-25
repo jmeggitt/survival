@@ -20,6 +20,7 @@ use derivative::Derivative;
 use gfx::pso::buffer::ElemStride;
 use gfx_core::state::{Blend, ColorMask};
 use glsl_layout::Uniform;
+use log::warn;
 
 use crate::components::{FlaggedSpriteRender, TilePosition};
 use crate::settings::Config;
@@ -125,7 +126,6 @@ impl Pass for DrawFlat2D {
         builder.build()
     }
 
-    #[allow(clippy::extra_unused_lifetimes)]
     fn apply<'a, 'b: 'a>(
         &'a mut self,
         encoder: &mut Encoder,
@@ -146,7 +146,7 @@ impl Pass for DrawFlat2D {
             tiles_flipped,
             tiles_rgba,
             tile_globals,
-        ): <Self as PassData<'a>>::Data,
+        ): <Self as PassData<'b>>::Data,
     ) {
         let camera_g = get_camera(active, &camera, &global);
 
@@ -275,29 +275,21 @@ impl TextureBatch {
         rgba: Option<&Rgba>,
         tex_storage: &AssetStorage<Texture>,
     ) {
-        let global = match global {
-            Some(v) => v,
-            None => return,
-        };
-
-        #[allow(clippy::single_match_else)]
-        let texture_dims = match tex_storage.get(&texture_handle) {
-            Some(tex) => tex.size(),
-            None => {
-                // TODO: Slog
-                //warn!("Texture not loaded for texture: `{:?}`.", texture_handle);
-                return;
+        if let Some(global) = global {
+            if let Some(texture_dims) = tex_storage.get(&texture_handle) {
+                let (width, height) = texture_dims.size();
+                self.textures.push(TextureDrawData::Image {
+                    texture_handle: texture_handle.clone(),
+                    transform: *global,
+                    flipped: flipped.cloned(),
+                    rgba: rgba.cloned(),
+                    width,
+                    height,
+                });
+            } else {
+                warn!("Texture not loaded for texture: `{:?}`.", texture_handle);
             }
-        };
-
-        self.textures.push(TextureDrawData::Image {
-            texture_handle: texture_handle.clone(),
-            transform: *global,
-            flipped: flipped.cloned(),
-            rgba: rgba.cloned(),
-            width: texture_dims.0,
-            height: texture_dims.1,
-        });
+        }
     }
 
     pub fn add_sprite(
@@ -309,42 +301,36 @@ impl TextureBatch {
         sprite_sheet_storage: &AssetStorage<SpriteSheet>,
         tex_storage: &AssetStorage<Texture>,
     ) {
-        let global = match global {
-            Some(v) => v,
-            None => return,
-        };
+        if let Some(global) = global {
+            let texture_handle = match sprite_sheet_storage.get(&sprite_render.sprite_sheet) {
+                Some(sprite_sheet) => {
+                    if tex_storage.get(&sprite_sheet.texture).is_none() {
+                        warn!(
+                            "Texture not loaded for texture: `{:?}`.",
+                            sprite_sheet.texture
+                        );
+                        return;
+                    }
 
-        #[allow(clippy::single_match_else)]
-        let texture_handle = match sprite_sheet_storage.get(&sprite_render.sprite_sheet) {
-            Some(sprite_sheet) => {
-                if tex_storage.get(&sprite_sheet.texture).is_none() {
-                    // TODO: Slog
-                    //warn!(
-                    //    "Texture not loaded for texture: `{:?}`.",
-                    //    sprite_sheet.texture
-                    //);
+                    sprite_sheet.texture.clone()
+                }
+                None => {
+                    warn!(
+                        "Sprite sheet not loaded for sprite_render: `{:?}`.",
+                        sprite_render
+                    );
                     return;
                 }
+            };
 
-                sprite_sheet.texture.clone()
-            }
-            None => {
-                // TODO: Slog
-                //warn!(
-                //    "Sprite sheet not loaded for sprite_render: `{:?}`.",
-                //    sprite_render
-                //);
-                return;
-            }
-        };
-
-        self.textures.push(TextureDrawData::Sprite {
-            texture_handle,
-            render: sprite_render.clone(),
-            flipped: flipped.cloned(),
-            rgba: rgba.cloned(),
-            transform: *global,
-        });
+            self.textures.push(TextureDrawData::Sprite {
+                texture_handle,
+                render: sprite_render.clone(),
+                flipped: flipped.cloned(),
+                rgba: rgba.cloned(),
+                transform: *global,
+            });
+        }
     }
 
     /// Optimize the sprite order to generating more coherent batches.

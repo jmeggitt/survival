@@ -1,5 +1,4 @@
 use amethyst::{
-    assets::ProgressCounter,
     core::components::{GlobalTransform, Transform},
     ecs::{Builder, Entity, SystemData, World},
     renderer::{Camera, Projection, Rgba, SpriteRender, SpriteSheetHandle, Transparent},
@@ -9,6 +8,7 @@ use log::trace;
 
 use crate::components::{Actionable, FlaggedSpriteRender, Player, TilePosition, TimeAvailable};
 use crate::settings;
+use crate::states::Paused;
 use crate::tiles::TileEntities;
 use crate::tiles::{Tiles, WriteTiles};
 use crate::SurvivalData;
@@ -67,20 +67,9 @@ fn init_camera(world: &mut World, _: Entity, tiles: Tiles, game_settings: &setti
         .build();
 }
 
-pub struct State {
-    progress_counter: ProgressCounter,
-}
+pub struct Level;
 
-impl State {
-    pub fn new() -> Self {
-        Self {
-            progress_counter: ProgressCounter::default(),
-//            log: root_logger,
-        }
-    }
-}
-
-impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
+impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for Level {
     fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
         let world = data.world;
         trace!("Changed state to Level");
@@ -165,6 +154,6 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for State {
         _: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
         // Just swap straight to Paused
-        Trans::Push(Box::new(super::Paused::new()))
+        Trans::Push(Box::new(Paused))
     }
 }

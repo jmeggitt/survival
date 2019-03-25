@@ -9,7 +9,7 @@ use crate::settings::Config;
 use crate::tiles::{ReadTiles, Tiles};
 use crate::utils::ComponentEventReader;
 
-use log::{warn, error};
+use log::{error, warn};
 
 #[derive(Default)]
 pub struct System {
@@ -77,7 +77,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             Direction::W => {
                                 target.move_left(5.0);
                             }
-                            _ => error!("Unsupported direction!")
+                            _ => error!("Unsupported direction!"),
                         }
 
                         // Can we actually go to the target?
@@ -88,9 +88,10 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             .is_some()
                         {
                             // We cant do the move!
-                            warn!("Attempted to move to impassable tile: ({},{})",
-                                  target_tile.x,
-                                  target_tile.y);
+                            warn!(
+                                "Attempted to move to impassable tile: ({},{})",
+                                target_tile.x, target_tile.y
+                            );
                             continue;
                         }
 

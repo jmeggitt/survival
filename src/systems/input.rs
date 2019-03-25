@@ -41,7 +41,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         );
     }
 
-    #[allow(clippy::cast_possible_truncation)]
+    #[allow(clippy::useless_let_if_seq)]
     fn run(
         &mut self,
         (
@@ -53,37 +53,31 @@ impl<'s> amethyst::ecs::System<'s> for System {
             players,
             mut actionables,
             cameras,
-            mut transforms, // for debuging
+            mut transforms, // for debugging
         ): Self::SystemData,
     ) {
         if *state == SurvivalState::Paused {
             for (_, _, actionable) in (&entities, &players, &mut actionables).join() {
-                // TODO refactor to use match
                 let mut got_input = false;
 
                 // hold-down key actions go here
                 if input.action_is_down(&PlayerInputAction::MoveUp).unwrap() {
-                    //trace!(context.logs.root, "Got player input in direction: move_up");
                     actionable.channel.single_write(Action::Move(Direction::N));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::MoveDown).unwrap() {
-                    //trace!(context.logs.root, "Got player input in direction: move_down");
                     actionable.channel.single_write(Action::Move(Direction::S));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::MoveLeft).unwrap() {
-                    //trace!(context.logs.root, "Got player input in direction: move_left");
                     actionable.channel.single_write(Action::Move(Direction::W));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::MoveRight).unwrap() {
-                    //trace!(context.logs.root, "Got player input in direction: move_left");
                     actionable.channel.single_write(Action::Move(Direction::E));
                     got_input = true;
                 }
                 if input.action_is_down(&PlayerInputAction::PickUp).unwrap() {
-                    //trace!(context.logs.root, "Got player input in direction: move_right");
                     actionable
                         .channel
                         .single_write(Action::TryPickup(actions::PickupTarget::Under));

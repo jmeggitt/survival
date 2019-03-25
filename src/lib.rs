@@ -1,18 +1,4 @@
-//#![warn(clippy::pedantic, clippy::all)]
-//#![allow(
-//    clippy::type_complexity,
-//    clippy::empty_enum,
-//    clippy::default_trait_access
-//)]
-//#![allow(
-//    clippy::cast_sign_loss,
-//    clippy::cast_precision_loss,
-//    clippy::cast_possible_truncation,
-//    clippy::similar_names
-//)] // TODO: revisit these
-//#![allow(non_upper_case_globals)]
 #![feature(custom_attribute)]
-#![allow(dead_code)]
 
 use amethyst::{
     assets::{HotReloadBundle, PrefabLoaderSystem},
@@ -64,16 +50,8 @@ pub fn run() -> amethyst::Result<()> {
     );
 
     let game_config = crate::settings::Config::load(root.join("game_settings.ron"));
-//    let game_context = crate::settings::Context {
-//        logs: crate::settings::Logs {
-//            root: root_logger.clone(),
-//        },
-//        spritesheet: None,
-//    };
 
-    let game_context = None;
-
-    let game_data = SurvivalDataBuilder::new(game_context, display_config.clone(), game_config)
+    let game_data = SurvivalDataBuilder::new(None, display_config.clone(), game_config)
         .with_core_bundle(TransformBundle::new())?
         .with_core_bundle(
             InputBundle::<actions::PlayerInputAction, actions::PlayerInputAction>::new()
@@ -125,7 +103,7 @@ pub fn run() -> amethyst::Result<()> {
         .with_level(systems::TimeSystem::default(), "time", &[])
         .with_level(systems::InitiativeSystem::default(), "initiative", &[]);
 
-    let mut game = Application::build(root, crate::states::FirstLoad::new())?
+    let mut game = Application::build(root, crate::states::FirstLoad::default())?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)
         .build(game_data)?;
 

@@ -256,7 +256,6 @@ pub fn set_vertex_args(
     global: &GlobalTransform,
     rgba: Rgba,
 ) {
-    #[allow(clippy::option_map_unwrap_or_else)]
     let vertex_args = camera
         .as_ref()
         .map(|&(ref cam, ref transform)| {

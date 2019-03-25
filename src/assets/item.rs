@@ -6,7 +6,7 @@ use amethyst::{
     ecs::VecStorage,
 };
 use bitflags::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 bitflags! {
     #[derive(Serialize, Deserialize)]

@@ -27,9 +27,6 @@ use amethyst::{
 
 pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
 
-#[macro_use]
-pub mod bitflags_serial;
-
 pub mod goap;
 pub mod mapgen;
 pub mod system_chain;

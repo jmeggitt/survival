@@ -8,6 +8,8 @@ use amethyst::{
 use bitflags::*;
 use petgraph;
 
+use serde::{Serialize, Deserialize};
+
 #[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]
 pub struct MaterialLayer;
 
@@ -26,7 +28,8 @@ impl Part {
     }
 }
 
-bitflags_serial! {
+bitflags! {
+    #[derive(Serialize, Deserialize, Default)]
     pub struct JointRelation: u8 {
         const INSIDE    = 1;
         const OUTSIDE   = 1 << 1;

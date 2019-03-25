@@ -182,7 +182,8 @@ impl TilePosition {
     }
 }
 
-bitflags_serial! {
+bitflags! {
+    #[derive(Serialize, Deserialize, Default)]
     pub struct InteractionType: u64 {
         const NONE =                0;
         const CHOP =                1 << 1;

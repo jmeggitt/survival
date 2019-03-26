@@ -1,3 +1,4 @@
+use amethyst::core::Transform;
 use amethyst::ecs::{
     storage,
     storage::{ComponentEvent, UnprotectedStorage},
@@ -105,3 +106,11 @@ where
             .read(self.action_readers.get_mut(&entity).unwrap())
     }
 }
+
+pub struct WorldEntity {
+    inner: Entity,
+    transform: Transform,
+    location: (f32, f32),
+}
+
+impl WorldEntity {}

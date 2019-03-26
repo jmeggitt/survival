@@ -15,10 +15,6 @@ use crate::utils::HasChannel;
 #[storage(NullStorage)]
 pub struct Player;
 
-#[derive(Component, Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[storage(NullStorage)]
-pub struct IsTurn;
-
 #[derive(Component, Default, Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(DenseVecStorage)]
 pub struct PawnTraits {
@@ -151,12 +147,11 @@ impl PartialEq<Item> for Item {
     }
 }
 
-//#[storage(DenseVecStorage)]
 #[derive(Component, Clone, Debug, Serialize, Deserialize)]
 pub struct TilePosition {
     pub coord: Vector3<u32>,
-//    pub x: u32,
-//    pub y: u32,
+    //    pub x: u32,
+    //    pub y: u32,
 }
 
 impl Default for TilePosition {

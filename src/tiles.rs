@@ -6,13 +6,14 @@ use amethyst::{
     ecs::{Component, DenseVecStorage, Entity, Read, Write},
 };
 use specs_derive::Component;
+use serde::{Deserialize, Serialize};
 
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]
 pub struct TileEntities(pub HashSet<Entity>);
 
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct TileId(u32);
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+pub struct TileId(pub u32);
 
 impl TileId {
     #[inline]

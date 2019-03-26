@@ -22,7 +22,7 @@ use gfx_core::state::{Blend, ColorMask};
 use glsl_layout::Uniform;
 use log::warn;
 
-use crate::components::{FlaggedSpriteRender};
+use crate::components::FlaggedSpriteRender;
 use crate::settings::Config;
 use crate::tiles::*;
 
@@ -89,7 +89,7 @@ impl<'a> PassData<'a> for DrawFlat2D {
         Read<'a, DisplayConfig>,
         Read<'a, ActiveCamera>,
         ReadStorage<'a, Camera>,
-//        ReadStorage<'a, TilePosition>,
+        //        ReadStorage<'a, TilePosition>,
         Read<'a, AssetStorage<SpriteSheet>>,
         Read<'a, AssetStorage<Texture>>,
         ReadStorage<'a, GlobalTransform>,

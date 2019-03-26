@@ -1,7 +1,6 @@
 pub use debug::System as DebugSystem;
 pub use dropped_item::System as DroppedItemSystem;
 pub use handle_pickup::System as HandlePickupSystem;
-pub use initiative::System as InitiativeSystem;
 pub use input::System as InputSystem;
 pub use movement::System as MovementSystem;
 pub use nutrition::System as NutritionSystem;
@@ -23,8 +22,6 @@ pub mod nutrition;
 pub mod movement;
 
 pub mod input;
-
-pub mod initiative;
 
 pub mod wearing;
 

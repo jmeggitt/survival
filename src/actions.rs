@@ -1,6 +1,7 @@
 use amethyst::core::math::Vector3;
 use amethyst::ecs::Entity;
 
+// TODO: Replace with polar notation
 #[derive(
     Clone,
     Copy,

@@ -56,7 +56,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
             mut transforms, // for debugging
         ): Self::SystemData,
     ) {
-        if *state == SurvivalState::Paused {
+//        if *state == SurvivalState::Paused {
             for (_, _, actionable) in (&entities, &players, &mut actionables).join() {
                 let mut got_input = false;
 
@@ -107,9 +107,9 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 }
 
                 // End state
-                if got_input {
-                    *state = SurvivalState::Running;
-                }
+//                if got_input {
+//                    *state = SurvivalState::Running;
+//                }
 
                 // Set the camera position here too LOL
                 let mut player_translation = None;
@@ -127,5 +127,5 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 }
             }
         }
-    }
+//    }
 }

@@ -34,8 +34,10 @@ pub mod initializers;
 
 pub mod specs_static;
 
-use actions::PlayerInputAction;
+mod chunk;
+
 use crate::render::tiles::Pass;
+use actions::PlayerInputAction;
 
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
@@ -72,10 +74,7 @@ pub fn run() -> amethyst::Result<()> {
             &["imgui_begin_frame"],
         )
         .with_core_bundle(HotReloadBundle::default())?
-        .with_core_bundle(UiBundle::<
-            PlayerInputAction,
-            PlayerInputAction,
-        >::new())?
+        .with_core_bundle(UiBundle::<PlayerInputAction, PlayerInputAction>::new())?
         .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with_core_bundle(FPSCounterBundle::default())?
         .with_core_bundle(
@@ -104,8 +103,7 @@ pub fn run() -> amethyst::Result<()> {
         .with_level(systems::InputSystem::default(), "input", &[])
         .with_level(systems::TilePositionSystem::default(), "tile_position", &[])
         .with_level(systems::MovementSystem::default(), "movement", &[])
-        .with_level(systems::TimeSystem::default(), "time", &[])
-        .with_level(systems::InitiativeSystem::default(), "initiative", &[]);
+        .with_level(systems::TimeSystem::default(), "time", &[]);
 
     let mut game = Application::build(root, crate::states::FirstLoad::default())?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)

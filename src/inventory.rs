@@ -88,14 +88,14 @@ where
     let mut inv = String::new();
     inv += "Inventory:\n";
     hierarchy.children(parent).iter().for_each(|child| {
-//        println!("Child found");
+        //        println!("Child found");
         if let Some(item) = item_storage.get(*child) {
-//            println!("item found");
-//            println!("Handle = {:?}", item.handle);
+            //            println!("item found");
+            //            println!("Handle = {:?}", item.handle);
             if let Some(details) = details_storage.get(&item.handle) {
-//                println!("details found");
+                //                println!("details found");
                 if container_storage.get(*child).is_some() {
-//                    println!("Container found");
+                    //                    println!("Container found");
                     inv += &format!("- {}\t50/100\n", details.name);
                 }
             }

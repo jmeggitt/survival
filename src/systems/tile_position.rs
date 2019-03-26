@@ -1,3 +1,5 @@
+//! Move entities to their correct chunks.
+
 use amethyst::{
     core::{math::Vector3, Transform},
     ecs::{
@@ -9,11 +11,9 @@ use amethyst::{
 use hibitset::BitSet;
 use log::error;
 
-use crate::{
-    components::TilePosition,
-    settings::Config,
-    tiles::{TileEntities, Tiles, WriteTiles},
-};
+use crate::components::TilePosition;
+use crate::settings::Config;
+use crate::tiles::{TileEntities, Tiles, WriteTiles};
 
 #[derive(Default)]
 pub struct System {
@@ -65,10 +65,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
             // Did they actually move tiles? LOL
             if tile_position.coord.xy() != new_position {
-                //trace!(context.logs.root, "TileMove E:{}: ({},{}) -> ({},{}) ", entity.id(),
-                //tile_position.coord.x, tile_position.coord.y,
-                //new_position.x, new_position.y);
-
                 if let Some(entities_list) =
                     tile_entities_map.get_mut(tiles.id_from_vector(tile_position.coord.xy()))
                 {

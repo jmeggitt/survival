@@ -1,7 +1,8 @@
+use parking_lot::{RwLock, RwLockReadGuard};
 use std::collections::HashMap;
 use std::fs::File;
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, RwLock, RwLockReadGuard};
+use std::sync::Arc;
 
 use amethyst::{
     assets::{Asset, AssetStorage, Handle, Loader, Source},
@@ -12,8 +13,6 @@ use amethyst::{
 use log::error;
 
 pub use item::Details as Item;
-#[allow(unused_imports)]
-use loader::AssetLoader;
 
 pub mod body;
 
@@ -38,7 +37,7 @@ pub trait GetStorage<T> {
 
 impl<T> GetStorage<T> for Arc<RwLock<Storage<T>>> {
     fn borrow(&self) -> RwLockReadGuard<Storage<T>> {
-        self.read().unwrap()
+        self.read()
     }
 }
 
@@ -82,7 +81,7 @@ where
 
             println!("enter");
             {
-                let mut borrow = storage.write().unwrap();
+                let mut borrow = storage.write();
                 let keys = borrow.data.keys().cloned().collect::<Vec<_>>();
                 for key in &keys {
                     let handle = loader.load_from(

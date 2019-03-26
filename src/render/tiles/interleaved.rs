@@ -41,10 +41,7 @@ pub struct DrawFlat2D {
     map_transform: Option<GlobalTransform>,
 }
 
-impl DrawFlat2D
-where
-    Self: Pass,
-{
+impl DrawFlat2D {
     /// Create instance of `DrawFlat2D` pass
     pub fn new() -> Self {
         Default::default()

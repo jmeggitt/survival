@@ -5,8 +5,8 @@ use amethyst::{
     core::math::{Vector2, Vector3, Vector4},
     ecs::{Component, DenseVecStorage, Entity, Read, Write},
 };
-use specs_derive::Component;
 use serde::{Deserialize, Serialize};
+use specs_derive::Component;
 
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]

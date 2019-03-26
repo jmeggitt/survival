@@ -8,6 +8,7 @@ edition = "2018"
 amethyst = { path = "dep/amethyst", features = ["nightly", "saveload"] }
 amethyst-imgui = { path = "dep/amethyst-imgui" }
 specs-derive = "*"
+parking_lot = "0.7.1"
 
 rayon = { version = "1.0.0" }
 rayon-hash = "*"

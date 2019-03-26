@@ -24,7 +24,7 @@ pub fn spawn_item(
 ) -> Entity {
     let (details_handle, is_container) = {
         let item_storage = world.res.fetch::<assets::ItemStorage>();
-        let item_details = item_storage.read().unwrap();
+        let item_details = item_storage.read();
 
         (
             item_details.handles.get(name).unwrap().clone(),

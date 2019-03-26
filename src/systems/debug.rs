@@ -1,4 +1,5 @@
-use std::sync::{Arc, Mutex};
+use parking_lot::Mutex;
+use std::sync::Arc;
 
 use amethyst::{
     ecs::{Entities, Join, LazyUpdate, Read, ReadExpect, Resources, SystemData, Write},
@@ -64,19 +65,17 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
         let items = item_storage
             .read()
-            .unwrap()
             .data
             .keys()
             .map(|k| ImString::new(k.as_str()))
             .collect::<Vec<_>>();
 
         {
-            let mut state_lck = self.item_explorer_state.lock().unwrap();
+            let mut state_lck = self.item_explorer_state.lock();
             if state_lck.last_current_item != state_lck.current_item {
                 state_lck.active_item = Some(
                     item_storage
                         .read()
-                        .unwrap()
                         .data
                         .values()
                         .nth(state_lck.current_item as usize)
@@ -100,12 +99,12 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             refs.push(item.borrow());
                         }
 
-                        let mut state_lck = state.lock().unwrap();
+                        let mut state_lock = state.lock();
 
-                        state_lck.last_current_item = state_lck.current_item;
+                        state_lock.last_current_item = state_lock.current_item;
                         ui.list_box(
                             im_str!("Items"),
-                            &mut state_lck.current_item,
+                            &mut state_lock.current_item,
                             refs.as_slice(),
                             10,
                         );

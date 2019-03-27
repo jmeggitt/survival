@@ -9,8 +9,8 @@ use amethyst::{
     ui::UiBundle,
     utils::{application_root_dir, fps_counter::FPSCounterBundle, scene::BasicScenePrefab},
 };
-
-pub use game_data::{SurvivalData, SurvivalDataBuilder, SurvivalState};
+use log::info;
+pub use game_data::{SurvivalData, SurvivalDataBuilder};
 
 pub mod goap;
 pub mod mapgen;
@@ -111,6 +111,7 @@ pub fn run() -> amethyst::Result<()> {
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)
         .build(game_data)?;
 
+    info!("Starting game loop");
     game.run();
 
     Ok(())

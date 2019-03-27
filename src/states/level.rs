@@ -4,14 +4,13 @@ use amethyst::{
     renderer::{Camera, Projection, Rgba, SpriteRender, SpriteSheetHandle, Transparent},
     StateData, StateEvent, Trans,
 };
-use log::trace;
+use log::{trace, info};
 
 use crate::components::{Actionable, FlaggedSpriteRender, Player, TilePosition, TimeAvailable};
 use crate::settings;
-use crate::states::Paused;
-use crate::tiles::TileEntities;
-use crate::tiles::{Tiles, WriteTiles};
 use crate::SurvivalData;
+use crate::tiles::{Tiles, WriteTiles};
+use crate::tiles::TileEntities;
 
 fn init_player(
     world: &mut World,
@@ -72,7 +71,7 @@ pub struct Level;
 impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for Level {
     fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
         let world = data.world;
-        trace!("Changed state to Level");
+        info!("Started level setup");
 
         // Load the level
         let tiles = Tiles::new(100, 100);
@@ -138,22 +137,26 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for Level {
         }
 
         world.add_resource(tiles);
+        info!("Finished level setup");
     }
 
     fn handle_event(
         &mut self,
-        _: StateData<'_, SurvivalData<'_, '_>>,
-        _: StateEvent,
+        data: StateData<'_, SurvivalData<'_, '_>>,
+        event: StateEvent,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
-        trace!("Event Level");
+        amethyst_imgui::handle_imgui_events(data.world, &event);
         Trans::None
     }
 
+
     fn update(
         &mut self,
-        _: StateData<'_, SurvivalData<'_, '_>>,
+        state: StateData<'_, SurvivalData<'_, '_>>,
     ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
+        state.data.update(state.world);
         // Just swap straight to Paused
-        Trans::Push(Box::new(Paused))
+//        Trans::Push(Box::new(Paused))
+        Trans::None
     }
 }

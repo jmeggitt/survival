@@ -72,6 +72,7 @@ impl Chunk {
     }
 
     pub fn load<P: AsRef<Path>>(path: &P, pos: (i32, i32)) -> Self {
+        info!("Loading chunk at {:?}", pos);
         if let Some(chunk) = Chunk::read(path, pos) {
             return chunk;
         }
@@ -92,6 +93,7 @@ impl Chunk {
 
 impl Drop for Chunk {
     fn drop(&mut self) {
+        info!("Saving and unloading {:?}", self);
         self.save()
     }
 }
@@ -109,6 +111,7 @@ impl WorldChunks {
     }
 
     fn reload_chunks<P: AsRef<Path>>(&mut self, player: Vector2<f32>, save_path: &P) {
+        info!("Performing chunk refresh");
         // TODO add to config
         const CHUNK_RADIUS: i32 = 4;
 
@@ -157,11 +160,6 @@ impl<P: AsRef<Path>> ChunkLoadSystem<P> {
 impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
     type SystemData = ChunkSystemData<'a>;
 
-    fn setup(&mut self, res: &mut Resources) {
-        <Self::SystemData as DynamicSystemData>::setup(&self.accessor(), res);
-        res.insert(WorldChunks::new())
-    }
-
     fn run(&mut self, mut data: ChunkSystemData) {
         self.player_offset = self.player_offset + data.player.0 - self.player_previous;
         self.player_previous = data.player.0;
@@ -174,5 +172,12 @@ impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
         // Reset offset
         self.player_offset = Vector2::new(0.0, 0.0);
         data.chunks.reload_chunks(data.player.0, &self.save_path)
+    }
+
+    fn setup(&mut self, res: &mut Resources) {
+        info!("Setting up world chunks resource");
+        <Self::SystemData as DynamicSystemData>::setup(&self.accessor(), res);
+        res.insert(PlayerPosition(Vector2::new(0.0, 0.0)));
+        res.insert(WorldChunks::new());
     }
 }

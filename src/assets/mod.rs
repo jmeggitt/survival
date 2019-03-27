@@ -1,23 +1,21 @@
-use parking_lot::{RwLock, RwLockReadGuard};
 use std::collections::HashMap;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use log::info;
 
 use amethyst::{
     assets::{Asset, AssetStorage, Handle, Loader, Source},
     ecs::World,
-    error::{format_err, Error, ResultExt},
+    error::{Error, format_err, ResultExt},
 };
-
 use log::error;
+use parking_lot::{RwLock, RwLockReadGuard};
 
 pub use item::Details as Item;
 
 pub mod body;
-
 pub mod item;
-
 pub mod loader;
 
 pub type StorageWrapper<T> = Arc<RwLock<Storage<T>>>;
@@ -47,9 +45,9 @@ pub struct StorageSource<T> {
 }
 
 impl<T> StorageSource<T>
-where
-    T: for<'a> serde::Deserialize<'a> + serde::Serialize + Send + Sync + Asset + Sized + Default,
-    <T as Asset>::Data: for<'a> serde::Deserialize<'a>,
+    where
+        T: for<'a> serde::Deserialize<'a> + serde::Serialize + Send + Sync + Asset + Sized + Default,
+        <T as Asset>::Data: for<'a> serde::Deserialize<'a>,
 {
     pub fn apply(source: &Path, world: &mut World) -> Result<Arc<RwLock<Storage<T>>>, Error> {
         let file = File::open(&source)
@@ -79,7 +77,6 @@ where
             };
             loader.add_source("items", copy);
 
-            println!("enter");
             {
                 let mut borrow = storage.write();
                 let keys = borrow.data.keys().cloned().collect::<Vec<_>>();
@@ -92,7 +89,7 @@ where
                         (),
                         &asset_storage,
                     );
-                    println!("Loading: {} -> {:?}", key, handle);
+                    info!("Loading {} as {:?}", key, handle);
                     borrow.handles.insert(key.to_string(), handle);
                 }
             }
@@ -104,8 +101,8 @@ where
 }
 
 impl<T> Source for StorageSource<T>
-where
-    T: serde::Serialize + serde::de::DeserializeOwned + Send + Sync + Asset + Sized + Default,
+    where
+        T: serde::Serialize + serde::de::DeserializeOwned + Send + Sync + Asset + Sized + Default,
 {
     fn modified(&self, path: &str) -> Result<u64, Error> {
         use std::fs::metadata;

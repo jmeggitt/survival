@@ -1,4 +1,3 @@
-use crate::specs_static::WorldExt;
 use amethyst::{
     assets::{AssetStorage, Loader, ProgressCounter},
     ecs::World,
@@ -7,9 +6,11 @@ use amethyst::{
     },
     StateData, StateEvent, Trans,
 };
+use log::info;
 use log::trace;
 
 use crate::settings;
+use crate::specs_static::WorldExt;
 use crate::states::Level;
 use crate::SurvivalData;
 
@@ -64,18 +65,18 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for FirstLoad {
             &std::path::Path::new("resources/data/items.ron"),
             world,
         )
-        .unwrap();
+            .unwrap();
 
         // Register tile components
         world.register_tile_comp::<crate::components::FlaggedSpriteRender, crate::tiles::TileId>();
         world.register_tile_comp::<amethyst::renderer::Flipped, crate::tiles::TileId>();
         world.register_tile_comp::<amethyst::renderer::Rgba, crate::tiles::TileId>();
         world
-            .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>(
-            );
+            .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>();
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
 
         world.register_tile_comp::<crate::components::Impassable, crate::tiles::TileId>();
+        info!("Finished first load");
     }
 
     fn handle_event(

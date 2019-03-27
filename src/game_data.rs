@@ -4,28 +4,6 @@ use amethyst::{
     DataInit, Result,
 };
 
-#[derive(
-    Clone,
-    Debug,
-    PartialEq,
-    serde::Serialize,
-    serde::Deserialize,
-    strum_macros::EnumString,
-    strum_macros::Display,
-)]
-pub enum SurvivalState {
-    Paused,
-    Running,
-    // Unused
-    Level,
-}
-
-impl Default for SurvivalState {
-    fn default() -> Self {
-        SurvivalState::Paused
-    }
-}
-
 pub struct SurvivalData<'a, 'b> {
     level_dispatcher: Dispatcher<'a, 'b>,
     core_dispatcher: Dispatcher<'a, 'b>,
@@ -33,13 +11,9 @@ pub struct SurvivalData<'a, 'b> {
 
 impl<'a, 'b> SurvivalData<'a, 'b> {
     /// Update game data
-    pub fn update(&mut self, world: &World, state: SurvivalState) -> SurvivalState {
-        *world.res.fetch_mut::<SurvivalState>() = state;
-
+    pub fn update(&mut self, world: &World) {
         self.level_dispatcher.dispatch(&world.res);
         self.core_dispatcher.dispatch(&world.res);
-
-        world.res.fetch::<SurvivalState>().clone()
     }
 }
 

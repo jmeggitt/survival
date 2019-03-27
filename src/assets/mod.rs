@@ -2,14 +2,14 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
-use log::info;
 
 use amethyst::{
     assets::{Asset, AssetStorage, Handle, Loader, Source},
     ecs::World,
-    error::{Error, format_err, ResultExt},
+    error::{format_err, Error, ResultExt},
 };
 use log::error;
+use log::info;
 use parking_lot::{RwLock, RwLockReadGuard};
 
 pub use item::Details as Item;
@@ -45,9 +45,9 @@ pub struct StorageSource<T> {
 }
 
 impl<T> StorageSource<T>
-    where
-        T: for<'a> serde::Deserialize<'a> + serde::Serialize + Send + Sync + Asset + Sized + Default,
-        <T as Asset>::Data: for<'a> serde::Deserialize<'a>,
+where
+    T: for<'a> serde::Deserialize<'a> + serde::Serialize + Send + Sync + Asset + Sized + Default,
+    <T as Asset>::Data: for<'a> serde::Deserialize<'a>,
 {
     pub fn apply(source: &Path, world: &mut World) -> Result<Arc<RwLock<Storage<T>>>, Error> {
         let file = File::open(&source)
@@ -101,8 +101,8 @@ impl<T> StorageSource<T>
 }
 
 impl<T> Source for StorageSource<T>
-    where
-        T: serde::Serialize + serde::de::DeserializeOwned + Send + Sync + Asset + Sized + Default,
+where
+    T: serde::Serialize + serde::de::DeserializeOwned + Send + Sync + Asset + Sized + Default,
 {
     fn modified(&self, path: &str) -> Result<u64, Error> {
         use std::fs::metadata;

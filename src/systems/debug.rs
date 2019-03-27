@@ -1,4 +1,3 @@
-use parking_lot::Mutex;
 use std::sync::Arc;
 
 use amethyst::{
@@ -6,6 +5,7 @@ use amethyst::{
     shrev::EventChannel,
 };
 use amethyst_imgui::imgui::ImString;
+use parking_lot::Mutex;
 
 use crate::assets;
 use crate::components;

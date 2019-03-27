@@ -7,7 +7,6 @@ use amethyst::{
 };
 use bitflags::*;
 use petgraph;
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, serde::Deserialize, serde::Serialize)]

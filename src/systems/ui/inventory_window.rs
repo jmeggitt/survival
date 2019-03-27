@@ -18,7 +18,6 @@ use crate::settings::Context;
 
 #[derive(Default)]
 pub struct System {
-    main_ui: Option<Entity>,
     inventory: Option<Entity>,
     input_reader_id: Option<ReaderId<InputEvent<PlayerInputAction>>>,
 }

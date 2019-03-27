@@ -4,13 +4,13 @@ use amethyst::{
     renderer::{Camera, Projection, Rgba, SpriteRender, SpriteSheetHandle, Transparent},
     StateData, StateEvent, Trans,
 };
-use log::{trace, info};
+use log::info;
 
 use crate::components::{Actionable, FlaggedSpriteRender, Player, TilePosition, TimeAvailable};
 use crate::settings;
-use crate::SurvivalData;
-use crate::tiles::{Tiles, WriteTiles};
 use crate::tiles::TileEntities;
+use crate::tiles::{Tiles, WriteTiles};
+use crate::GameDispatchers;
 
 fn init_player(
     world: &mut World,
@@ -19,13 +19,13 @@ fn init_player(
     game_settings: &settings::Config,
 ) -> Entity {
     let mut transform = Transform::default();
-    transform.set_translation_x(100.0);
-    transform.set_translation_y(-100.0);
+    transform.set_translation_xyz(300.0, -300.0, 0.0);
     transform.set_scale(
         game_settings.graphics.scale,
         game_settings.graphics.scale,
         1.,
     );
+
     world
         .create_entity()
         .with(TilePosition::from_transform(
@@ -68,8 +68,8 @@ fn init_camera(world: &mut World, _: Entity, tiles: Tiles, game_settings: &setti
 
 pub struct Level;
 
-impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for Level {
-    fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
+impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
+    fn on_start(&mut self, data: StateData<'_, GameDispatchers<'_, '_>>) {
         let world = data.world;
         info!("Started level setup");
 
@@ -142,21 +142,18 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for Level {
 
     fn handle_event(
         &mut self,
-        data: StateData<'_, SurvivalData<'_, '_>>,
+        data: StateData<'_, GameDispatchers<'_, '_>>,
         event: StateEvent,
-    ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
+    ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
         amethyst_imgui::handle_imgui_events(data.world, &event);
         Trans::None
     }
 
-
     fn update(
         &mut self,
-        state: StateData<'_, SurvivalData<'_, '_>>,
-    ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
+        state: StateData<'_, GameDispatchers<'_, '_>>,
+    ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
         state.data.update(state.world);
-        // Just swap straight to Paused
-//        Trans::Push(Box::new(Paused))
         Trans::None
     }
 }

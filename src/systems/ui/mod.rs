@@ -1,5 +1,5 @@
 use amethyst::{
-    ecs::{Entity, LazyUpdate, Read, ReadExpect, Resources, SystemData, Write, WriteStorage},
+    ecs::{LazyUpdate, Read, ReadExpect, Resources, SystemData, Write, WriteStorage},
     input::InputEvent,
     renderer::HiddenPropagate,
     shrev::{EventChannel, ReaderId},
@@ -23,8 +23,6 @@ pub type ImGuiDraw =
 #[derive(Default)]
 pub struct System {
     draw_call_reader_id: Option<ReaderId<ImGuiDraw>>,
-    main_ui: Option<Entity>,
-    inventory: Option<Entity>,
     input_reader_id: Option<ReaderId<InputEvent<PlayerInputAction>>>,
 }
 
@@ -70,8 +68,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
             Some(res.fetch_mut::<EventChannel<ImGuiDraw>>().register_reader());
 
         let mut creator: UiCreator<'_> = SystemData::fetch(res);
-        //let mut hidden: WriteStorage<'_, HiddenPropagate> = SystemData::fetch(res);
-
-        self.main_ui = Some(creator.create("ui/main_ui.ron", ()));
+        let _ = Some(creator.create("ui/main_ui.ron", ()));
     }
 }

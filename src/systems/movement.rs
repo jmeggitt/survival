@@ -1,3 +1,4 @@
+use amethyst::core::math::Vector2;
 use amethyst::{
     core::components::Transform,
     ecs::{
@@ -5,6 +6,7 @@ use amethyst::{
         WriteStorage,
     },
 };
+use log::{error, warn};
 
 use crate::actions::{Action, Direction};
 use crate::components;
@@ -12,9 +14,6 @@ use crate::components::PlayerPosition;
 use crate::settings::Config;
 use crate::tiles::{ReadTiles, Tiles};
 use crate::utils::ComponentEventReader;
-use amethyst::core::math::Vector2;
-
-use log::{error, warn};
 
 #[derive(Default)]
 pub struct System {

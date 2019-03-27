@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["Walter Pearce <jaynus@gmail.com>"]
 edition = "2018"
 
+[features]
+pretty-save = []
+no-save = []
+
 [dependencies]
 amethyst = { path = "dep/amethyst", features = ["nightly", "saveload"] }
 amethyst-imgui = { path = "dep/amethyst-imgui" }

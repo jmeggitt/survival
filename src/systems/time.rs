@@ -1,9 +1,8 @@
 use amethyst::ecs::{Entities, Entity, Join, ReadExpect, ReadStorage, Write, WriteStorage};
+use serde::{Deserialize, Serialize};
 
 use crate::components;
 use crate::settings::Context;
-
-use serde::{Deserialize, Serialize};
 
 #[derive(Default, Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TimeState {

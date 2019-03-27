@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-use crate::specs_static::{Id, Storage};
 use amethyst::{
     core::math::{Vector2, Vector3, Vector4},
     ecs::{Component, DenseVecStorage, Entity, Read, Write},
@@ -8,11 +7,16 @@ use amethyst::{
 use serde::{Deserialize, Serialize};
 use specs_derive::Component;
 
+use crate::specs_static::{Id, Storage};
+
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]
 pub struct TileEntities(pub HashSet<Entity>);
 
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(transparent)]
+#[derive(
+    Default, Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize,
+)]
 pub struct TileId(pub u32);
 
 impl TileId {

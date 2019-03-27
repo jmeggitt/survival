@@ -12,7 +12,7 @@ use log::trace;
 use crate::settings;
 use crate::specs_static::WorldExt;
 use crate::states::Level;
-use crate::SurvivalData;
+use crate::GameDispatchers;
 
 fn load_sprite_sheet(
     world: &mut World,
@@ -45,8 +45,8 @@ pub struct FirstLoad {
     progress_counter: ProgressCounter,
 }
 
-impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for FirstLoad {
-    fn on_start(&mut self, data: StateData<'_, SurvivalData<'_, '_>>) {
+impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad {
+    fn on_start(&mut self, data: StateData<'_, GameDispatchers<'_, '_>>) {
         let world = data.world;
 
         trace!("Changed state to first_load");
@@ -65,14 +65,15 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for FirstLoad {
             &std::path::Path::new("resources/data/items.ron"),
             world,
         )
-            .unwrap();
+        .unwrap();
 
         // Register tile components
         world.register_tile_comp::<crate::components::FlaggedSpriteRender, crate::tiles::TileId>();
         world.register_tile_comp::<amethyst::renderer::Flipped, crate::tiles::TileId>();
         world.register_tile_comp::<amethyst::renderer::Rgba, crate::tiles::TileId>();
         world
-            .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>();
+            .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>(
+            );
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
 
         world.register_tile_comp::<crate::components::Impassable, crate::tiles::TileId>();
@@ -81,17 +82,17 @@ impl<'a, 'b> amethyst::State<SurvivalData<'a, 'b>, StateEvent> for FirstLoad {
 
     fn handle_event(
         &mut self,
-        _: StateData<'_, SurvivalData<'_, '_>>,
+        _: StateData<'_, GameDispatchers<'_, '_>>,
         _: StateEvent,
-    ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
+    ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
         trace!("Event First Load");
         Trans::None
     }
 
     fn update(
         &mut self,
-        _: StateData<'_, SurvivalData<'_, '_>>,
-    ) -> Trans<SurvivalData<'a, 'b>, StateEvent> {
+        _: StateData<'_, GameDispatchers<'_, '_>>,
+    ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
         Trans::Switch(Box::new(Level))
     }
 }

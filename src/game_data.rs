@@ -4,12 +4,12 @@ use amethyst::{
     DataInit, Result,
 };
 
-pub struct SurvivalData<'a, 'b> {
+pub struct GameDispatchers<'a, 'b> {
     level_dispatcher: Dispatcher<'a, 'b>,
     core_dispatcher: Dispatcher<'a, 'b>,
 }
 
-impl<'a, 'b> SurvivalData<'a, 'b> {
+impl<'a, 'b> GameDispatchers<'a, 'b> {
     /// Update game data
     pub fn update(&mut self, world: &World) {
         self.level_dispatcher.dispatch(&world.res);
@@ -66,8 +66,8 @@ impl<'a, 'b> SurvivalDataBuilder<'a, 'b> {
     }
 }
 
-impl<'a, 'b> DataInit<SurvivalData<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
-    fn build(self, world: &mut World) -> SurvivalData<'a, 'b> {
+impl<'a, 'b> DataInit<GameDispatchers<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
+    fn build(self, world: &mut World) -> GameDispatchers<'a, 'b> {
         // Get a handle to the `ThreadPool`.
         let pool = world.read_resource::<ArcThreadPool>().clone();
 
@@ -85,7 +85,7 @@ impl<'a, 'b> DataInit<SurvivalData<'a, 'b>> for SurvivalDataBuilder<'a, 'b> {
 
         // Add the context state to the world
 
-        SurvivalData {
+        GameDispatchers {
             core_dispatcher,
             level_dispatcher,
         }

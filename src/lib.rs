@@ -10,7 +10,12 @@ use amethyst::{
     utils::{application_root_dir, fps_counter::FPSCounterBundle, scene::BasicScenePrefab},
 };
 use log::info;
-pub use game_data::{SurvivalData, SurvivalDataBuilder};
+
+use actions::PlayerInputAction;
+use chunk::ChunkLoadSystem;
+pub use game_data::{GameDispatchers, SurvivalDataBuilder};
+
+use crate::render::tiles::Pass;
 
 pub mod goap;
 pub mod mapgen;
@@ -18,10 +23,12 @@ pub mod system_chain;
 
 pub mod assets;
 pub mod components;
+#[allow(dead_code)]
 pub mod render;
 pub mod settings;
 pub mod states;
 pub mod systems;
+#[allow(dead_code)]
 pub mod tiles;
 pub mod utils;
 
@@ -35,10 +42,6 @@ pub mod initializers;
 pub mod specs_static;
 
 mod chunk;
-
-use crate::render::tiles::Pass;
-use actions::PlayerInputAction;
-use chunk::ChunkLoadSystem;
 
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
@@ -105,7 +108,11 @@ pub fn run() -> amethyst::Result<()> {
         .with_level(systems::TilePositionSystem::default(), "tile_position", &[])
         .with_level(systems::MovementSystem::default(), "movement", &[])
         .with_level(systems::TimeSystem::default(), "time", &[])
-        .with_level(ChunkLoadSystem::new(root.join("saves")), "chunk_loader", &[]);
+        .with_level(
+            ChunkLoadSystem::new(root.join("saves")),
+            "chunk_loader",
+            &[],
+        );
 
     let mut game = Application::build(root, crate::states::FirstLoad::default())?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)

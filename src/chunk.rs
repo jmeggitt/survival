@@ -1,36 +1,45 @@
-use std::fs::File;
+use std::fs::{DirBuilder, File};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use amethyst::core::math::Vector2;
 use amethyst::ecs::prelude::*;
-use amethyst::ecs::{ReadExpect, System, WriteExpect, };
+use amethyst::ecs::{ReadExpect, System, WriteExpect};
 use derivative::Derivative;
 use hashbrown::HashMap;
-use log::{error, info};
+use log::{error, info, warn};
+use ron::de::from_reader;
+#[cfg(not(feature = "pretty-save"))]
+use ron::ser::to_string;
+#[cfg(feature = "pretty-save")]
 use ron::ser::{to_string_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
+use shred::DynamicSystemData;
 use shred_derive::SystemData;
 use specs_derive::Component;
 
 use crate::components::PlayerPosition;
 use crate::tiles::TileId;
-use shred::DynamicSystemData;
 
-#[derive(Clone, Serialize, Deserialize, Derivative)]
+#[derive(Serialize, Deserialize, Derivative)]
 #[derivative(Debug)]
 pub struct Chunk {
     #[serde(skip_serializing, skip_deserializing)]
     pos: (i32, i32),
     #[derivative(Debug = "ignore")]
+    #[serde(default = [[TileId(0); 16]; 16])]
     pub tiles: [[TileId; 16]; 16],
+    #[serde(skip_serializing, skip_deserializing)]
     path: PathBuf,
+    #[serde(skip_serializing, skip_deserializing)]
+    requires_save: bool,
 }
 
 impl Chunk {
     /// Save this chunk to the previous file
-    pub fn save(&self) {
-        info!("Saving chunk at ({}, {})", self.pos.0, self.pos.1);
+    #[cfg(not(feature = "no-save"))]
+    fn save(&self) {
+        info!("Saving and unloading {:?}", self);
 
         if self.path.exists() && !self.path.is_file() {
             error!("Unable to overwrite directory to save chunk!");
@@ -39,24 +48,29 @@ impl Chunk {
 
         let mut file = match File::create(self.path.clone()) {
             Ok(v) => v,
-            Err(_) => {
-                error!("Unable to open file to save chunk");
+            Err(e) => {
+                error!("Unable to open {:?} to save chunk: {}", self.path, e);
                 return;
             }
         };
 
-        let serial = match to_string_pretty(
+        #[cfg(feature = "pretty-save")]
+        let save = to_string_pretty(
             &self,
             PrettyConfig {
                 depth_limit: 99,
-                separate_tuple_members: true,
                 enumerate_arrays: true,
                 ..PrettyConfig::default()
             },
-        ) {
+        );
+
+        #[cfg(not(feature = "pretty-save"))]
+        let save = to_string(&self);
+
+        let serial = match save {
             Ok(v) => v,
-            Err(_) => {
-                error!("Unable to serialize chunk!");
+            Err(e) => {
+                error!("Unable to serialize chunk: {}", e);
                 return;
             }
         };
@@ -66,22 +80,48 @@ impl Chunk {
         }
     }
 
-    pub fn read<P: AsRef<Path>>(_: &P, _: (i32, i32)) -> Option<Self> {
-        error!("I didn't feel like implementing file io yet. :(");
-        None
+    fn read<P: AsRef<Path>>(path: &P, pos: (i32, i32)) -> Option<Self> {
+        if !path.as_ref().exists() {
+            return None;
+        }
+
+        if !path.as_ref().is_file() {
+            warn!("Could not read chunk {:?} due to non file at path", pos);
+            return None;
+        }
+
+        let file_name = Chunk::file_name(path, pos);
+
+        let file = match File::open(&*file_name.as_path()) {
+            Ok(v) => v,
+            Err(e) => {
+                error!("Unable to open file to read chunk: {}", e);
+                return None;
+            }
+        };
+
+        from_reader(file).ok()
+    }
+
+    /// Generate a new chunk from its coords and possibly more information in future.
+    fn generate(pos: (i32, i32)) -> [[TileId; 16]; 16] {
+        info!("Generating new chunk at {:?}", pos);
+        [[TileId(20); 16]; 16]
     }
 
     pub fn load<P: AsRef<Path>>(path: &P, pos: (i32, i32)) -> Self {
-        info!("Loading chunk at {:?}", pos);
-        if let Some(chunk) = Chunk::read(path, pos) {
-            return chunk;
-        }
-
-        // TODO generate
-        Chunk {
-            pos,
-            tiles: [[TileId(20); 16]; 16],
-            path: Chunk::file_name(path, pos),
+        let path = Chunk::file_name(path, pos);
+        if let Some(mut found) = Chunk::read(&path, pos) {
+            found.pos = pos;
+            found.path = path;
+            found
+        } else {
+            Chunk {
+                pos,
+                tiles: Chunk::generate(pos),
+                path,
+                requires_save: true,
+            }
         }
     }
 
@@ -91,10 +131,12 @@ impl Chunk {
     }
 }
 
+#[cfg(not(feature = "no-save"))]
 impl Drop for Chunk {
     fn drop(&mut self) {
-        info!("Saving and unloading {:?}", self);
-        self.save()
+        if self.requires_save {
+            self.save()
+        }
     }
 }
 
@@ -176,8 +218,23 @@ impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
 
     fn setup(&mut self, res: &mut Resources) {
         info!("Setting up world chunks resource");
+
+        #[cfg(feature = "pretty-save")]
+        info!("Using pretty ron serialization");
+
+        #[cfg(feature = "no-save")]
+        info!("Using no save mode");
+
         <Self::SystemData as DynamicSystemData>::setup(&self.accessor(), res);
         res.insert(PlayerPosition(Vector2::new(0.0, 0.0)));
         res.insert(WorldChunks::new());
+
+        if cfg!(not(feature = "no-save")) && !self.save_path.as_ref().exists() {
+            info!("Creating save folder");
+            let builder = DirBuilder::new();
+            if let Err(e) = builder.create(self.save_path.as_ref()) {
+                error!("Could not create save folder: {}", e);
+            }
+        }
     }
 }

@@ -18,17 +18,16 @@ pub use game_data::{GameDispatchers, SurvivalDataBuilder};
 use crate::render::tiles::Pass;
 
 pub mod goap;
+#[allow(dead_code)]
 pub mod mapgen;
 pub mod system_chain;
 
 pub mod assets;
 pub mod components;
-#[allow(dead_code)]
 pub mod render;
 pub mod settings;
 pub mod states;
 pub mod systems;
-#[allow(dead_code)]
 pub mod tiles;
 pub mod utils;
 

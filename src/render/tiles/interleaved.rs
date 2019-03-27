@@ -14,7 +14,7 @@ use amethyst::renderer::{
         DepthMode, Effect, NewEffect,
     },
     ActiveCamera, Attributes, Camera, Color, DisplayConfig, Encoder, Factory, Flipped, Query,
-    Resources, Rgba, SpriteSheet, Texture, TextureHandle, VertexFormat,
+    Resources, Rgba, SpriteSheet, Texture, VertexFormat,
 };
 use derivative::Derivative;
 use gfx::pso::buffer::ElemStride;
@@ -86,7 +86,6 @@ impl<'a> PassData<'a> for DrawFlat2D {
         Read<'a, DisplayConfig>,
         Read<'a, ActiveCamera>,
         ReadStorage<'a, Camera>,
-        //        ReadStorage<'a, TilePosition>,
         Read<'a, AssetStorage<SpriteSheet>>,
         Read<'a, AssetStorage<Texture>>,
         ReadStorage<'a, GlobalTransform>,
@@ -112,7 +111,7 @@ impl Pass for DrawFlat2D {
                 1,
             )
             .with_raw_vertex_buffer(Self::attributes(), SpriteInstance::size() as ElemStride, 1);
-        setup_textures(&mut builder, &TEXTURES);
+        setup_textures(&mut builder);
         match self.transparency {
             Some((mask, blend, depth)) => builder.with_blended_output("color", mask, blend, depth),
             None => builder.with_output("color", Some(DepthMode::LessEqualWrite)),
@@ -152,12 +151,7 @@ impl Pass for DrawFlat2D {
             amethyst::core::math::Vector3::new(global[12], global[13], global[14]);
         let camera_tile_position =
             tiles.world_to_tile(&camera_world_position.xyz(), &game_settings);
-        //let (_, camera_tile_position) = (&camera, &tile_positions).join().next().unwrap();
 
-        //let translation: amethyst::core::math::Translation3<f32> = amethyst::core::math::convert(transform);
-
-        // Calculate the scale of how much we can view...from...what?
-        // this should be resolution / (tile width * scale(
         // TODO: dont hardcode the tileset size multiplier, this should be stored in Tiles
         let view_tiles =
             display_config.dimensions.unwrap().0 as f32 / (16. * game_settings.graphics.scale); // Hardcoded for now, these should be out of the sprites and into the Tiles object
@@ -176,9 +170,7 @@ impl Pass for DrawFlat2D {
             .max(0.)
             .min(tiles.dimensions().y as f32) as u32;
 
-        //println!("Viewing: camera=({}, {}), {}, {}, {}, {}", camera_tile_position.x, camera_tile_position.y, view_x, view_y, view_e_x, view_e_y);
-        //println!("World: {:?}", camera_world_position);
-        // TODO: we should scale this to viewport from teh camera
+        // TODO: we should scale this to viewport from the camera
         for tile_id in tiles.iter_region(Vector4::new(view_x, view_y, view_e_x, view_e_y)) {
             let sprite_render = tiles_sprites.get(tile_id);
             if sprite_render.is_none() {
@@ -199,7 +191,6 @@ impl Pass for DrawFlat2D {
                 &sprite_sheet_storage,
                 &tex_storage,
             );
-            //self.batch.sort();
         }
 
         self.batch.encode(
@@ -215,46 +206,12 @@ impl Pass for DrawFlat2D {
 }
 
 #[derive(Clone, Debug)]
-enum TextureDrawData {
-    Sprite {
-        texture_handle: Handle<Texture>,
-        render: FlaggedSpriteRender,
-        flipped: Option<Flipped>,
-        rgba: Option<Rgba>,
-        transform: GlobalTransform,
-    },
-    Image {
-        texture_handle: Handle<Texture>,
-        transform: GlobalTransform,
-        flipped: Option<Flipped>,
-        rgba: Option<Rgba>,
-        width: usize,
-        height: usize,
-    },
-}
-
-impl TextureDrawData {
-    pub fn texture_handle(&self) -> &Handle<Texture> {
-        match self {
-            TextureDrawData::Sprite { texture_handle, .. }
-            | TextureDrawData::Image { texture_handle, .. } => texture_handle,
-        }
-    }
-
-    pub fn tex_id(&self) -> u32 {
-        match self {
-            TextureDrawData::Image { texture_handle, .. }
-            | TextureDrawData::Sprite { texture_handle, .. } => texture_handle.id(),
-        }
-    }
-
-    pub fn flipped(&self) -> &Option<Flipped> {
-        match self {
-            TextureDrawData::Image { flipped, .. } | TextureDrawData::Sprite { flipped, .. } => {
-                flipped
-            }
-        }
-    }
+struct TextureDrawData {
+    texture_handle: Handle<Texture>,
+    render: FlaggedSpriteRender,
+    flipped: Option<Flipped>,
+    rgba: Option<Rgba>,
+    transform: GlobalTransform,
 }
 
 #[derive(Clone, Default, Debug)]
@@ -263,31 +220,6 @@ struct TextureBatch {
 }
 
 impl TextureBatch {
-    pub fn add_image(
-        &mut self,
-        texture_handle: &TextureHandle,
-        global: Option<&GlobalTransform>,
-        flipped: Option<&Flipped>,
-        rgba: Option<&Rgba>,
-        tex_storage: &AssetStorage<Texture>,
-    ) {
-        if let Some(global) = global {
-            if let Some(texture_dims) = tex_storage.get(&texture_handle) {
-                let (width, height) = texture_dims.size();
-                self.textures.push(TextureDrawData::Image {
-                    texture_handle: texture_handle.clone(),
-                    transform: *global,
-                    flipped: flipped.cloned(),
-                    rgba: rgba.cloned(),
-                    width,
-                    height,
-                });
-            } else {
-                warn!("Texture not loaded for texture: `{:?}`.", texture_handle);
-            }
-        }
-    }
-
     pub fn add_sprite(
         &mut self,
         sprite_render: &FlaggedSpriteRender,
@@ -319,7 +251,7 @@ impl TextureBatch {
                 }
             };
 
-            self.textures.push(TextureDrawData::Sprite {
+            self.textures.push(TextureDrawData {
                 texture_handle,
                 render: sprite_render.clone(),
                 flipped: flipped.cloned(),
@@ -327,12 +259,6 @@ impl TextureBatch {
                 transform: *global,
             });
         }
-    }
-
-    /// Optimize the sprite order to generating more coherent batches.
-    pub fn sort(&mut self) {
-        // Only takes the texture into account for now.
-        self.textures.sort_by(|a, b| a.tex_id().cmp(&b.tex_id()));
     }
 
     pub fn encode(
@@ -369,90 +295,52 @@ impl TextureBatch {
 
         for (i, quad) in self.textures.iter().enumerate() {
             let texture = tex_storage
-                .get(&quad.texture_handle())
+                .get(&quad.texture_handle)
                 .expect("Unable to get texture of sprite");
 
-            let (flip_horizontal, flip_vertical) = match quad.flipped() {
+            let (flip_horizontal, flip_vertical) = match quad.flipped {
                 Some(Flipped::Horizontal) => (true, false),
                 Some(Flipped::Vertical) => (false, true),
                 Some(Flipped::Both) => (true, true),
                 _ => (false, false),
             };
 
-            let (dir_x, dir_y, pos, uv_left, uv_right, uv_top, uv_bottom, rgba) = match quad {
-                TextureDrawData::Sprite {
-                    render,
-                    transform,
-                    rgba,
-                    ..
-                } => {
-                    let sprite_sheet = sprite_sheet_storage
-                        .get(&render.sprite_sheet)
-                        .expect(
-                            "Unreachable: Existence of sprite sheet checked when collecting the sprites",
-                        );
+            let (dir_x, dir_y, pos, uv_left, uv_right, uv_top, uv_bottom, rgba) = {
+                let sprite_sheet = sprite_sheet_storage.get(&quad.render.sprite_sheet).expect(
+                    "Unreachable: Existence of sprite sheet checked when collecting the sprites",
+                );
 
-                    // Append sprite to instance data.
-                    let sprite_data = &sprite_sheet.sprites[render.sprite_number];
+                // Append sprite to instance data.
+                let sprite_data = &sprite_sheet.sprites[quad.render.sprite_number];
 
-                    let tex_coords = &sprite_data.tex_coords;
-                    let (uv_left, uv_right) = if flip_horizontal {
-                        (tex_coords.right, tex_coords.left)
-                    } else {
-                        (tex_coords.left, tex_coords.right)
-                    };
-                    let (uv_bottom, uv_top) = if flip_vertical {
-                        (tex_coords.top, tex_coords.bottom)
-                    } else {
-                        (tex_coords.bottom, tex_coords.top)
-                    };
+                let tex_coords = &sprite_data.tex_coords;
+                let (uv_left, uv_right) = if flip_horizontal {
+                    (tex_coords.right, tex_coords.left)
+                } else {
+                    (tex_coords.left, tex_coords.right)
+                };
+                let (uv_bottom, uv_top) = if flip_vertical {
+                    (tex_coords.top, tex_coords.bottom)
+                } else {
+                    (tex_coords.bottom, tex_coords.top)
+                };
 
-                    let transform = &transform.0;
+                let transform = &quad.transform.0;
 
-                    let dir_x = transform.column(0) * sprite_data.width;
-                    let dir_y = transform.column(1) * sprite_data.height;
+                let dir_x = transform.column(0) * sprite_data.width;
+                let dir_y = transform.column(1) * sprite_data.height;
 
-                    // The offsets are negated to shift the sprite left and down relative to the entity, in
-                    // regards to pivot points. This is the convention adopted in:
-                    //
-                    // * libgdx: <https://gamedev.stackexchange.com/q/22553>
-                    // * godot: <https://godotengine.org/qa/9784>
-                    let pos = transform
-                        * Vector4::new(-sprite_data.offsets[0], -sprite_data.offsets[1], 0.0, 1.0);
+                // The offsets are negated to shift the sprite left and down relative to the entity, in
+                // regards to pivot points. This is the convention adopted in:
+                //
+                // * libgdx: <https://gamedev.stackexchange.com/q/22553>
+                // * godot: <https://godotengine.org/qa/9784>
+                let pos = transform
+                    * Vector4::new(-sprite_data.offsets[0], -sprite_data.offsets[1], 0.0, 1.0);
 
-                    (
-                        dir_x, dir_y, pos, uv_left, uv_right, uv_top, uv_bottom, rgba,
-                    )
-                }
-                TextureDrawData::Image {
-                    transform,
-                    width,
-                    height,
-                    rgba,
-                    ..
-                } => {
-                    let (uv_left, uv_right) = if flip_horizontal {
-                        (1.0, 0.0)
-                    } else {
-                        (0.0, 1.0)
-                    };
-                    let (uv_bottom, uv_top) = if flip_vertical {
-                        (1.0, 0.0)
-                    } else {
-                        (0.0, 1.0)
-                    };
-
-                    let transform = &transform.0;
-
-                    let dir_x = transform.column(0) * (*width as f32);
-                    let dir_y = transform.column(1) * (*height as f32);
-
-                    let pos = transform * Vector4::new(1.0, 1.0, 0.0, 1.0);
-
-                    (
-                        dir_x, dir_y, pos, uv_left, uv_right, uv_top, uv_bottom, rgba,
-                    )
-                }
+                (
+                    dir_x, dir_y, pos, uv_left, uv_right, uv_top, uv_bottom, quad.rgba,
+                )
             };
             let rgba = rgba.unwrap_or(Rgba::WHITE);
             instance_data.extend(&[
@@ -466,7 +354,7 @@ impl TextureBatch {
             // 1. We are at the last sprite and want to submit all pending work.
             // 2. The next sprite will use a different texture triggering a flush.
             let need_flush = i >= num_quads - 1
-                || self.textures[i + 1].texture_handle().id() != quad.texture_handle().id();
+                || self.textures[i + 1].texture_handle.id() != quad.texture_handle.id();
 
             if need_flush {
                 add_texture(effect, texture);

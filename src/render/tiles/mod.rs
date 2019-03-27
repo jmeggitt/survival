@@ -6,8 +6,6 @@ use gfx::{
 };
 use serde::{Deserialize, Serialize};
 
-use util::TextureType;
-
 pub use self::interleaved::DrawFlat2D as Pass;
 
 mod interleaved;
@@ -15,8 +13,6 @@ mod util;
 
 static VERT_SRC: &[u8] = include_bytes!("sprite_v.glsl");
 static FRAG_SRC: &[u8] = include_bytes!("sprite_f.glsl");
-
-static TEXTURES: [TextureType; 1] = [TextureType::Albedo];
 
 #[derive(Clone, Debug)]
 enum DirX {}

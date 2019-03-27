@@ -1,3 +1,5 @@
+use crate::utils::HasChannel;
+use amethyst::core::math::Vector2;
 use amethyst::{
     assets::Handle,
     core::{components::Transform, math::Vector3},
@@ -8,8 +10,6 @@ use amethyst::{
 use bitflags::*;
 use serde::{Deserialize, Serialize};
 use specs_derive::Component;
-
-use crate::utils::HasChannel;
 
 #[derive(Component, Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[storage(NullStorage)]
@@ -203,4 +203,7 @@ pub struct MaterialStatus {
 
 #[derive(Component, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
 #[storage(DenseVecStorage)]
-pub struct Wearing {}
+pub struct Wearing;
+
+#[derive(Component, Clone, Copy, Debug)]
+pub struct PlayerPosition(pub Vector2<f32>);

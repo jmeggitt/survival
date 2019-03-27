@@ -11,7 +11,6 @@ use amethyst::{
 use crate::actions;
 use crate::actions::{Action, Direction, PlayerInputAction};
 use crate::components;
-use crate::game_data::SurvivalState;
 use crate::settings::Context;
 
 #[derive(Default)]
@@ -23,7 +22,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
     #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'s, Context>,
-        Write<'s, SurvivalState>,
         Read<'s, InputHandler<PlayerInputAction, PlayerInputAction>>,
         Read<'s, EventChannel<InputEvent<PlayerInputAction>>>,
         Entities<'s>,
@@ -46,7 +44,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
         &mut self,
         (
             _,
-            mut state,
             input,
             input_events,
             entities,
@@ -56,7 +53,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
             mut transforms, // for debugging
         ): Self::SystemData,
     ) {
-        //        if *state == SurvivalState::Paused {
         for (_, _, actionable) in (&entities, &players, &mut actionables).join() {
             let mut got_input = false;
 
@@ -105,11 +101,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
                     }
                 }
             }
-
-            // End state
-            //                if got_input {
-            //                    *state = SurvivalState::Running;
-            //                }
 
             // Set the camera position here too LOL
             let mut player_translation = None;

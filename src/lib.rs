@@ -38,6 +38,7 @@ mod chunk;
 
 use crate::render::tiles::Pass;
 use actions::PlayerInputAction;
+use chunk::ChunkLoadSystem;
 
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
@@ -103,7 +104,8 @@ pub fn run() -> amethyst::Result<()> {
         .with_level(systems::InputSystem::default(), "input", &[])
         .with_level(systems::TilePositionSystem::default(), "tile_position", &[])
         .with_level(systems::MovementSystem::default(), "movement", &[])
-        .with_level(systems::TimeSystem::default(), "time", &[]);
+        .with_level(systems::TimeSystem::default(), "time", &[])
+        .with_level(ChunkLoadSystem::new(root.join("saves")), "chunk_loader", &[]);
 
     let mut game = Application::build(root, crate::states::FirstLoad::default())?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)

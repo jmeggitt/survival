@@ -3,7 +3,9 @@ use amethyst::ecs::{Entities, Entity, Join, ReadExpect, ReadStorage, Write, Writ
 use crate::components;
 use crate::settings::Context;
 
-#[derive(Default, Copy, Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Default, Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TimeState {
     pub current_time: u64,
 }

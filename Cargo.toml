@@ -8,12 +8,14 @@ edition = "2018"
 amethyst = { path = "dep/amethyst", features = ["nightly", "saveload"] }
 amethyst-imgui = { path = "dep/amethyst-imgui" }
 specs-derive = "*"
+shred-derive = "*"
+shred = "*"
 parking_lot = "0.7.1"
 
 rayon = { version = "1.0.0" }
 rayon-hash = "*"
 crossbeam-skiplist = { git = "https://github.com/crossbeam-rs/crossbeam.git" }
-
+hashbrown = "0.1.8"
 gfx = { version = "0.17.1", features = ["serialize"] }
 gfx_core = { version = "0.9.0", features = ["serialize"] }
 glsl-layout = { version = "0.1.1", features = ["gfx"] }

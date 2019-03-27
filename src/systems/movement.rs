@@ -1,13 +1,18 @@
 use amethyst::{
     core::components::Transform,
-    ecs::{Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, WriteStorage},
+    ecs::{
+        Entities, Join, Read, ReadExpect, ReadStorage, Resources, SystemData, WriteExpect,
+        WriteStorage,
+    },
 };
 
 use crate::actions::{Action, Direction};
 use crate::components;
+use crate::components::PlayerPosition;
 use crate::settings::Config;
 use crate::tiles::{ReadTiles, Tiles};
 use crate::utils::ComponentEventReader;
+use amethyst::core::math::Vector2;
 
 use log::{error, warn};
 
@@ -28,6 +33,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
         WriteStorage<'s, Transform>,
         // Tile storages
         ReadTiles<'s, components::Impassable>,
+        WriteExpect<'s, PlayerPosition>,
     );
 
     fn setup(&mut self, res: &mut Resources) {
@@ -47,6 +53,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
             mut actionables,
             mut transforms,
             tile_impassable,
+            mut player_position,
         ): Self::SystemData,
     ) {
         self.action_reader.maintain(&entities, &mut actionables);
@@ -96,6 +103,10 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         }
 
                         *transform = target;
+
+                        if players.get(entity).is_some() {
+                            player_position.0 = Vector2::new(0.0, 0.0);
+                        }
                     }
                 }
             }

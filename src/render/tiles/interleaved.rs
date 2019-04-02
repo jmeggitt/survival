@@ -1,11 +1,9 @@
 //! Flat forward drawing pass that mimics a blit.
 
 use amethyst::assets::{AssetStorage, Handle};
-use amethyst::core::{
-    ecs::prelude::{Read, ReadExpect, ReadStorage},
-    math::Vector4,
-    transform::{GlobalTransform, Transform},
-};
+use amethyst::core::ecs::prelude::{Read, ReadExpect, ReadStorage};
+use amethyst::core::math::{Vector3, Vector4};
+use amethyst::core::transform::{GlobalTransform, Transform};
 use amethyst::error::Error;
 use amethyst::renderer::{
     get_camera,
@@ -34,14 +32,14 @@ type Slice = gfx::Slice<Resources>;
 /// Draws sprites on a 2D quad.
 #[derive(Derivative, Clone, Debug)]
 #[derivative(Default(bound = "Self: Pass"))]
-pub struct DrawFlat2D {
+pub struct TileRenderPass {
     #[derivative(Default(value = "default_transparency()"))]
     transparency: Option<(ColorMask, Blend, Option<DepthMode>)>,
     batch: TextureBatch,
     map_transform: Option<GlobalTransform>,
 }
 
-impl DrawFlat2D {
+impl TileRenderPass {
     /// Create instance of `DrawFlat2D` pass
     pub fn new() -> Self {
         Default::default()
@@ -80,7 +78,7 @@ impl DrawFlat2D {
 }
 
 #[allow(clippy::type_complexity)]
-impl<'a> PassData<'a> for DrawFlat2D {
+impl<'a> PassData<'a> for TileRenderPass {
     type Data = (
         Read<'a, Config>,
         Read<'a, DisplayConfig>,
@@ -98,7 +96,7 @@ impl<'a> PassData<'a> for DrawFlat2D {
     );
 }
 
-impl Pass for DrawFlat2D {
+impl Pass for TileRenderPass {
     fn compile(&mut self, effect: NewEffect<'_>) -> Result<Effect, Error> {
         use std::mem;
 
@@ -147,8 +145,7 @@ impl Pass for DrawFlat2D {
 
         let (_, g) = camera_g.as_ref().unwrap();
         let global: amethyst::core::math::Matrix4<f32> = g.0;
-        let camera_world_position =
-            amethyst::core::math::Vector3::new(global[12], global[13], global[14]);
+        let camera_world_position = Vector3::new(global[12], global[13], global[14]);
         let camera_tile_position =
             tiles.world_to_tile(&camera_world_position.xyz(), &game_settings);
 
@@ -289,63 +286,54 @@ impl TextureBatch {
         // chain of sprites with the same texture, so we would need
         // to check if it actually results in an improvement over just
         // doing the allocations.
-        let mut instance_data = Vec::<f32>::new();
         let mut num_instances = 0;
         let num_quads = self.textures.len();
+        let mut instance_data: Vec<f32> = Vec::with_capacity(num_quads * 15);
 
         for (i, quad) in self.textures.iter().enumerate() {
+            // Get actual texture to use.
             let texture = tex_storage
                 .get(&quad.texture_handle)
                 .expect("Unable to get texture of sprite");
 
-            let (flip_horizontal, flip_vertical) = match quad.flipped {
-                Some(Flipped::Horizontal) => (true, false),
-                Some(Flipped::Vertical) => (false, true),
-                Some(Flipped::Both) => (true, true),
-                _ => (false, false),
-            };
+            let sprite_sheet = sprite_sheet_storage.get(&quad.render.sprite_sheet).expect(
+                "Unreachable: Existence of sprite sheet checked when collecting the sprites",
+            );
 
-            let (dir_x, dir_y, pos, uv_left, uv_right, uv_top, uv_bottom, rgba) = {
-                let sprite_sheet = sprite_sheet_storage.get(&quad.render.sprite_sheet).expect(
-                    "Unreachable: Existence of sprite sheet checked when collecting the sprites",
-                );
+            // Append sprite to instance data.
+            let sprite_data = &sprite_sheet.sprites[quad.render.sprite_number];
 
-                // Append sprite to instance data.
-                let sprite_data = &sprite_sheet.sprites[quad.render.sprite_number];
+            let transform = &quad.transform.0;
 
-                let tex_coords = &sprite_data.tex_coords;
-                let (uv_left, uv_right) = if flip_horizontal {
-                    (tex_coords.right, tex_coords.left)
-                } else {
-                    (tex_coords.left, tex_coords.right)
-                };
-                let (uv_bottom, uv_top) = if flip_vertical {
-                    (tex_coords.top, tex_coords.bottom)
-                } else {
-                    (tex_coords.bottom, tex_coords.top)
-                };
+            let dir_x = transform.column(0) * sprite_data.width;
+            let dir_y = transform.column(1) * sprite_data.height;
 
-                let transform = &quad.transform.0;
+            // The offsets are negated to shift the sprite left and down relative to the entity, in
+            // regards to pivot points. This is the convention adopted in:
+            //
+            // * libgdx: <https://gamedev.stackexchange.com/q/22553>
+            // * godot: <https://godotengine.org/qa/9784>
+            let pos = transform
+                * Vector4::new(-sprite_data.offsets[0], -sprite_data.offsets[1], 0.0, 1.0);
 
-                let dir_x = transform.column(0) * sprite_data.width;
-                let dir_y = transform.column(1) * sprite_data.height;
+            let rgba = quad.rgba.unwrap_or(Rgba::WHITE);
 
-                // The offsets are negated to shift the sprite left and down relative to the entity, in
-                // regards to pivot points. This is the convention adopted in:
-                //
-                // * libgdx: <https://gamedev.stackexchange.com/q/22553>
-                // * godot: <https://godotengine.org/qa/9784>
-                let pos = transform
-                    * Vector4::new(-sprite_data.offsets[0], -sprite_data.offsets[1], 0.0, 1.0);
-
-                (
-                    dir_x, dir_y, pos, uv_left, uv_right, uv_top, uv_bottom, quad.rgba,
-                )
-            };
-            let rgba = rgba.unwrap_or(Rgba::WHITE);
             instance_data.extend(&[
-                dir_x.x, dir_x.y, dir_y.x, dir_y.y, pos.x, pos.y, uv_left, uv_right, uv_bottom,
-                uv_top, pos.z, rgba.0, rgba.1, rgba.2, rgba.3,
+                dir_x.x,
+                dir_x.y,
+                dir_y.x,
+                dir_y.y,
+                pos.x,
+                pos.y,
+                sprite_data.tex_coords.left,
+                sprite_data.tex_coords.right,
+                sprite_data.tex_coords.bottom,
+                sprite_data.tex_coords.top,
+                pos.z,
+                rgba.0,
+                rgba.1,
+                rgba.2,
+                rgba.3,
             ]);
             num_instances += 1;
 
@@ -363,7 +351,7 @@ impl TextureBatch {
                     .create_buffer_immutable(&instance_data, buffer::Role::Vertex, Bind::empty())
                     .expect("Unable to create immutable buffer for `TextureBatch`");
 
-                for _ in DrawFlat2D::attributes() {
+                for _ in TileRenderPass::attributes() {
                     effect.data.vertex_bufs.push(vbuf.raw().clone());
                 }
 

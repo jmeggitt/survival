@@ -60,6 +60,11 @@ pub fn run() -> amethyst::Result<()> {
 
     let game_config = settings::Config::load(root.join("game_settings.ron"));
 
+    let render_bundle = RenderBundle::new(pipe, Some(display_config.clone()))
+        .with_sprite_sheet_processor()
+        .with_sprite_visibility_sorting(&[])
+        .with_hide_hierarchy_system();
+
     let game_data = SurvivalDataBuilder::new(None, display_config.clone(), game_config)
         .with_core_bundle(TransformBundle::new())?
         .with_core_bundle(
@@ -80,12 +85,7 @@ pub fn run() -> amethyst::Result<()> {
         .with_core_bundle(UiBundle::<PlayerInputAction, PlayerInputAction>::new())?
         .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with_core_bundle(FPSCounterBundle::default())?
-        .with_core_bundle(
-            RenderBundle::new(pipe, Some(display_config.clone()))
-                .with_sprite_sheet_processor()
-                .with_sprite_visibility_sorting(&[])
-                .with_hide_hierarchy_system(),
-        )?
+        .with_core_bundle(render_bundle)?
         .with_core(
             systems::UiSystem::default(),
             "ui",

@@ -1,4 +1,5 @@
 use amethyst::renderer::{Attribute, AttributeFormat, Attributes, Color, VertexFormat, With};
+use amethyst::ui::DrawUi;
 use gfx::{
     format::{ChannelType, Format, SurfaceType},
     pso::buffer::Element,
@@ -6,7 +7,7 @@ use gfx::{
 };
 use serde::{Deserialize, Serialize};
 
-pub use self::interleaved::DrawFlat2D as Pass;
+pub use self::interleaved::TileRenderPass as Pass;
 
 mod interleaved;
 mod util;

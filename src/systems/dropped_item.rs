@@ -63,7 +63,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         .insert(
                             entity,
                             components::FlaggedSpriteRender {
-                                sprite_sheet: sheet_handle.clone(),
+                                handle: sheet_handle.clone(),
                                 sprite_number: details.sprite_number,
                             },
                         )
@@ -87,7 +87,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                                         .insert(
                                             entity,
                                             components::FlaggedSpriteRender {
-                                                sprite_sheet: sheet_handle.clone(),
+                                                handle: sheet_handle.clone(),
                                                 sprite_number: details.sprite_number,
                                             },
                                         )

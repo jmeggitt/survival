@@ -227,7 +227,7 @@ impl TextureBatch {
         tex_storage: &AssetStorage<Texture>,
     ) {
         if let Some(global) = global {
-            let texture_handle = match sprite_sheet_storage.get(&sprite_render.sprite_sheet) {
+            let texture_handle = match sprite_sheet_storage.get(&sprite_render.handle) {
                 Some(sprite_sheet) => {
                     if tex_storage.get(&sprite_sheet.texture).is_none() {
                         warn!(
@@ -296,7 +296,7 @@ impl TextureBatch {
                 .get(&quad.texture_handle)
                 .expect("Unable to get texture of sprite");
 
-            let sprite_sheet = sprite_sheet_storage.get(&quad.render.sprite_sheet).expect(
+            let sprite_sheet = sprite_sheet_storage.get(&quad.render.handle).expect(
                 "Unreachable: Existence of sprite sheet checked when collecting the sprites",
             );
 

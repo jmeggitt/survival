@@ -82,6 +82,8 @@ impl<'s> amethyst::ecs::System<'s> for System {
         WriteStorage<'s, Nutrition>,
     );
 
+    fn run(&mut self, _: Self::SystemData) {}
+
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
 
@@ -90,6 +92,4 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 .register_reader(),
         );
     }
-
-    fn run(&mut self, _: Self::SystemData) {}
 }

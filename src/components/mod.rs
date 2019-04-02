@@ -25,7 +25,7 @@ pub struct PawnTraits {
 
 #[derive(Default, Serialize, Deserialize)]
 pub struct Actionable {
-    #[serde(skip_serializing, skip_deserializing)]
+    #[serde(skip)]
     pub channel: EventChannel<crate::actions::Action>,
 }
 
@@ -122,7 +122,7 @@ impl TimeAvailable {
 #[derive(Clone, Debug, PartialEq)]
 pub struct FlaggedSpriteRender {
     /// Handle to the sprite sheet of the sprite
-    pub sprite_sheet: SpriteSheetHandle,
+    pub handle: SpriteSheetHandle,
     /// Index of the sprite on the sprite sheet
     pub sprite_number: usize,
 }

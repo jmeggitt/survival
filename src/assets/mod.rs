@@ -25,7 +25,7 @@ pub type ItemStorage = StorageWrapper<Item>;
 #[derive(Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Storage<T> {
     pub data: HashMap<String, T>,
-    #[serde(skip_serializing, skip_deserializing)]
+    #[serde(skip)]
     pub handles: HashMap<String, Handle<T>>,
 }
 

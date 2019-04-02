@@ -93,7 +93,7 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
                 sprites.insert(
                     tile_id,
                     FlaggedSpriteRender {
-                        sprite_sheet: map_sprite_sheet_handle.clone(),
+                        handle: map_sprite_sheet_handle.clone(),
                         sprite_number: 11,
                     },
                 );

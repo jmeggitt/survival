@@ -24,14 +24,14 @@ use crate::tiles::TileId;
 #[derive(Serialize, Deserialize, Derivative)]
 #[derivative(Debug)]
 pub struct Chunk {
-    #[serde(skip_serializing, skip_deserializing)]
+    #[serde(skip)]
     pos: (i32, i32),
     #[derivative(Debug = "ignore")]
     #[serde(default = [[TileId(0); 16]; 16])]
     pub tiles: [[TileId; 16]; 16],
-    #[serde(skip_serializing, skip_deserializing)]
+    #[serde(skip)]
     path: PathBuf,
-    #[serde(skip_serializing, skip_deserializing)]
+    #[serde(skip)]
     requires_save: bool,
 }
 

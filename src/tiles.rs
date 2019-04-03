@@ -8,6 +8,18 @@ use serde::{Deserialize, Serialize};
 use specs_derive::Component;
 
 use crate::specs_static::{Id, Storage};
+use amethyst::assets::Handle;
+use amethyst::renderer::Rgba;
+use amethyst::renderer::Sprite;
+use amethyst::renderer::Texture;
+
+#[derive(Component, Clone, Debug)]
+#[storage(DenseVecStorage)]
+pub struct TileAsset {
+    pub texture: Handle<Texture>,
+    pub sprite: Sprite,
+    pub tint: Rgba,
+}
 
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]

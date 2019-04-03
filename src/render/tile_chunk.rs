@@ -1,27 +1,32 @@
 use std::mem::size_of;
 
 use amethyst::assets::{AssetStorage, Handle};
-use amethyst::core::math::Matrix4;
+use amethyst::core::components::Transform;
 use amethyst::core::GlobalTransform;
-use amethyst::ecs::prelude::*;
+use amethyst::core::math::{Matrix4, Vector4};
 use amethyst::ecs::{Join, ReadStorage, WriteStorage};
-use amethyst::renderer::pipe::pass::{Pass, PassData};
-use amethyst::renderer::Camera;
+use amethyst::ecs::prelude::*;
+use amethyst::Error;
 use amethyst::renderer::{
     DepthMode, Effect, Encoder, Factory, NewEffect, Resources, Texture, VertexFormat,
 };
-use amethyst::Error;
+use amethyst::renderer::Camera;
+use amethyst::renderer::pipe::pass::{Pass, PassData};
 use gfx::buffer::Role::Vertex;
 use gfx::handle::RawBuffer;
 use gfx::memory::{Bind, Typed};
 use gfx::pso::buffer::ElemStride;
 use glsl_layout::Uniform;
+use hashbrown::HashMap;
 use log::error;
 use shred_derive::SystemData;
 use specs_derive::Component;
 
-use crate::render::flat_specs::{SpriteInstance, FRAG_SRC, VERT_SRC};
+use crate::chunk::Chunk;
+use crate::render::flat_specs::{FRAG_SRC, SpriteInstance, VERT_SRC};
 use crate::render::tile_chunk::ChunkRender::Buffered;
+use crate::tiles::TileAsset;
+use crate::utils::TILE_SIZE;
 
 use super::flat_specs::{TextureOffsetPod, ViewArgs};
 
@@ -32,6 +37,70 @@ pub struct TextureUsage {
     texture: Handle<Texture>,
     data: Vec<f32>,
     len: u32,
+}
+
+// TODO Dispatch render load!
+#[allow(dead_code)]
+pub fn compile_chunk(chunk: Chunk, tile_specs: &Vec<TileAsset>) -> ChunkRender {
+    // Compile slice
+    let mut texture_map: HashMap<usize, TextureUsage> = HashMap::new();
+    for x in 0..16 {
+        for y in 0..16 {
+            let texture_id = chunk.tiles[x][y].0 as usize;
+            let asset = &tile_specs[texture_id];
+            let (chunk_x, chunk_y) = chunk.pos;
+
+            let mut transform = Transform::default();
+            transform.set_translation_xyz(
+                x as f32 * TILE_SIZE + 16. * chunk_x as f32,
+                y as f32 * TILE_SIZE + 16. * chunk_y as f32,
+                0.,
+            );
+            let transform = transform.matrix();
+
+            let dir_x = transform.column(0) * TILE_SIZE;
+            let dir_y = transform.column(1) * TILE_SIZE;
+
+            let pos = transform
+                * Vector4::new(-asset.sprite.offsets[0], -asset.sprite.offsets[1], 0.0, 1.0);
+
+            let slice = [
+                dir_x.x,
+                dir_x.y,
+                dir_y.x,
+                dir_y.y,
+                pos.x,
+                pos.y,
+                asset.sprite.tex_coords.left,
+                asset.sprite.tex_coords.right,
+                asset.sprite.tex_coords.bottom,
+                asset.sprite.tex_coords.top,
+                pos.z,
+                asset.tint.0,
+                asset.tint.1,
+                asset.tint.2,
+                asset.tint.3,
+            ];
+
+            match texture_map.get_mut(&texture_id) {
+                Some(usage) => {
+                    usage.data.extend(&slice);
+                    usage.len += 1;
+                }
+                None => {
+                    let usage = TextureUsage {
+                        texture: asset.texture.clone(),
+                        data: slice[..].into(),
+                        len: 1,
+                    };
+                    texture_map.insert(texture_id, usage);
+                }
+            }
+        }
+    }
+
+    let collected = Vec::with_capacity(texture_map.len());
+    ChunkRender::Unbuffered(collected)
 }
 
 #[derive(Debug, Component)]
@@ -64,13 +133,13 @@ impl ChunkRender {
 
             point_buffer.shrink_to_fit();
             let buffer = match factory.create_buffer_immutable(&point_buffer, Vertex, Bind::empty())
-            {
-                Ok(v) => v,
-                Err(_) => {
-                    error!("Unable to create immutable graphics buffer");
-                    return;
-                }
-            };
+                {
+                    Ok(v) => v,
+                    Err(_) => {
+                        error!("Unable to create immutable graphics buffer");
+                        return;
+                    }
+                };
 
             *self = Buffered(buffer.raw().clone(), slice_buffer)
         }
@@ -144,7 +213,10 @@ impl Pass for TileRenderPass {
                     effect.data.textures.push(texture.view().clone());
                     effect.data.samplers.push(texture.sampler().clone());
                     effect.draw(slice, encoder);
+                    effect.data.textures.clear();
+                    effect.data.samplers.clear();
                 }
+                effect.clear();
             }
         }
     }

@@ -17,7 +17,6 @@ pub use game_data::{GameDispatchers, SurvivalDataBuilder};
 
 use crate::render::tiles::Pass;
 
-pub mod goap;
 #[allow(dead_code)]
 pub mod mapgen;
 pub mod system_chain;

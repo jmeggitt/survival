@@ -25,7 +25,7 @@ use crate::tiles::TileId;
 #[derivative(Debug)]
 pub struct Chunk {
     #[serde(skip)]
-    pos: (i32, i32),
+    pub pos: (i32, i32),
     #[derivative(Debug = "ignore")]
     #[serde(default = [[TileId(0); 16]; 16])]
     pub tiles: [[TileId; 16]; 16],

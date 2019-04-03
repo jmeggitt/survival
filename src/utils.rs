@@ -6,6 +6,8 @@ use amethyst::ecs::{
 use amethyst::shrev;
 use hibitset::BitSet;
 
+pub const TILE_SIZE: f32 = 32.;
+
 pub trait HasChannel<E> {
     /// Event channel tracking modified/inserted/removed components.
     fn channel(&self) -> &shrev::EventChannel<E>;

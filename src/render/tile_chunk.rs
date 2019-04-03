@@ -2,16 +2,16 @@ use std::mem::size_of;
 
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::components::Transform;
-use amethyst::core::GlobalTransform;
 use amethyst::core::math::{Matrix4, Vector4};
-use amethyst::ecs::{Join, ReadStorage, WriteStorage};
+use amethyst::core::GlobalTransform;
 use amethyst::ecs::prelude::*;
-use amethyst::Error;
+use amethyst::ecs::{Join, ReadStorage, WriteStorage};
+use amethyst::renderer::pipe::pass::{Pass, PassData};
+use amethyst::renderer::Camera;
 use amethyst::renderer::{
     DepthMode, Effect, Encoder, Factory, NewEffect, Resources, Texture, VertexFormat,
 };
-use amethyst::renderer::Camera;
-use amethyst::renderer::pipe::pass::{Pass, PassData};
+use amethyst::Error;
 use gfx::buffer::Role::Vertex;
 use gfx::handle::RawBuffer;
 use gfx::memory::{Bind, Typed};
@@ -23,7 +23,7 @@ use shred_derive::SystemData;
 use specs_derive::Component;
 
 use crate::chunk::Chunk;
-use crate::render::flat_specs::{FRAG_SRC, SpriteInstance, VERT_SRC};
+use crate::render::flat_specs::{SpriteInstance, FRAG_SRC, VERT_SRC};
 use crate::render::tile_chunk::ChunkRender::Buffered;
 use crate::tiles::TileAsset;
 use crate::utils::TILE_SIZE;
@@ -133,13 +133,13 @@ impl ChunkRender {
 
             point_buffer.shrink_to_fit();
             let buffer = match factory.create_buffer_immutable(&point_buffer, Vertex, Bind::empty())
-                {
-                    Ok(v) => v,
-                    Err(_) => {
-                        error!("Unable to create immutable graphics buffer");
-                        return;
-                    }
-                };
+            {
+                Ok(v) => v,
+                Err(_) => {
+                    error!("Unable to create immutable graphics buffer");
+                    return;
+                }
+            };
 
             *self = Buffered(buffer.raw().clone(), slice_buffer)
         }

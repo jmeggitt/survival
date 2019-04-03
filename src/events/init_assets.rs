@@ -9,9 +9,9 @@ use amethyst::{
 use log::info;
 use log::trace;
 
+use crate::events::Level;
 use crate::settings;
 use crate::specs_static::WorldExt;
-use crate::states::Level;
 use crate::GameDispatchers;
 
 fn load_sprite_sheet(

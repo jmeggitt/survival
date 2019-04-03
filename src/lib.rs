@@ -19,13 +19,12 @@ use crate::render::tiles::Pass;
 
 #[allow(dead_code)]
 pub mod mapgen;
-pub mod system_chain;
 
 pub mod assets;
 pub mod components;
+pub mod events;
 pub mod render;
 pub mod settings;
-pub mod states;
 pub mod systems;
 pub mod tiles;
 pub mod utils;
@@ -112,7 +111,7 @@ pub fn run() -> amethyst::Result<()> {
             &[],
         );
 
-    let mut game = Application::build(root, crate::states::FirstLoad::default())?
+    let mut game = Application::build(root, crate::events::FirstLoad::default())?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)
         .build(game_data)?;
 

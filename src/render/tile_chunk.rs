@@ -2,30 +2,30 @@ use std::mem::size_of;
 
 use amethyst::assets::{AssetStorage, Handle};
 use amethyst::core::components::Transform;
-use amethyst::core::GlobalTransform;
 use amethyst::core::math::{Matrix4, Vector4};
-use amethyst::ecs::{Join, ReadStorage, WriteStorage};
-use amethyst::ecs::{Component, Write};
+use amethyst::core::GlobalTransform;
 use amethyst::ecs::prelude::*;
-use amethyst::Error;
+use amethyst::ecs::{Component, Write};
+use amethyst::ecs::{Join, ReadStorage, WriteStorage};
+use amethyst::renderer::pipe::pass::{Pass, PassData};
+use amethyst::renderer::Camera;
 use amethyst::renderer::{
     DepthMode, Effect, Encoder, Factory, NewEffect, Resources, Texture, VertexFormat,
 };
-use amethyst::renderer::Camera;
-use amethyst::renderer::pipe::pass::{Pass, PassData};
+use amethyst::Error;
 use gfx::buffer::Role::Vertex;
 use gfx::handle::RawBuffer;
 use gfx::memory::{Bind, Typed};
 use gfx::pso::buffer::ElemStride;
 use glsl_layout::Uniform;
 use hashbrown::HashMap;
-use log::warn;
 use log::debug;
+use log::warn;
 use shred_derive::SystemData;
 use specs_derive::Component;
 
 use crate::chunk::Chunk;
-use crate::render::flat_specs::{FRAG_SRC, SpriteInstance, VERT_SRC};
+use crate::render::flat_specs::{SpriteInstance, FRAG_SRC, VERT_SRC};
 use crate::specs_static::{Id, Storage};
 use crate::tiles::TileAsset;
 use crate::utils::TILE_SIZE;
@@ -100,13 +100,11 @@ pub fn compile_chunk(chunk: &Chunk, tile_specs: &[TileAsset]) -> ChunkRender {
     for (_, texture_usage) in texture_map {
         collected.push(texture_usage);
     }
-    ChunkRender {
-        inner: collected
-    }
+    ChunkRender { inner: collected }
 }
 
 pub type WriteChunkRender<'a> =
-Write<'a, Storage<ChunkRender, <ChunkRender as Component>::Storage, (i32, i32)>>;
+    Write<'a, Storage<ChunkRender, <ChunkRender as Component>::Storage, (i32, i32)>>;
 
 // TODO: Expand to include full i32 range
 impl Id for (i32, i32) {
@@ -189,7 +187,7 @@ impl Pass for TileRenderPass {
                     Some(tex) => {
                         effect.data.textures.push(tex.view().clone());
                         effect.data.samplers.push(tex.sampler().clone());
-                    },
+                    }
                     None => {
                         warn!("Missing texture {:?}", &usage.texture);
                         continue;
@@ -197,12 +195,12 @@ impl Pass for TileRenderPass {
                 };
 
                 match factory.create_buffer_immutable(&usage.data, Vertex, Bind::empty()) {
-                        Ok(v) => effect.data.vertex_bufs.push(v.raw().clone()),
-                        Err(_) => {
-                            warn!("Unable to create immutable graphics buffer");
-                            continue;
-                        }
-                    };
+                    Ok(v) => effect.data.vertex_bufs.push(v.raw().clone()),
+                    Err(_) => {
+                        warn!("Unable to create immutable graphics buffer");
+                        continue;
+                    }
+                };
 
                 let slice = GraphicsSlice {
                     start: 0,

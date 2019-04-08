@@ -2,27 +2,27 @@ use std::ops::DerefMut;
 use std::sync::atomic::AtomicBool;
 use std::sync::atomic::Ordering;
 
+use amethyst::renderer::SpriteSheet;
 use amethyst::{
     assets::AssetStorage,
     assets::Progress,
     assets::ProgressCounter,
     assets::Tracker,
     core::components::{GlobalTransform, Transform},
-    ecs::{Builder, Entity, Read, SystemData, World, WriteExpect},
+    ecs::{Builder, Entity, Read, SystemData, World, WriteExpect, WriteStorage},
     renderer::{Camera, Projection, Rgba, SpriteRender, SpriteSheetHandle, Transparent},
     StateData, StateEvent, Trans,
 };
-use amethyst::renderer::SpriteSheet;
 use log::error;
 use log::info;
 use shred::ReadExpect;
 
-use crate::components::{Actionable, FlaggedSpriteRender, Player, TilePosition, TimeAvailable};
-use crate::GameDispatchers;
+use crate::components::{Actionable, FlaggedSpriteRender, Player, TimeAvailable};
 use crate::settings;
+use crate::tiles::TileEntities;
 use crate::tiles::{TileAsset, TileAssets};
 use crate::tiles::{Tiles, WriteTiles};
-use crate::tiles::TileEntities;
+use crate::GameDispatchers;
 
 fn init_player(
     world: &mut World,
@@ -40,11 +40,6 @@ fn init_player(
 
     world
         .create_entity()
-        .with(TilePosition::from_transform(
-            &transform,
-            tiles,
-            game_settings,
-        ))
         .with(transform)
         .with(Player)
         .with(SpriteRender {
@@ -61,19 +56,11 @@ fn init_player(
 fn init_camera(world: &mut World, _: Entity, tiles: Tiles, game_settings: &settings::Config) {
     let mut transform = Transform::default();
     transform.set_translation_z(1.0);
-    //*transform.scale_mut() = transform.scale() * 4.0;
-    // transform.set_scale(game_settings.graphics.scale * 20. * -1., game_settings.graphics.scale * 20. * -1., 0.);
     world
         .create_entity()
-        .with(TilePosition::from_transform(
-            &transform,
-            tiles,
-            game_settings,
-        ))
         .with(Camera::from(Projection::orthographic(
             -1000.0, 1000.0, -1000.0, 1000.0,
         )))
-        //.with(Parent { entity: parent })
         .with(transform)
         .build();
 }
@@ -87,53 +74,12 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
 
         // Load the level
         let tiles = Tiles::new(100, 100);
-//        {
-            let context = world.res.fetch::<settings::Context>().clone();
-            let map_sprite_sheet_handle = context.as_ref().unwrap();
-            let game_settings = world.res.fetch::<settings::Config>().clone();
+        let context = world.res.fetch::<settings::Context>().clone();
+        let map_sprite_sheet_handle = context.as_ref().unwrap();
+        let game_settings = world.res.fetch::<settings::Config>().clone();
 
-            let player = init_player(world, map_sprite_sheet_handle, tiles, &game_settings);
-            init_camera(world, player, tiles, &game_settings);
-
-//            let mut sprites: WriteTiles<FlaggedSpriteRender> = SystemData::fetch(&world.res);
-//            let mut transforms: WriteTiles<GlobalTransform> = SystemData::fetch(&world.res);
-//            let mut tile_entities_map: WriteTiles<TileEntities> = SystemData::fetch(&world.res);
-
-            //let tile_rgb: WriteTiles<Rgba> = SystemData::fetch(&world.res);
-//            for tile_id in tiles.iter_all() {
-//                tile_entities_map.insert_default(tile_id);
-//
-//                sprites.insert(
-//                    tile_id,
-//                    FlaggedSpriteRender {
-//                        handle: map_sprite_sheet_handle.clone(),
-//                        sprite_number: 11,
-//                    },
-//                );
-//
-//                // tile_rgb.insert(tile_id, Rgba::GREEN);
-//
-////                let coords = tile_id.coords(tiles.dimensions());
-////                let mut transform = Transform::default();
-////
-////                let width = 16.;
-////                let height = 16.;
-////                transform.set_translation_xyz(
-////                    coords.0 * width * game_settings.graphics.scale,
-////                    -1. * (coords.1 * height * game_settings.graphics.scale),
-////                    0.,
-////                );
-////                transform.set_scale(
-////                    game_settings.graphics.scale,
-////                    game_settings.graphics.scale,
-////                    game_settings.graphics.scale,
-////                );
-//
-//                let mut global = GlobalTransform::default();
-//                global.0 = transform.matrix();
-//                transforms.insert(tile_id, global);
-//            }
-//        }
+        let player = init_player(world, map_sprite_sheet_handle, tiles, &game_settings);
+        init_camera(world, player, tiles, &game_settings);
 
         world.add_resource(tiles);
         info!("Finished level setup");
@@ -168,7 +114,9 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
                         });
                     }
 
-                    unsafe { SHEET_INIT.store(true, Ordering::SeqCst); }
+                    unsafe {
+                        SHEET_INIT.store(true, Ordering::SeqCst);
+                    }
                 }
                 None => (),
             }
@@ -178,6 +126,5 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
         Trans::None
     }
 }
-
 
 pub static mut SHEET_INIT: AtomicBool = AtomicBool::new(false);

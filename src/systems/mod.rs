@@ -4,7 +4,6 @@ pub use handle_pickup::System as HandlePickupSystem;
 pub use input::System as InputSystem;
 pub use movement::System as MovementSystem;
 pub use nutrition::System as NutritionSystem;
-pub use tile_position::System as TilePositionSystem;
 pub use time::System as TimeSystem;
 pub use ui::imgui::BeginFrameSystem as ImguiBeginFrameSystem;
 pub use ui::imgui::EndFrameSystem as ImguiEndFrameSystem;
@@ -12,8 +11,6 @@ pub use ui::System as UiSystem;
 pub use wearing::System as WearingSystem;
 
 pub mod ui;
-
-pub mod tile_position;
 
 pub mod time;
 

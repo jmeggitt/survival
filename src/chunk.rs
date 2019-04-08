@@ -215,8 +215,8 @@ impl<P: AsRef<Path>> ChunkLoadSystem<P> {
     }
 }
 
-use std::sync::atomic::Ordering;
 use crate::events::SHEET_INIT;
+use std::sync::atomic::Ordering;
 
 impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
     type SystemData = ChunkSystemData<'a>;
@@ -226,12 +226,14 @@ impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
         self.player_previous = data.player.0;
 
         // Don't attempt to reload if there hasn't been a notable change in chunks
-        if self.player_offset.x.abs() < 16.0 && self.player_offset.y.abs() < 16.0 || !unsafe {SHEET_INIT.load(Ordering::SeqCst)} {
+        if self.player_offset.x.abs() < 16.0 && self.player_offset.y.abs() < 16.0
+            || !unsafe { SHEET_INIT.load(Ordering::SeqCst) }
+        {
             return;
         }
 
-//        use log::debug;
-//        debug!("Complete: {:?} {}/{}", data.asset_progress.complete(), data.asset_progress.num_assets(), data.asset_progress.num_finished());
+        //        use log::debug;
+        //        debug!("Complete: {:?} {}/{}", data.asset_progress.complete(), data.asset_progress.num_assets(), data.asset_progress.num_finished());
 
         // Reset offset
         self.player_offset = Vector2::new(0.0, 0.0);

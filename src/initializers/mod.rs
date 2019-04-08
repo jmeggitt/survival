@@ -11,7 +11,6 @@ use crate::components;
 
 #[derive(Copy, Clone, Debug, strum_macros::Display)]
 pub enum SpawnType {
-    TilePosition(Vector2<u32>),
     TransformPosition(Vector3<f32>),
     Parent(Entity),
 }
@@ -50,7 +49,6 @@ pub fn spawn_item(
     }
 
     match spawn_type {
-        SpawnType::TilePosition(_) => unimplemented!("Not implemented"),
         SpawnType::TransformPosition(_) => unimplemented!("Not implemented"),
         SpawnType::Parent(parent_entity) => {
             builder = builder.with(Parent {

@@ -148,38 +148,6 @@ impl PartialEq<Item> for Item {
     }
 }
 
-#[derive(Component, Clone, Debug, Serialize, Deserialize)]
-pub struct TilePosition {
-    pub coord: Vector3<u32>,
-    //    pub x: u32,
-    //    pub y: u32,
-}
-
-impl Default for TilePosition {
-    fn default() -> Self {
-        Self {
-            coord: Vector3::new(0, 0, 0),
-        }
-    }
-}
-
-impl TilePosition {
-    pub fn new(coord: Vector3<u32>) -> Self {
-        TilePosition { coord }
-    }
-    pub fn from_transform(
-        transform: &Transform,
-        tiles: crate::tiles::Tiles,
-        game_settings: &crate::settings::Config,
-    ) -> Self {
-        let position = tiles.world_to_tile(transform.translation(), &game_settings);
-
-        TilePosition {
-            coord: Vector3::new(position.x as u32, position.y as u32, 0),
-        }
-    }
-}
-
 bitflags! {
     #[derive(Serialize, Deserialize, Default)]
     pub struct InteractionType: u64 {

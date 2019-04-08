@@ -5,7 +5,7 @@ use std::env;
 
 fn main() -> amethyst::Result<()> {
     env::set_var("RUST_BACKTRACE", "1");
-    amethyst::start_logger(LoggerConfig{
+    amethyst::start_logger(LoggerConfig {
         level_filter: LevelFilter::Debug,
         ..Default::default()
     });

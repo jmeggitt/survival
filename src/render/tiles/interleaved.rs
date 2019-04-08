@@ -330,11 +330,6 @@ impl TextureBatch {
                 sprite_data.tex_coords.right,
                 sprite_data.tex_coords.bottom,
                 sprite_data.tex_coords.top,
-//                pos.z,
-//                rgba.0,
-//                rgba.1,
-//                rgba.2,
-//                rgba.3,
             ]);
             num_instances += 1;
 

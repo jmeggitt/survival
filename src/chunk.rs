@@ -111,7 +111,7 @@ impl Chunk {
     /// Generate a new chunk from its coords and possibly more information in future.
     fn generate(pos: (i32, i32)) -> [[TileId; 16]; 16] {
         info!("Generating new chunk at {:?}", pos);
-        [[TileId(20); 16]; 16]
+        [[TileId(25); 16]; 16]
     }
 
     pub fn load<P: AsRef<Path>>(path: &P, pos: (i32, i32)) -> Self {

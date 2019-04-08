@@ -1,6 +1,5 @@
 use amethyst::{
     assets::{AssetStorage, Loader, ProgressCounter},
-    ecs::Component,
     ecs::World,
     renderer::{
         PngFormat, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle, Texture, TextureMetadata,
@@ -15,7 +14,6 @@ use crate::settings;
 use crate::specs_static::WorldExt;
 use crate::tiles::TileAssets;
 use crate::GameDispatchers;
-use amethyst::assets::Progress;
 
 fn load_sprite_sheet(
     world: &mut World,
@@ -44,9 +42,7 @@ fn load_sprite_sheet(
 }
 
 #[derive(Default)]
-pub struct FirstLoad {
-    //    progress_counter: ProgressCounter,
-}
+pub struct FirstLoad;
 
 impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad {
     fn on_start(&mut self, data: StateData<'_, GameDispatchers<'_, '_>>) {
@@ -81,9 +77,6 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad 
             );
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
         world.register_tile_comp::<crate::render::ChunkRender, (i32, i32)>();
-        //        world.register_tile_comp::<crate::render::ChunkRender, (i32, i32)>();
-        //        world.register::<crate::tiles::TileAssets>();
-        //                *world.res.fetch_mut::<crate::tiles::TileAssets>() = TileAssets(Vec::new());
         world.add_resource(TileAssets(Vec::new()));
         world.add_resource(progress);
 

@@ -6,20 +6,16 @@ use amethyst::core::math::{Matrix4, Vector4};
 use amethyst::core::GlobalTransform;
 use amethyst::ecs::prelude::*;
 use amethyst::ecs::{Component, Write};
-use amethyst::ecs::{Join, ReadStorage, WriteStorage};
+use amethyst::ecs::{Join, ReadStorage};
 use amethyst::renderer::pipe::pass::{Pass, PassData};
 use amethyst::renderer::Camera;
-use amethyst::renderer::{
-    DepthMode, Effect, Encoder, Factory, NewEffect, Resources, Texture, VertexFormat,
-};
+use amethyst::renderer::{Effect, Encoder, Factory, NewEffect, Resources, Texture, VertexFormat};
 use amethyst::Error;
 use gfx::buffer::Role::Vertex;
-use gfx::handle::RawBuffer;
 use gfx::memory::{Bind, Typed};
 use gfx::pso::buffer::ElemStride;
 use glsl_layout::Uniform;
 use hashbrown::HashMap;
-use log::debug;
 use log::warn;
 use shred_derive::SystemData;
 use specs_derive::Component;
@@ -113,13 +109,8 @@ impl Id for (i32, i32) {
     }
 
     fn id(&self) -> u32 {
-        let (a, b) = self;
-        use rand::RngCore;
-        use rand::SeedableRng;
-        let mut seed = [0u8; 32];
-        unsafe {
-            rand::rngs::StdRng::from_seed(::std::mem::transmute_copy(&(*a, *b))).next_u32() >> 8
-        }
+        use rand::{rngs::StdRng, RngCore, SeedableRng};
+        unsafe { StdRng::from_seed(::std::mem::transmute_copy(self)).next_u32() >> 8 }
     }
 }
 

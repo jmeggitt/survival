@@ -2,7 +2,6 @@ use std::fs::{DirBuilder, File};
 #[cfg(not(feature = "no-save"))]
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use std::sync::Once;
 
 use amethyst::core::math::Vector2;
 use amethyst::ecs::prelude::*;
@@ -11,9 +10,9 @@ use derivative::Derivative;
 use hashbrown::HashMap;
 use log::{error, info, warn};
 use ron::de::from_reader;
-#[cfg(all(not(feature = "pretty-save"), not(feature = "no-save")))]
+#[cfg(not(feature = "no-save"))]
 use ron::ser::to_string;
-#[cfg(all(not(feature = "pretty-save"), not(feature = "no-save")))]
+#[cfg(all(feature = "pretty-save", not(feature = "no-save")))]
 use ron::ser::{to_string_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
 use shred::DynamicSystemData;
@@ -195,6 +194,8 @@ pub struct ChunkSystemData<'a> {
     player: ReadExpect<'a, PlayerPosition>,
     tile_assets: ReadExpect<'a, TileAssets>,
     chunk_renders: WriteChunkRender<'a>,
+    // TODO Use progress counter instead of atomic bool
+    #[allow(dead_code)]
     asset_progress: ReadExpect<'a, ProgressCounter>,
 }
 

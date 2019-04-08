@@ -1,11 +1,5 @@
 use amethyst::core::math::Vector2;
-use amethyst::{
-    assets::Handle,
-    core::{components::Transform, math::Vector3},
-    ecs::prelude::*,
-    renderer::SpriteSheetHandle,
-    shrev::EventChannel,
-};
+use amethyst::{assets::Handle, ecs::prelude::*, renderer::SpriteSheetHandle, shrev::EventChannel};
 use bitflags::*;
 use serde::{Deserialize, Serialize};
 use specs_derive::Component;

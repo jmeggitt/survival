@@ -1,4 +1,7 @@
 #![feature(custom_attribute)]
+// Honestly, I don't really care about this clippy requirement and its a pain to have to fix all
+// instances.
+#![allow(clippy::cast_lossless)]
 
 use amethyst::{
     assets::{HotReloadBundle, PrefabLoaderSystem},

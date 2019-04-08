@@ -1,8 +1,5 @@
 use amethyst::{
-    core::{
-        components::Parent,
-        math::{Vector2, Vector3},
-    },
+    core::{components::Parent, math::Vector3},
     ecs::{Builder, Entity, World},
 };
 

@@ -72,16 +72,16 @@ impl<'s> amethyst::ecs::System<'s> for System {
 
                         match direction {
                             Direction::N => {
-                                target.move_up(5.0);
+                                target.move_up(2.0);
                             }
                             Direction::S => {
-                                target.move_down(5.0);
+                                target.move_down(2.0);
                             }
                             Direction::E => {
-                                target.move_right(5.0);
+                                target.move_right(2.0);
                             }
                             Direction::W => {
-                                target.move_left(5.0);
+                                target.move_left(2.0);
                             }
                             _ => error!("Unsupported direction!"),
                         }

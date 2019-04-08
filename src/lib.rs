@@ -50,7 +50,8 @@ pub fn run() -> amethyst::Result<()> {
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
             .clear_target([1.0; 4], 1.0)
-            .with_pass(Pass::new())
+//            .with_pass(Pass::new())
+            .with_pass(crate::render::TileRenderPass)
             .with_pass(DrawFlat2D::new())
             .with_pass(amethyst::ui::DrawUi::new())
             .with_pass(amethyst_imgui::DrawUi::default().docking()),
@@ -83,7 +84,6 @@ pub fn run() -> amethyst::Result<()> {
         .with_core_bundle(UiBundle::<PlayerInputAction, PlayerInputAction>::new())?
         .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with_core_bundle(FPSCounterBundle::default())?
-        .with_core_bundle(render_bundle)?
         .with_core(
             systems::UiSystem::default(),
             "ui",
@@ -109,7 +109,8 @@ pub fn run() -> amethyst::Result<()> {
             ChunkLoadSystem::new(root.join("saves")),
             "chunk_loader",
             &[],
-        );
+        )
+        .with_core_bundle(render_bundle)?;
 
     let mut game = Application::build(root, crate::events::FirstLoad::default())?
         .with_frame_limit(FrameRateLimitStrategy::Unlimited, 9999)

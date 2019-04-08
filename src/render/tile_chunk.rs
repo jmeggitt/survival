@@ -24,9 +24,13 @@ use specs_derive::Component;
 
 use crate::chunk::Chunk;
 use crate::render::flat_specs::{SpriteInstance, FRAG_SRC, VERT_SRC};
+//use crate::render::tiles::{SpriteInstance, FRAG_SRC, VERT_SRC};
 use crate::render::tile_chunk::ChunkRender::Buffered;
 use crate::tiles::TileAsset;
 use crate::utils::TILE_SIZE;
+
+use crate::specs_static::{Id, Storage};
+use amethyst::ecs::{Component, Write};
 
 use super::flat_specs::{TextureOffsetPod, ViewArgs};
 
@@ -39,9 +43,7 @@ pub struct TextureUsage {
     len: u32,
 }
 
-// TODO Dispatch render load!
-#[allow(dead_code)]
-pub fn compile_chunk(chunk: Chunk, tile_specs: &Vec<TileAsset>) -> ChunkRender {
+pub fn compile_chunk(chunk: &Chunk, tile_specs: &[TileAsset]) -> ChunkRender {
     // Compile slice
     let mut texture_map: HashMap<usize, TextureUsage> = HashMap::new();
     for x in 0..16 {
@@ -75,11 +77,6 @@ pub fn compile_chunk(chunk: Chunk, tile_specs: &Vec<TileAsset>) -> ChunkRender {
                 asset.sprite.tex_coords.right,
                 asset.sprite.tex_coords.bottom,
                 asset.sprite.tex_coords.top,
-                pos.z,
-                asset.tint.0,
-                asset.tint.1,
-                asset.tint.2,
-                asset.tint.3,
             ];
 
             match texture_map.get_mut(&texture_id) {
@@ -99,12 +96,37 @@ pub fn compile_chunk(chunk: Chunk, tile_specs: &Vec<TileAsset>) -> ChunkRender {
         }
     }
 
-    let collected = Vec::with_capacity(texture_map.len());
+    let mut collected = Vec::with_capacity(texture_map.len());
+    for (_, texture_usage) in texture_map {
+        collected.push(texture_usage);
+    }
     ChunkRender::Unbuffered(collected)
 }
 
+pub type WriteChunkRender<'a> =
+    Write<'a, Storage<ChunkRender, <ChunkRender as Component>::Storage, (i32, i32)>>;
+
+// TODO: Expand to include full i32 range
+impl Id for (i32, i32) {
+    fn from_u32(value: u32) -> Self {
+        ((value & 0xFF) as i8 as i32, (value >> 8) as i8 as i32)
+    }
+
+    fn id(&self) -> u32 {
+        let (a, b) = self;
+        use rand::RngCore;
+        use rand::SeedableRng;
+        let mut seed = [0u8; 32];
+        unsafe {
+            rand::rngs::StdRng::from_seed(::std::mem::transmute_copy(&(*a, *b))).next_u32() >> 8
+        }
+
+//        (*a as i8 as u32) | ((*b as i8 as u32) << 8)
+    }
+}
+
 #[derive(Debug, Component)]
-#[storage(DenseVecStorage)]
+#[storage(HashMapStorage)]
 pub enum ChunkRender {
     Unbuffered(Vec<TextureUsage>),
     Buffered(RawBuffer<Resources>, Vec<(Handle<Texture>, GraphicsSlice)>),
@@ -122,7 +144,7 @@ impl ChunkRender {
                 let gfx_slice = GraphicsSlice {
                     start: 0,
                     end: 6,
-                    base_vertex: point_buffer.len() as u32,
+                    base_vertex:  point_buffer.len() as u32 , // BUG
                     instances: Some((usage.len, 0)),
                     buffer: Default::default(),
                 };
@@ -148,7 +170,7 @@ impl ChunkRender {
 
 #[derive(SystemData)]
 pub struct RenderData<'a> {
-    chunks: WriteStorage<'a, ChunkRender>,
+    chunks: WriteChunkRender<'a>,
     camera: ReadStorage<'a, Camera>,
     global: ReadStorage<'a, GlobalTransform>,
     sprite_assets: Read<'a, AssetStorage<Texture>>,
@@ -160,7 +182,7 @@ impl<'a> RenderData<'a> {
     }
 }
 
-#[allow(dead_code)]
+//#[allow(dead_code)]
 pub struct TileRenderPass;
 
 impl<'a> PassData<'a> for TileRenderPass {
@@ -184,7 +206,7 @@ impl Pass for TileRenderPass {
                 size_of::<<TextureOffsetPod as Uniform>::Std140>(),
                 1,
             )
-            .with_output("color", Some(DepthMode::LessEqualWrite))
+            .with_output("color", None)
             .build()
     }
 
@@ -193,7 +215,7 @@ impl Pass for TileRenderPass {
         encoder: &mut Encoder,
         effect: &mut Effect,
         mut factory: Factory,
-        mut data: RenderData,
+        mut data: RenderData<'b>,
     ) {
         set_view_args(encoder, effect, data.camera());
 

@@ -1,5 +1,6 @@
 use amethyst::{
     assets::{AssetStorage, Loader, ProgressCounter},
+    ecs::Component,
     ecs::World,
     renderer::{
         PngFormat, SpriteSheet, SpriteSheetFormat, SpriteSheetHandle, Texture, TextureMetadata,
@@ -13,6 +14,8 @@ use crate::events::Level;
 use crate::settings;
 use crate::specs_static::WorldExt;
 use crate::GameDispatchers;
+use amethyst::assets::Progress;
+use crate::tiles::TileAssets;
 
 fn load_sprite_sheet(
     world: &mut World,
@@ -42,7 +45,7 @@ fn load_sprite_sheet(
 
 #[derive(Default)]
 pub struct FirstLoad {
-    progress_counter: ProgressCounter,
+//    progress_counter: ProgressCounter,
 }
 
 impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad {
@@ -51,11 +54,13 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad 
 
         trace!("Changed state to first_load");
 
+        let mut progress = ProgressCounter::new();
+
         let default_sprite_sheet = load_sprite_sheet(
             world,
             "spritesheets/tileset_16x16.png",
             "spritesheets/tileset_16x16.ron",
-            &mut self.progress_counter,
+            &mut progress,
         );
 
         // How do we pass this along?
@@ -75,9 +80,15 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad 
             .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>(
             );
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
+        world.register_tile_comp::<crate::render::ChunkRender, (i32, i32)>();
+        //        world.register_tile_comp::<crate::render::ChunkRender, (i32, i32)>();
+        //        world.register::<crate::tiles::TileAssets>();
+//                *world.res.fetch_mut::<crate::tiles::TileAssets>() = TileAssets(Vec::new());
+        world.add_resource(TileAssets(Vec::new()));
+        world.add_resource(progress);
 
         world.register_tile_comp::<crate::components::Impassable, crate::tiles::TileId>();
-        info!("Finished first load");
+        info!("Finished initial asset load");
     }
 
     fn handle_event(
@@ -89,10 +100,13 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad 
         Trans::None
     }
 
-    fn update(
-        &mut self,
-        _: StateData<'_, GameDispatchers<'_, '_>>,
-    ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
-        Trans::Switch(Box::new(Level))
+    fn update(&mut self, _: StateData<'_, GameDispatchers<'_, '_>>)
+        -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
+//        if self.progress_counter.is_complete() {
+//            info!("Completed asset load");
+            Trans::Switch(Box::new(Level))
+//        } else {
+//            Trans::None
+//        }
     }
 }

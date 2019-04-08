@@ -1,6 +1,8 @@
 use std::fs::{DirBuilder, File};
+#[cfg(not(feature = "no-save"))]
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::sync::Once;
 
 use amethyst::core::math::Vector2;
 use amethyst::ecs::prelude::*;
@@ -9,9 +11,9 @@ use derivative::Derivative;
 use hashbrown::HashMap;
 use log::{error, info, warn};
 use ron::de::from_reader;
-#[cfg(not(feature = "pretty-save"))]
+#[cfg(all(not(feature = "pretty-save"), not(feature = "no-save")))]
 use ron::ser::to_string;
-#[cfg(feature = "pretty-save")]
+#[cfg(all(not(feature = "pretty-save"), not(feature = "no-save")))]
 use ron::ser::{to_string_pretty, PrettyConfig};
 use serde::{Deserialize, Serialize};
 use shred::DynamicSystemData;
@@ -19,7 +21,10 @@ use shred_derive::SystemData;
 use specs_derive::Component;
 
 use crate::components::PlayerPosition;
+use crate::render::{compile_chunk, WriteChunkRender};
 use crate::tiles::TileId;
+use crate::tiles::{TileAsset, TileAssets};
+use amethyst::assets::ProgressCounter;
 
 #[derive(Serialize, Deserialize, Derivative)]
 #[derivative(Debug)]
@@ -152,7 +157,13 @@ impl WorldChunks {
         }
     }
 
-    fn reload_chunks<P: AsRef<Path>>(&mut self, player: Vector2<f32>, save_path: &P) {
+    fn reload_chunks<P: AsRef<Path>>(
+        &mut self,
+        player: Vector2<f32>,
+        save_path: &P,
+        assets: &[TileAsset],
+        renders: &mut WriteChunkRender,
+    ) {
         info!("Performing chunk refresh");
         // TODO add to config
         const CHUNK_RADIUS: i32 = 4;
@@ -168,8 +179,10 @@ impl WorldChunks {
             for y in player_chunk_y - CHUNK_RADIUS..player_chunk_y + CHUNK_RADIUS {
                 let chunk_pos = (x, y);
                 if !self.inner.contains_key(&chunk_pos) {
-                    self.inner
-                        .insert(chunk_pos, Chunk::load(save_path, chunk_pos));
+                    log::debug!("Creating and adding chunk!");
+                    let chunk = Chunk::load(save_path, chunk_pos);
+                    renders.insert(chunk.pos, compile_chunk(&chunk, assets));
+                    self.inner.insert(chunk_pos, chunk);
                 }
             }
         }
@@ -180,6 +193,9 @@ impl WorldChunks {
 pub struct ChunkSystemData<'a> {
     chunks: WriteExpect<'a, WorldChunks>,
     player: ReadExpect<'a, PlayerPosition>,
+    tile_assets: ReadExpect<'a, TileAssets>,
+    chunk_renders: WriteChunkRender<'a>,
+    asset_progress: ReadExpect<'a, ProgressCounter>,
 }
 
 #[derive(Debug)]
@@ -193,11 +209,14 @@ impl<P: AsRef<Path>> ChunkLoadSystem<P> {
     pub fn new(path: P) -> Self {
         ChunkLoadSystem {
             player_previous: Vector2::new(0.0, 0.0),
-            player_offset: Vector2::new(200.0, 200.0),
+            player_offset: Vector2::new(2000.0, 2000.0),
             save_path: path,
         }
     }
 }
+
+use std::sync::atomic::Ordering;
+use crate::events::SHEET_INIT;
 
 impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
     type SystemData = ChunkSystemData<'a>;
@@ -207,13 +226,21 @@ impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
         self.player_previous = data.player.0;
 
         // Don't attempt to reload if there hasn't been a notable change in chunks
-        if self.player_offset.x.abs() < 16.0 && self.player_offset.y.abs() < 16.0 {
+        if self.player_offset.x.abs() < 16.0 && self.player_offset.y.abs() < 16.0 || !unsafe {SHEET_INIT.load(Ordering::SeqCst)} {
             return;
         }
 
+//        use log::debug;
+//        debug!("Complete: {:?} {}/{}", data.asset_progress.complete(), data.asset_progress.num_assets(), data.asset_progress.num_finished());
+
         // Reset offset
         self.player_offset = Vector2::new(0.0, 0.0);
-        data.chunks.reload_chunks(data.player.0, &self.save_path)
+        data.chunks.reload_chunks(
+            data.player.0,
+            &self.save_path,
+            &data.tile_assets.0,
+            &mut data.chunk_renders,
+        );
     }
 
     fn setup(&mut self, res: &mut Resources) {

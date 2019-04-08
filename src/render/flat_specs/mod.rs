@@ -39,9 +39,8 @@ attr!(DirY, "dir_y", [f32; 2], SurfaceType::R32_G32);
 attr!(Pos, "pos", [f32; 2], SurfaceType::R32_G32);
 attr!(OffsetU, "u_offset", [f32; 2], SurfaceType::R32_G32);
 attr!(OffsetV, "v_offset", [f32; 2], SurfaceType::R32_G32);
-attr!(Depth, "depth", f32, SurfaceType::R32);
 
-attr!(0, DirX, DirY, Pos, OffsetU, OffsetV, Depth, Color);
+attr!(0, DirX, DirY, Pos, OffsetU, OffsetV);
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
@@ -51,8 +50,6 @@ pub struct SpriteInstance {
     pub pos: [f32; 2],
     pub u_offset: [f32; 2],
     pub v_offset: [f32; 2],
-    pub depth: f32,
-    pub color: [f32; 4],
 }
 
 unsafe impl Pod for SpriteInstance {}
@@ -64,14 +61,12 @@ impl VertexFormat for SpriteInstance {
         (Pos::NAME, <Self as With<Pos>>::FORMAT),
         (OffsetU::NAME, <Self as With<OffsetU>>::FORMAT),
         (OffsetV::NAME, <Self as With<OffsetV>>::FORMAT),
-        (Depth::NAME, <Self as With<Depth>>::FORMAT),
-        (Color::NAME, <Self as With<Color>>::FORMAT),
     ];
 }
 
 impl SpriteInstance {
     pub fn attributes() -> Attributes<'static> {
-        <Self as Query<(DirX, DirY, Pos, OffsetU, OffsetV, Depth, Color)>>::QUERIED_ATTRIBUTES
+        <Self as Query<(DirX, DirY, Pos, OffsetU, OffsetV)>>::QUERIED_ATTRIBUTES
     }
 }
 

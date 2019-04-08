@@ -4,13 +4,9 @@
 
 uniform sampler2D albedo;
 
-in VertexData {
-    vec2 tex_uv;
-    vec4 color;
-} vertex;
-
+in vec2 tex_uv;
 out vec4 color;
 
 void main() {
-    color = texture(albedo, vertex.tex_uv) * vertex.color;
+    color = texture(albedo, tex_uv);
 }

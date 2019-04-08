@@ -73,7 +73,7 @@ impl TileRenderPass {
     }
 
     fn attributes() -> Attributes<'static> {
-        <SpriteInstance as Query<(DirX, DirY, Pos, OffsetU, OffsetV, Depth, Color)>>::QUERIED_ATTRIBUTES
+        <SpriteInstance as Query<(DirX, DirY, Pos, OffsetU, OffsetV)>>::QUERIED_ATTRIBUTES
     }
 }
 
@@ -110,10 +110,11 @@ impl Pass for TileRenderPass {
             )
             .with_raw_vertex_buffer(Self::attributes(), SpriteInstance::size() as ElemStride, 1);
         setup_textures(&mut builder);
-        match self.transparency {
-            Some((mask, blend, depth)) => builder.with_blended_output("color", mask, blend, depth),
-            None => builder.with_output("color", Some(DepthMode::LessEqualWrite)),
-        };
+//        match self.transparency {
+//            Some((mask, blend, depth)) => builder.with_blended_output("color", mask, blend, depth),
+//            None => builder.with_output("color", Some(DepthMode::LessEqualWrite)),
+//        };
+        builder.with_output("color", None);
 
         self.map_transform = Some(GlobalTransform::default());
 
@@ -329,11 +330,11 @@ impl TextureBatch {
                 sprite_data.tex_coords.right,
                 sprite_data.tex_coords.bottom,
                 sprite_data.tex_coords.top,
-                pos.z,
-                rgba.0,
-                rgba.1,
-                rgba.2,
-                rgba.3,
+//                pos.z,
+//                rgba.0,
+//                rgba.1,
+//                rgba.2,
+//                rgba.3,
             ]);
             num_instances += 1;
 

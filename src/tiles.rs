@@ -13,13 +13,16 @@ use amethyst::renderer::Rgba;
 use amethyst::renderer::Sprite;
 use amethyst::renderer::Texture;
 
-#[derive(Component, Clone, Debug)]
-#[storage(DenseVecStorage)]
+#[derive(Clone, Debug)]
 pub struct TileAsset {
     pub texture: Handle<Texture>,
     pub sprite: Sprite,
     pub tint: Rgba,
 }
+
+#[derive(Component, Debug, Default)]
+#[storage(DenseVecStorage)]
+pub struct TileAssets(pub Vec<TileAsset>);
 
 #[derive(Component, Clone, Debug, Default)]
 #[storage(DenseVecStorage)]

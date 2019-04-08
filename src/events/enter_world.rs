@@ -1,16 +1,25 @@
 use amethyst::{
+    assets::AssetStorage,
+    assets::ProgressCounter,
+    assets::Progress,
+    assets::Tracker,
     core::components::{GlobalTransform, Transform},
-    ecs::{Builder, Entity, SystemData, World},
+    ecs::{Builder, Entity, Read, SystemData, World, WriteExpect},
     renderer::{Camera, Projection, Rgba, SpriteRender, SpriteSheetHandle, Transparent},
     StateData, StateEvent, Trans,
 };
 use log::info;
+use std::ops::DerefMut;
 
 use crate::components::{Actionable, FlaggedSpriteRender, Player, TilePosition, TimeAvailable};
 use crate::settings;
 use crate::tiles::TileEntities;
+use crate::tiles::{TileAsset, TileAssets};
 use crate::tiles::{Tiles, WriteTiles};
 use crate::GameDispatchers;
+use amethyst::renderer::SpriteSheet;
+use log::error;
+use shred::ReadExpect;
 
 fn init_player(
     world: &mut World,
@@ -86,6 +95,7 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
             let mut sprites: WriteTiles<FlaggedSpriteRender> = SystemData::fetch(&world.res);
             let mut transforms: WriteTiles<GlobalTransform> = SystemData::fetch(&world.res);
             let mut tile_entities_map: WriteTiles<TileEntities> = SystemData::fetch(&world.res);
+
             //let tile_rgb: WriteTiles<Rgba> = SystemData::fetch(&world.res);
             for tile_id in tiles.iter_all() {
                 tile_entities_map.insert_default(tile_id);
@@ -153,7 +163,42 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
         &mut self,
         state: StateData<'_, GameDispatchers<'_, '_>>,
     ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
+        {
+//            let mut progress: WriteExpect<ProgressCounter> = SystemData::fetch(&state.world.res);
+
+            if !unsafe {SHEET_INIT.load(Ordering::SeqCst)} {
+                let context = state.world.res.fetch::<settings::Context>().clone();
+                let map_sprite_sheet_handle = context.as_ref().unwrap();
+
+                let sheet = state.world.read_resource::<AssetStorage<SpriteSheet>>();
+                match sheet.get(map_sprite_sheet_handle) {
+                    Some(sheet) => {
+                        let mut tiles = state.world.write_resource::<TileAssets>();
+                        for sprite in sheet.sprites.iter() {
+                            tiles.0.push(TileAsset {
+                                texture: sheet.texture.clone(),
+                                sprite: sprite.clone(),
+                                tint: Rgba::WHITE,
+                            });
+                        }
+//                        log::debug!("Everything is working well!");
+
+                        unsafe {SHEET_INIT.store(true, Ordering::SeqCst);}
+//                        let tracker = Box::new(progress.create_tracker());
+//                        tracker.success();
+                    },
+                    None => (),
+                }
+            }
+        }
+
         state.data.update(state.world);
         Trans::None
     }
 }
+
+
+
+use std::sync::atomic::AtomicBool;
+use std::sync::atomic::Ordering;
+pub static mut SHEET_INIT: AtomicBool = AtomicBool::new(false);

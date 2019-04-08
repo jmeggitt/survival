@@ -5,13 +5,13 @@ authors = ["Walter Pearce <jaynus@gmail.com>"]
 edition = "2018"
 
 [features]
-default = ["req"]
-req = ["parking_lot/nightly"]
-pretty-save = ["req"]
-no-save = ["req"]
+default = ["parking_lot/nightly"]
+pretty-save = ["parking_lot/nightly"]
+no-save = ["parking_lot/nightly"]
 
 [dependencies]
 amethyst = { path = "dep/amethyst", features = ["nightly", "saveload"] }
+#amethyst = { version = "0.10.0", git = "https://github.com/jaynus/amethyst.git", features = ["nightly", "saveload"] }
 amethyst-imgui = { path = "dep/amethyst-imgui" }
 specs-derive = "*"
 shred-derive = "*"

@@ -12,8 +12,8 @@ pub use self::interleaved::TileRenderPass as Pass;
 mod interleaved;
 mod util;
 
-static VERT_SRC: &[u8] = include_bytes!("sprite_v.glsl");
-static FRAG_SRC: &[u8] = include_bytes!("sprite_f.glsl");
+pub static VERT_SRC: &[u8] = include_bytes!("sprite_v.glsl");
+pub static FRAG_SRC: &[u8] = include_bytes!("sprite_f.glsl");
 
 #[derive(Clone, Debug)]
 enum DirX {}
@@ -65,26 +65,14 @@ impl Attribute for OffsetV {
     type Repr = [f32; 2];
 }
 
-#[derive(Clone, Debug)]
-enum Depth {}
-
-impl Attribute for Depth {
-    const NAME: &'static str = "depth";
-    const FORMAT: Format = Format(SurfaceType::R32, ChannelType::Float);
-    const SIZE: u32 = 4;
-    type Repr = f32;
-}
-
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
-struct SpriteInstance {
+pub struct SpriteInstance {
     pub dir_x: [f32; 2],
     pub dir_y: [f32; 2],
     pub pos: [f32; 2],
     pub u_offset: [f32; 2],
     pub v_offset: [f32; 2],
-    pub depth: f32,
-    pub color: [f32; 4],
 }
 
 unsafe impl Pod for SpriteInstance {}
@@ -96,8 +84,6 @@ impl VertexFormat for SpriteInstance {
         (Pos::NAME, <Self as With<Pos>>::FORMAT),
         (OffsetU::NAME, <Self as With<OffsetU>>::FORMAT),
         (OffsetV::NAME, <Self as With<OffsetV>>::FORMAT),
-        (Depth::NAME, <Self as With<Depth>>::FORMAT),
-        (Color::NAME, <Self as With<Color>>::FORMAT),
     ];
 }
 
@@ -136,16 +122,9 @@ impl With<OffsetV> for SpriteInstance {
     };
 }
 
-impl With<Depth> for SpriteInstance {
-    const FORMAT: AttributeFormat = Element {
-        offset: DirX::SIZE + DirY::SIZE + Pos::SIZE + OffsetU::SIZE + OffsetV::SIZE,
-        format: Depth::FORMAT,
-    };
-}
-
-impl With<Color> for SpriteInstance {
-    const FORMAT: AttributeFormat = Element {
-        offset: DirX::SIZE + DirY::SIZE + Pos::SIZE + OffsetU::SIZE + OffsetV::SIZE + Depth::SIZE,
-        format: Color::FORMAT,
-    };
+use amethyst::renderer::Query;
+impl SpriteInstance {
+    pub fn attributes() -> Attributes<'static> {
+        <Self as Query<(DirX, DirY, Pos, OffsetU, OffsetV)>>::QUERIED_ATTRIBUTES
+    }
 }

@@ -9,19 +9,12 @@ layout (std140) uniform ViewArgs {
 in vec2 dir_x;
 in vec2 dir_y;
 in vec2 pos;
-in float depth;
 
 // Texture quad.
 in vec2 u_offset;
 in vec2 v_offset;
 
-in vec4 color;
-
-
-out VertexData {
-    vec2 tex_uv;
-    vec4 color;
-} vertex;
+out vec2 tex_uv;
 
 const vec2 positions[6] = vec2[](
     // First triangle
@@ -37,7 +30,7 @@ const vec2 positions[6] = vec2[](
 
 // coords = 0.0 to 1.0 texture coordinates
 vec2 texture_coords(vec2 coords, vec2 u, vec2 v) {
-    return vec2(mix(u.x, u.y, coords.x+0.5), mix(v.x, v.y, coords.y+0.5));
+    return vec2(mix(u.x, u.y, coords.x + 0.5), mix(v.x, v.y, coords.y + 0.5));
 }
 
 void main() {
@@ -45,8 +38,7 @@ void main() {
     float tex_v = positions[gl_VertexID][1];
 
     vec2 uv = pos + tex_u * dir_x + tex_v * dir_y;
-    vertex.tex_uv = texture_coords(vec2(tex_u, tex_v), u_offset, v_offset);
-    vertex.color = color;
-    vec4 vertex = vec4(uv, depth, 1.0);
+    tex_uv = texture_coords(vec2(tex_u, tex_v), u_offset, v_offset);
+    vec4 vertex = vec4(uv, 0.0, 1.0);
     gl_Position = proj * view * vertex;
 }

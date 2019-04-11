@@ -22,7 +22,7 @@ pub struct SpriteAnimation {
     desired_loop: usize,
     index: usize,
     loops: Vec<FrameLoop>,
-    last_transition: SystemTime
+    last_transition: SystemTime,
 }
 
 impl SpriteAnimation {
@@ -68,7 +68,6 @@ pub struct KeyFrame {
 }
 
 impl KeyFrame {
-
     pub fn new(sprite: Sprite, texture: Handle<Texture>) -> Self {
         Self {
             sprite,
@@ -86,7 +85,9 @@ impl KeyFrame {
     pub fn with_transition(&mut self, loop_index: usize, index: usize) -> &mut Self {
         match &mut self.transition {
             FrameTransition::CanMove(moves) => moves.push((loop_index, index)),
-            FrameTransition::MustMove(_, _) => warn!("Attempted to add extra transition to must move keyframe!"),
+            FrameTransition::MustMove(_, _) => {
+                warn!("Attempted to add extra transition to must move keyframe!")
+            }
         }
         self
     }
@@ -95,7 +96,7 @@ impl KeyFrame {
         if let FrameTransition::CanMove(x) = &self.transition {
             if x.is_empty() {
                 self.transition = FrameTransition::MustMove(loop_index, index);
-                return self
+                return self;
             }
         }
         warn!("Attempted to add extra must move transition to keyframe!");

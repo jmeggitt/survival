@@ -1,5 +1,3 @@
-// TODO: Needs documentation.
-
 #version 150 core
 
 uniform sampler2D albedo;

@@ -195,25 +195,6 @@ impl AssetLoader {
     pub fn unload<T>(path: &str, ali: &mut AssetLoaderInternal<T>) {
         ali.assets.remove(path);
     }
-
-    /*pub fn load_from_extension<T>(&mut self,path: &str,ali: &mut AssetLoaderInternal<T>, storage: &mut AssetStorage<T>, loader: Loader) -> Option<Handle<T>> where T: Asset{
-        let ext = AssetLoader::extension_from_path(path);
-        match ext{
-            "obj" => Some(self.load::<Mesh,ObjFormat>(path,ObjFormat,ali,storage,loader)),
-            _ => None,
-        }
-    }
-    pub fn auto_load_from_extension(&mut self,path: &str,res: Resources){
-        let ext = AssetLoader::extension_from_path(path);
-        match ext{
-            "obj" => Some(self.load_from_extension::<Mesh>(ext,res.fetch_mut::<AssetLoaderInternal<Mesh>>(),res.fetch_mut::<AssetStorage<Mesh>>(),res.fetch())),
-            _ => None,
-        };
-    }*/
-
-    /*pub fn extension_from_path(path: &str) -> &str{
-        path.split(".").as_slice().last().clone()
-    }*/
 }
 
 pub struct AssetLoaderInternal<T> {
@@ -283,20 +264,4 @@ mod test {
             )
         )
     }
-
-    /*
-    #[test]
-    fn asset_loader_resolve_path_override_all() {
-        let asset_loader = load_asset_loader();
-        assert_eq!(
-            asset_loader.resolve_path("config/ovall"),
-            Some(
-                format!(
-                    "{}/tests/assets/mod2/config/ovall",
-                    env!("CARGO_MANIFEST_DIR")
-                )
-                    .to_string()
-            )
-        )
-    }*/
 }

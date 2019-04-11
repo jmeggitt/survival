@@ -21,6 +21,7 @@ pub use game_data::{GameDispatchers, SurvivalDataBuilder};
 #[allow(dead_code)]
 pub mod mapgen;
 //mod visibility;
+mod entity;
 
 pub mod assets;
 pub mod components;

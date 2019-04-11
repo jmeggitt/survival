@@ -1,8 +1,6 @@
 use crate::chunk::Chunk;
 use crate::specs_static::{Id, Storage};
 use amethyst::assets::Handle;
-use amethyst::core::components::Transform;
-use amethyst::core::math::Vector4;
 use amethyst::ecs::prelude::*;
 use amethyst::ecs::{Component, Write};
 use amethyst::renderer::Texture;

@@ -44,7 +44,7 @@ attr!(0, Pos, OffsetU, OffsetV);
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SpriteInstance {
-//    pub dest: [f32; 2],
+    //    pub dest: [f32; 2],
     pub pos: [f32; 2],
     pub u_offset: [f32; 2],
     pub v_offset: [f32; 2],
@@ -54,7 +54,7 @@ unsafe impl Pod for SpriteInstance {}
 
 impl VertexFormat for SpriteInstance {
     const ATTRIBUTES: Attributes<'static> = &[
-//        (Dest::NAME, <Self as With<Dest>>::FORMAT),
+        //        (Dest::NAME, <Self as With<Dest>>::FORMAT),
         (Pos::NAME, <Self as With<Pos>>::FORMAT),
         (OffsetU::NAME, <Self as With<OffsetU>>::FORMAT),
         (OffsetV::NAME, <Self as With<OffsetV>>::FORMAT),

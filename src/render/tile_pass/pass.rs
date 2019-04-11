@@ -12,13 +12,12 @@ use amethyst::Error;
 use gfx::buffer::Role::Vertex;
 use gfx::memory::{Bind, Typed};
 use gfx::pso::buffer::ElemStride;
-use glsl_layout::{Uniform, float};
+use glsl_layout::Uniform;
 use log::warn;
 use shred_derive::SystemData;
 
 use super::specs::{SpriteInstance, TextureOffsetPod, ViewArgs, FRAG_SRC, VERT_SRC};
 use super::WriteChunkRender;
-use crate::utils::TILE_SIZE;
 
 type GraphicsSlice = gfx::Slice<Resources>;
 

@@ -1,4 +1,4 @@
-#![feature(custom_attribute)]
+#![feature(custom_attribute, drain_filter)]
 // Honestly, I don't really care about this clippy requirement and its a pain to have to fix all
 // instances.
 #![allow(clippy::cast_lossless)]
@@ -77,6 +77,11 @@ pub fn run() -> amethyst::Result<()> {
         .with_level(
             ChunkLoadSystem::new(root.join("saves")),
             "chunk_loader",
+            &[],
+        )
+        .with_level(
+            systems::entity_chunk::EntityChunkSystem::new(),
+            "entity_chunk",
             &[],
         )
         .with_core_bundle(render_bundle)?;

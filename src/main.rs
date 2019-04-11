@@ -1,7 +1,9 @@
 #![feature(custom_attribute)]
+
+use std::env;
+
 use amethyst::LoggerConfig;
 use log::LevelFilter;
-use std::env;
 
 fn main() -> amethyst::Result<()> {
     env::set_var("RUST_BACKTRACE", "1");

@@ -10,9 +10,9 @@ pub trait EventSystem<'a> {
 }
 
 impl<'a, E, A, B> EventSystem<'a> for (A, B)
-where
-    A: EventSystem<'a, Event = E>,
-    B: EventSystem<'a, Event = E>,
+    where
+        A: EventSystem<'a, Event=E>,
+        B: EventSystem<'a, Event=E>,
 {
     type SystemData = (A::SystemData, B::SystemData);
     type Event = E;
@@ -31,10 +31,10 @@ where
 }
 
 impl<'a, E, A, B, C> EventSystem<'a> for (A, B, C)
-where
-    A: EventSystem<'a, Event = E>,
-    B: EventSystem<'a, Event = E>,
-    C: EventSystem<'a, Event = E>,
+    where
+        A: EventSystem<'a, Event=E>,
+        B: EventSystem<'a, Event=E>,
+        C: EventSystem<'a, Event=E>,
 {
     type SystemData = (A::SystemData, B::SystemData, C::SystemData);
     type Event = E;
@@ -58,11 +58,11 @@ where
 }
 
 impl<'a, E, A, B, C, D> EventSystem<'a> for (A, B, C, D)
-where
-    A: EventSystem<'a, Event = E>,
-    B: EventSystem<'a, Event = E>,
-    C: EventSystem<'a, Event = E>,
-    D: EventSystem<'a, Event = E>,
+    where
+        A: EventSystem<'a, Event=E>,
+        B: EventSystem<'a, Event=E>,
+        C: EventSystem<'a, Event=E>,
+        D: EventSystem<'a, Event=E>,
 {
     type SystemData = (A::SystemData, B::SystemData, C::SystemData, D::SystemData);
     type Event = E;
@@ -92,15 +92,15 @@ where
 }
 
 pub struct ReifiedEventSystem<'a, T>
-where
-    T: EventSystem<'a>,
+    where
+        T: EventSystem<'a>,
 {
     data: T::SystemData,
 }
 
 impl<'a, T> ReifiedEventSystem<'a, T>
-where
-    T: EventSystem<'a>,
+    where
+        T: EventSystem<'a>,
 {
     pub fn run(&self, event: &mut T::Event) -> bool {
         T::run(&self.data, event)
@@ -108,8 +108,8 @@ where
 }
 
 impl<'a, T> SystemData<'a> for ReifiedEventSystem<'a, T>
-where
-    T: EventSystem<'a>,
+    where
+        T: EventSystem<'a>,
 {
     fn setup(res: &mut Resources) {
         T::SystemData::setup(&mut *res);

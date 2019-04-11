@@ -100,7 +100,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         *transform = target;
 
                         if players.get(entity).is_some() {
-                            player_position.0 = Vector2::new(0.0, 0.0);
+                            player_position.0 = transform.translation().xy() / 16.0;
                         }
                     }
                 }

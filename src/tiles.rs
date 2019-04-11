@@ -1,5 +1,9 @@
 use std::collections::HashSet;
 
+use amethyst::assets::Handle;
+use amethyst::renderer::Rgba;
+use amethyst::renderer::Sprite;
+use amethyst::renderer::Texture;
 use amethyst::{
     core::math::{Vector2, Vector3, Vector4},
     ecs::{Component, DenseVecStorage, Entity, Read, Write},
@@ -8,10 +12,6 @@ use serde::{Deserialize, Serialize};
 use specs_derive::Component;
 
 use crate::specs_static::{Id, Storage};
-use amethyst::assets::Handle;
-use amethyst::renderer::Rgba;
-use amethyst::renderer::Sprite;
-use amethyst::renderer::Texture;
 
 #[derive(Clone, Debug)]
 pub struct TileAsset {

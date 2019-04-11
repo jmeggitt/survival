@@ -1,22 +1,21 @@
-use std::mem::size_of;
-
 use amethyst::assets::AssetStorage;
-use amethyst::core::math::Matrix4;
 use amethyst::core::GlobalTransform;
-use amethyst::ecs::prelude::*;
+use amethyst::core::math::Matrix4;
 use amethyst::ecs::{Join, ReadStorage};
-use amethyst::renderer::pipe::pass::{Pass, PassData};
-use amethyst::renderer::Camera;
-use amethyst::renderer::{Effect, Encoder, Factory, NewEffect, Resources, Texture, VertexFormat};
+use amethyst::ecs::prelude::*;
 use amethyst::Error;
+use amethyst::renderer::{Effect, Encoder, Factory, NewEffect, Resources, Texture, VertexFormat};
+use amethyst::renderer::Camera;
+use amethyst::renderer::pipe::pass::{Pass, PassData};
 use gfx::buffer::Role::Vertex;
 use gfx::memory::{Bind, Typed};
 use gfx::pso::buffer::ElemStride;
 use glsl_layout::Uniform;
 use log::warn;
 use shred_derive::SystemData;
+use std::mem::size_of;
 
-use super::specs::{SpriteInstance, TextureOffsetPod, ViewArgs, FRAG_SRC, VERT_SRC};
+use super::specs::{FRAG_SRC, SpriteInstance, TextureOffsetPod, VERT_SRC, ViewArgs};
 use super::WriteChunkRender;
 
 type GraphicsSlice = gfx::Slice<Resources>;

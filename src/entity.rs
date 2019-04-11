@@ -5,17 +5,30 @@ use amethyst::assets::Handle;
 use amethyst::core::math::Vector2;
 use amethyst::renderer::Sprite;
 use amethyst::renderer::Texture;
+use derivative::Derivative;
 use log::warn;
+use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Derivative)]
+#[derivative(Debug)]
 pub struct WorldEntity {
+    #[serde(skip)]
+    #[derivative(Debug = "ignore")]
     display: EntityGraphics,
-    pos: Vector2<f64>,
+    pub pos: Vector2<f64>,
 }
 
 pub enum EntityGraphics {
     Fixed(Handle<Texture>, Sprite),
     Animate(SpriteAnimation),
     None,
+}
+
+// TODO make serializing work for entities
+impl Default for EntityGraphics {
+    fn default() -> Self {
+        unimplemented!()
+    }
 }
 
 const DEFAULT_FRAME_TIME: Duration = Duration::from_millis(400);

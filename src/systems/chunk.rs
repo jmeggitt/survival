@@ -2,7 +2,9 @@ use std::fs::{DirBuilder, File};
 #[cfg(not(feature = "no-save"))]
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::Ordering;
 
+use amethyst::assets::ProgressCounter;
 use amethyst::core::math::Vector2;
 use amethyst::ecs::prelude::*;
 use amethyst::ecs::{ReadExpect, System, WriteExpect};
@@ -21,10 +23,10 @@ use specs_derive::Component;
 
 use crate::components::PlayerPosition;
 use crate::entity::WorldEntity;
+use crate::events::SHEET_INIT;
 use crate::render::tile_pass::{compile_chunk, WriteChunkRender};
 use crate::tiles::TileId;
 use crate::tiles::{TileAsset, TileAssets};
-use amethyst::assets::ProgressCounter;
 
 #[derive(Serialize, Deserialize, Derivative)]
 #[derivative(Debug)]
@@ -38,8 +40,7 @@ pub struct Chunk {
     path: PathBuf,
     #[serde(skip)]
     requires_save: bool,
-    //    #[serde(skip)]
-    //    pub entities: WorldEntity,
+    pub entities: Vec<WorldEntity>,
 }
 
 impl Chunk {
@@ -139,6 +140,7 @@ impl Chunk {
                 tiles: Chunk::generate(pos),
                 path,
                 requires_save: true,
+                entities: Vec::new(),
             }
         }
     }
@@ -160,7 +162,7 @@ impl Drop for Chunk {
 
 #[derive(Component)]
 pub struct WorldChunks {
-    inner: HashMap<(i32, i32), Chunk>,
+    pub inner: HashMap<(i32, i32), Chunk>,
 }
 
 impl WorldChunks {
@@ -229,9 +231,6 @@ impl<P: AsRef<Path>> ChunkLoadSystem<P> {
         }
     }
 }
-
-use crate::events::SHEET_INIT;
-use std::sync::atomic::Ordering;
 
 impl<'a, P: AsRef<Path>> System<'a> for ChunkLoadSystem<P> {
     type SystemData = ChunkSystemData<'a>;

@@ -8,6 +8,7 @@ pub use wearing::System as WearingSystem;
 
 pub mod chunk;
 pub mod dropped_item;
+pub mod entity_chunk;
 pub mod handle_pickup;
 pub mod input;
 pub mod movement;

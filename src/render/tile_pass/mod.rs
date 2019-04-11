@@ -1,5 +1,3 @@
-use crate::specs_static::{Id, Storage};
-use crate::systems::chunk::Chunk;
 use amethyst::assets::Handle;
 use amethyst::ecs::prelude::*;
 use amethyst::ecs::{Component, Write};
@@ -7,13 +5,15 @@ use amethyst::renderer::Texture;
 use hashbrown::HashMap;
 use specs_derive::Component;
 
+pub use pass::TileRenderPass;
+
+use crate::specs_static::{Id, Storage};
+use crate::systems::chunk::Chunk;
 use crate::tiles::TileAsset;
 use crate::utils::TILE_SIZE;
 
 mod pass;
 mod specs;
-
-pub use pass::TileRenderPass;
 
 #[derive(Debug)]
 pub struct TextureUsage {

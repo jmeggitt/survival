@@ -35,12 +35,6 @@ impl<'s> amethyst::ecs::System<'s> for System {
         WriteExpect<'s, PlayerPosition>,
     );
 
-    fn setup(&mut self, res: &mut Resources) {
-        Self::SystemData::setup(res);
-
-        self.action_reader.setup(res);
-    }
-
     fn run(
         &mut self,
         (
@@ -70,18 +64,20 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         // And finally, move one tile in the given direction
                         let mut target = transform.clone();
 
+                        const SPEED: f32 = 6.0;
+
                         match direction {
                             Direction::N => {
-                                target.move_up(2.0);
+                                target.move_up(SPEED);
                             }
                             Direction::S => {
-                                target.move_down(2.0);
+                                target.move_down(SPEED);
                             }
                             Direction::E => {
-                                target.move_right(2.0);
+                                target.move_right(SPEED);
                             }
                             Direction::W => {
-                                target.move_left(2.0);
+                                target.move_left(SPEED);
                             }
                             _ => error!("Unsupported direction!"),
                         }
@@ -110,5 +106,11 @@ impl<'s> amethyst::ecs::System<'s> for System {
                 }
             }
         }
+    }
+
+    fn setup(&mut self, res: &mut Resources) {
+        Self::SystemData::setup(res);
+
+        self.action_reader.setup(res);
     }
 }

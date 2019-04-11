@@ -18,10 +18,9 @@ use actions::PlayerInputAction;
 use chunk::ChunkLoadSystem;
 pub use game_data::{GameDispatchers, SurvivalDataBuilder};
 
-//use crate::render::tiles::Pass;
-
 #[allow(dead_code)]
 pub mod mapgen;
+//mod visibility;
 
 pub mod assets;
 pub mod components;
@@ -53,8 +52,7 @@ pub fn run() -> amethyst::Result<()> {
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
             .clear_target([1.0; 4], 1.0)
-            //            .with_pass(Pass::new())
-            .with_pass(crate::render::TileRenderPass)
+            .with_pass(crate::render::tile_pass::TileRenderPass)
             .with_pass(DrawFlat2D::new())
             .with_pass(amethyst::ui::DrawUi::new())
             .with_pass(amethyst_imgui::DrawUi::default().docking()),

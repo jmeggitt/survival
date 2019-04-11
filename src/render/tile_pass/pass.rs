@@ -1,11 +1,9 @@
 use std::mem::size_of;
 
-use amethyst::assets::{AssetStorage, Handle};
-use amethyst::core::components::Transform;
-use amethyst::core::math::{Matrix4, Vector4};
+use amethyst::assets::AssetStorage;
+use amethyst::core::math::Matrix4;
 use amethyst::core::GlobalTransform;
 use amethyst::ecs::prelude::*;
-use amethyst::ecs::{Component, Write};
 use amethyst::ecs::{Join, ReadStorage};
 use amethyst::renderer::pipe::pass::{Pass, PassData};
 use amethyst::renderer::Camera;
@@ -14,111 +12,15 @@ use amethyst::Error;
 use gfx::buffer::Role::Vertex;
 use gfx::memory::{Bind, Typed};
 use gfx::pso::buffer::ElemStride;
-use glsl_layout::Uniform;
-use hashbrown::HashMap;
+use glsl_layout::{Uniform, float};
 use log::warn;
 use shred_derive::SystemData;
-use specs_derive::Component;
 
-use crate::chunk::Chunk;
-use crate::render::flat_specs::{SpriteInstance, FRAG_SRC, VERT_SRC};
-use crate::specs_static::{Id, Storage};
-use crate::tiles::TileAsset;
+use super::specs::{SpriteInstance, TextureOffsetPod, ViewArgs, FRAG_SRC, VERT_SRC};
+use super::WriteChunkRender;
 use crate::utils::TILE_SIZE;
 
-use super::flat_specs::{TextureOffsetPod, ViewArgs};
-
 type GraphicsSlice = gfx::Slice<Resources>;
-
-#[derive(Debug)]
-pub struct TextureUsage {
-    texture: Handle<Texture>,
-    data: Vec<f32>,
-    len: u32,
-}
-
-pub fn compile_chunk(chunk: &Chunk, tile_specs: &[TileAsset]) -> ChunkRender {
-    // Compile slice
-    let mut texture_map: HashMap<usize, TextureUsage> = HashMap::new();
-    for x in 0..16 {
-        for y in 0..16 {
-            let texture_id = chunk.tiles[x][y].0 as usize;
-            let asset = &tile_specs[texture_id];
-            let (chunk_x, chunk_y) = chunk.pos;
-
-            // TODO: Use config for tile scale
-            let mut transform = Transform::default();
-            transform.set_translation_xyz(
-                (x as f32 * TILE_SIZE + 16. * chunk_x as f32) * 8.,
-                (y as f32 * TILE_SIZE + 16. * chunk_y as f32) * 8.,
-                0.,
-            );
-            transform.set_scale(8., 8., 8.);
-            let transform = transform.matrix();
-
-            let dir_x = transform.column(0) * TILE_SIZE;
-            let dir_y = transform.column(1) * TILE_SIZE;
-
-            let pos = transform
-                * Vector4::new(-asset.sprite.offsets[0], -asset.sprite.offsets[1], 0.0, 1.0);
-
-            let slice = [
-                dir_x.x,
-                dir_x.y,
-                dir_y.x,
-                dir_y.y,
-                pos.x,
-                pos.y,
-                asset.sprite.tex_coords.left,
-                asset.sprite.tex_coords.right,
-                asset.sprite.tex_coords.bottom,
-                asset.sprite.tex_coords.top,
-            ];
-
-            match texture_map.get_mut(&texture_id) {
-                Some(usage) => {
-                    usage.data.extend(&slice);
-                    usage.len += 1;
-                }
-                None => {
-                    let usage = TextureUsage {
-                        texture: asset.texture.clone(),
-                        data: slice[..].into(),
-                        len: 1,
-                    };
-                    texture_map.insert(texture_id, usage);
-                }
-            }
-        }
-    }
-
-    let mut collected = Vec::with_capacity(texture_map.len());
-    for (_, texture_usage) in texture_map {
-        collected.push(texture_usage);
-    }
-    ChunkRender { inner: collected }
-}
-
-pub type WriteChunkRender<'a> =
-    Write<'a, Storage<ChunkRender, <ChunkRender as Component>::Storage, (i32, i32)>>;
-
-// TODO: Expand to include full i32 range
-impl Id for (i32, i32) {
-    fn from_u32(value: u32) -> Self {
-        ((value & 0xFF) as i8 as i32, (value >> 8) as i8 as i32)
-    }
-
-    fn id(&self) -> u32 {
-        use rand::{rngs::StdRng, RngCore, SeedableRng};
-        unsafe { StdRng::from_seed(::std::mem::transmute_copy(self)).next_u32() >> 8 }
-    }
-}
-
-#[derive(Debug, Component)]
-#[storage(HashMapStorage)]
-pub struct ChunkRender {
-    inner: Vec<TextureUsage>,
-}
 
 #[derive(SystemData)]
 pub struct RenderData<'a> {
@@ -189,6 +91,7 @@ impl Pass for TileRenderPass {
                     Ok(v) => effect.data.vertex_bufs.push(v.raw().clone()),
                     Err(_) => {
                         warn!("Unable to create immutable graphics buffer");
+                        effect.clear();
                         continue;
                     }
                 };

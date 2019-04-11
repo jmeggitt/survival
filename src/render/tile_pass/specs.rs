@@ -34,19 +34,17 @@ macro_rules! attr {
     };
 }
 
-attr!(DirX, "dir_x", [f32; 2], SurfaceType::R32_G32);
-attr!(DirY, "dir_y", [f32; 2], SurfaceType::R32_G32);
+//attr!(Dest, "dest", [f32; 2], SurfaceType::R32_G32);
 attr!(Pos, "pos", [f32; 2], SurfaceType::R32_G32);
 attr!(OffsetU, "u_offset", [f32; 2], SurfaceType::R32_G32);
 attr!(OffsetV, "v_offset", [f32; 2], SurfaceType::R32_G32);
 
-attr!(0, DirX, DirY, Pos, OffsetU, OffsetV);
+attr!(0, Pos, OffsetU, OffsetV);
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SpriteInstance {
-    pub dir_x: [f32; 2],
-    pub dir_y: [f32; 2],
+//    pub dest: [f32; 2],
     pub pos: [f32; 2],
     pub u_offset: [f32; 2],
     pub v_offset: [f32; 2],
@@ -56,8 +54,7 @@ unsafe impl Pod for SpriteInstance {}
 
 impl VertexFormat for SpriteInstance {
     const ATTRIBUTES: Attributes<'static> = &[
-        (DirX::NAME, <Self as With<DirX>>::FORMAT),
-        (DirY::NAME, <Self as With<DirY>>::FORMAT),
+//        (Dest::NAME, <Self as With<Dest>>::FORMAT),
         (Pos::NAME, <Self as With<Pos>>::FORMAT),
         (OffsetU::NAME, <Self as With<OffsetU>>::FORMAT),
         (OffsetV::NAME, <Self as With<OffsetV>>::FORMAT),
@@ -66,7 +63,7 @@ impl VertexFormat for SpriteInstance {
 
 impl SpriteInstance {
     pub fn attributes() -> Attributes<'static> {
-        <Self as Query<(DirX, DirY, Pos, OffsetU, OffsetV)>>::QUERIED_ATTRIBUTES
+        <Self as Query<(Pos, OffsetU, OffsetV)>>::QUERIED_ATTRIBUTES
     }
 }
 

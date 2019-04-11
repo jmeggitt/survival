@@ -10,6 +10,7 @@ use log::info;
 use log::trace;
 
 use crate::events::Level;
+use crate::render::tile_pass::ChunkRender;
 use crate::settings;
 use crate::specs_static::WorldExt;
 use crate::tiles::TileAssets;
@@ -76,7 +77,7 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad 
             .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>(
             );
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
-        world.register_tile_comp::<crate::render::ChunkRender, (i32, i32)>();
+        world.register_tile_comp::<ChunkRender, (i32, i32)>();
         world.add_resource(TileAssets(Vec::new()));
         world.add_resource(progress);
 
@@ -97,11 +98,6 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad 
         &mut self,
         _: StateData<'_, GameDispatchers<'_, '_>>,
     ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
-        //        if self.progress_counter.is_complete() {
-        //            info!("Completed asset load");
         Trans::Switch(Box::new(Level))
-        //        } else {
-        //            Trans::None
-        //        }
     }
 }

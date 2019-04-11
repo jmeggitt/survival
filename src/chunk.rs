@@ -20,7 +20,7 @@ use shred_derive::SystemData;
 use specs_derive::Component;
 
 use crate::components::PlayerPosition;
-use crate::render::{compile_chunk, WriteChunkRender};
+use crate::render::tile_pass::{compile_chunk, WriteChunkRender};
 use crate::tiles::TileId;
 use crate::tiles::{TileAsset, TileAssets};
 use amethyst::assets::ProgressCounter;
@@ -110,7 +110,18 @@ impl Chunk {
     /// Generate a new chunk from its coords and possibly more information in future.
     fn generate(pos: (i32, i32)) -> [[TileId; 16]; 16] {
         info!("Generating new chunk at {:?}", pos);
-        [[TileId(25); 16]; 16]
+        let mut tiles = [[TileId(25); 16]; 16];
+
+        for i in 0..16 {
+            match i {
+                0 | 15 => tiles[i] = [TileId(11); 16],
+                _ => {
+                    tiles[i][0] = TileId(11);
+                    tiles[i][15] = TileId(11);
+                }
+            }
+        }
+        tiles
     }
 
     pub fn load<P: AsRef<Path>>(path: &P, pos: (i32, i32)) -> Self {

@@ -48,6 +48,7 @@ image = "0.21.0"
 imageproc = "0.18.0"
 sha2 = "*"
 arrayref = "*"
+approx = "0.3.2"
 
 # Game Related
 petgraph = { version="*", features = ["serde-1"] }

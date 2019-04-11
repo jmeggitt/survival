@@ -2,14 +2,20 @@ use std::time::Duration;
 use std::time::SystemTime;
 
 use amethyst::assets::Handle;
+use amethyst::core::math::Vector2;
 use amethyst::renderer::Sprite;
 use amethyst::renderer::Texture;
 use log::warn;
 
-pub struct WorldEntity {}
+pub struct WorldEntity {
+    display: EntityGraphics,
+    pos: Vector2<f64>,
+}
 
-pub trait DisplayEntity {
-    fn graphics_handle(&mut self) -> Handle<Texture>;
+pub enum EntityGraphics {
+    Fixed(Handle<Texture>, Sprite),
+    Animate(SpriteAnimation),
+    None,
 }
 
 const DEFAULT_FRAME_TIME: Duration = Duration::from_millis(400);

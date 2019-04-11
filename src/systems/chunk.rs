@@ -20,6 +20,7 @@ use shred_derive::SystemData;
 use specs_derive::Component;
 
 use crate::components::PlayerPosition;
+use crate::entity::WorldEntity;
 use crate::render::tile_pass::{compile_chunk, WriteChunkRender};
 use crate::tiles::TileId;
 use crate::tiles::{TileAsset, TileAssets};
@@ -37,6 +38,8 @@ pub struct Chunk {
     path: PathBuf,
     #[serde(skip)]
     requires_save: bool,
+    //    #[serde(skip)]
+    //    pub entities: WorldEntity,
 }
 
 impl Chunk {

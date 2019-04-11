@@ -9,19 +9,17 @@ use amethyst::{
     input::InputBundle,
     prelude::*,
     renderer::{DisplayConfig, DrawFlat2D, Pipeline, PosNormTex, RenderBundle, Stage},
-    ui::UiBundle,
     utils::{application_root_dir, fps_counter::FPSCounterBundle, scene::BasicScenePrefab},
 };
 use log::info;
 
 use actions::PlayerInputAction;
-use chunk::ChunkLoadSystem;
 pub use game_data::{GameDispatchers, SurvivalDataBuilder};
+use systems::chunk::ChunkLoadSystem;
 
+mod entity;
 #[allow(dead_code)]
 pub mod mapgen;
-//mod visibility;
-mod entity;
 
 pub mod assets;
 pub mod components;
@@ -41,8 +39,6 @@ pub mod initializers;
 
 pub mod specs_static;
 
-mod chunk;
-
 type MyPrefabData = BasicScenePrefab<Vec<PosNormTex>>;
 
 pub fn run() -> amethyst::Result<()> {
@@ -54,9 +50,7 @@ pub fn run() -> amethyst::Result<()> {
         Stage::with_backbuffer()
             .clear_target([1.0; 4], 1.0)
             .with_pass(crate::render::tile_pass::TileRenderPass)
-            .with_pass(DrawFlat2D::new())
-            .with_pass(amethyst::ui::DrawUi::new())
-            .with_pass(amethyst_imgui::DrawUi::default().docking()),
+            .with_pass(DrawFlat2D::new()),
     );
 
     let game_config = settings::Config::load(root.join("game_settings.ron"));
@@ -72,35 +66,9 @@ pub fn run() -> amethyst::Result<()> {
             InputBundle::<PlayerInputAction, PlayerInputAction>::new()
                 .with_bindings_from_file(root.join("input.ron"))?,
         )?
-        .with_core(
-            systems::ImguiBeginFrameSystem::default(),
-            "imgui_begin_frame",
-            &[],
-        )
-        .with_core(
-            systems::DebugSystem::default(),
-            "debug",
-            &["imgui_begin_frame"],
-        )
         .with_core_bundle(HotReloadBundle::default())?
-        .with_core_bundle(UiBundle::<PlayerInputAction, PlayerInputAction>::new())?
         .with_core(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with_core_bundle(FPSCounterBundle::default())?
-        .with_core(
-            systems::UiSystem::default(),
-            "ui",
-            &["imgui_begin_frame", "ui_loader"],
-        )
-        .with_core(
-            systems::ui::InventoryWindowSystem::default(),
-            "inventory_window_system",
-            &["ui"],
-        )
-        .with_core(
-            systems::ImguiEndFrameSystem::default(),
-            "imgui_end_frame",
-            &["imgui_begin_frame", "ui", "debug"],
-        ) // All systems which use imgui must be here.
         .with_level(systems::DroppedItemSystem::default(), "ground_items", &[])
         .with_level(systems::WearingSystem::default(), "wearing", &[])
         .with_level(systems::InputSystem::default(), "input", &[])

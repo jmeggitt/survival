@@ -1,4 +1,4 @@
-use amethyst_renderer::{SpriteList, SpritePosition};
+use amethyst::renderer::{SpriteList, SpritePosition};
 use image;
 
 fn get_tile_size(filepart: &str) -> usize {

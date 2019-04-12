@@ -72,7 +72,8 @@ impl Pass for TileRenderPass {
         set_view_args(encoder, effect, data.camera());
 
         use gfx::Factory;
-        for chunk in (&mut data.chunks).join() {
+
+        for chunk in data.chunks.values_mut() {
             for usage in chunk.inner.iter() {
                 // Get texture
                 match data.sprite_assets.get(&usage.texture) {
@@ -80,10 +81,7 @@ impl Pass for TileRenderPass {
                         effect.data.textures.push(tex.view().clone());
                         effect.data.samplers.push(tex.sampler().clone());
                     }
-                    None => {
-                        warn!("Missing texture {:?}", &usage.texture);
-                        continue;
-                    }
+                    None => continue,
                 };
 
                 match factory.create_buffer_immutable(&usage.data, Vertex, Bind::empty()) {

@@ -74,7 +74,6 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for Level {
         data: StateData<'_, GameDispatchers<'_, '_>>,
         event: StateEvent,
     ) -> Trans<GameDispatchers<'a, 'b>, StateEvent> {
-        amethyst_imgui::handle_imgui_events(data.world, &event);
         Trans::None
     }
 

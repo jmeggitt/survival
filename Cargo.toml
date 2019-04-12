@@ -5,74 +5,65 @@ authors = ["Walter Pearce <jaynus@gmail.com>"]
 edition = "2018"
 
 [features]
-default = ["parking_lot/nightly"]
-pretty-save = ["parking_lot/nightly"]
-no-save = ["parking_lot/nightly"]
+default = ["parking_lot/nightly", "no-save", "silent-load"]
+pretty-save = []
+no-save = []
+tools = ["amethyst-imgui", "voronoi", "delaunay2d", "mapgen", "arrayref"]
+mapgen = ["ordered-float", "image", "sha2", "imageproc", "rayon", "rayon-hash"]
+silent-load = []
 
 [dependencies]
-amethyst = { path = "dep/amethyst", features = ["nightly", "saveload"] }
-#amethyst = { version = "0.10.0", git = "https://github.com/jaynus/amethyst.git", features = ["nightly", "saveload"] }
-amethyst-imgui = { path = "dep/amethyst-imgui" }
-specs-derive = "*"
-shred-derive = "*"
-shred = "*"
-parking_lot = "0.7.1"
-
-rayon = { version = "1.0.0" }
-rayon-hash = "*"
-crossbeam-skiplist = { git = "https://github.com/crossbeam-rs/crossbeam.git" }
-hashbrown = "0.1.8"
-gfx = { version = "0.17.1", features = ["serialize"] }
-gfx_core = { version = "0.9.0", features = ["serialize"] }
-glsl-layout = { version = "0.1.1", features = ["gfx"] }
-winit = { version = "0.18.1" }
-derivative = "*"
+amethyst = {git = "https://github.com/jaynus/amethyst.git", features = ["nightly", "saveload"]}
+approx = "0.3.2"
 bitflags = "1.0"
-hibitset = { version = "*", features = ["parallel"] }
-
+derivative = "*"
+gfx = {version = "0.17.1", features = ["serialize"]}
+gfx_core = {version = "0.9.0", features = ["serialize"]}
+glsl-layout = {version = "0.1.1", features = ["gfx"]}
+hashbrown = "0.1.8"
+hibitset = {version = "*", features = ["parallel"]}
+log = "0.4.6"
+num-traits = "*"
+parking_lot = "^0.6"
+petgraph = {version="*", features = ["serde-1"]}
+serde = {version = "*", features = ["derive", "rc"]}
+specs-derive = "*"
+shred = "*"
+shred-derive = "*"
 strum = "*"
 strum_macros = "*"
-
-# Logging
-log = "0.4.6"
-
-# For Mapgen/procedural
-voronoi = { path = "dep/voronoi" }
-delaunay2d = { path = "dep/delaunay2d" }
-noise = "*"
-rand = "*"
-ordered-float = "*"
-num-traits = "*"
-itertools = "*"
-image = "0.21.0"
-imageproc = "0.18.0"
-sha2 = "*"
-arrayref = "*"
-approx = "0.3.2"
-
-# Game Related
-petgraph = { version="*", features = ["serde-1"] }
-
-# Serialization
-serde = { version = "*", features = ["derive", "rc"] }
+rand = "^0.6"
 ron = "*"
+nphysics2d = "^0.11"
+ncollide2d = "^0.19"
+array-init = "^0.0.4"
 
-[dev-dependencies]
-amethyst_test = { path = "dep/amethyst/amethyst_test" }
+# Other dependencies (mapgen and terrain tools)
+amethyst-imgui = {path = "dep/amethyst-imgui", optional = true}
+rayon = {version = "1.0.0", optional = true}
+rayon-hash = {version = "*", optional = true}
+voronoi = {path = "dep/voronoi", optional = true}
+delaunay2d = {path = "dep/delaunay2d", optional = true}
+ordered-float = {version = "*", optional = true}
+image = {version = "0.21.0", optional = true}
+imageproc = {version = "0.18.0", optional = true}
+sha2 = {version = "*", optional = true}
+arrayref = {version = "*", optional = true}
 
 [build-dependencies]
 image = "0.21.0"
-serde = { version = "*", features = ["derive"] }
-amethyst_renderer = { path = "dep/amethyst/amethyst_renderer" }
+serde = {version = "*", features = ["derive"]}
+amethyst = {git = "https://github.com/jaynus/amethyst.git", features = ["nightly", "saveload"]}
 ron = "*"
 
 [[bin]]
-name = "survival_game"
+name = "game"
 path = "src/main.rs"
 
 [[bin]]
 name = "terrain_generator"
 path = "tools/terrain_generator/main.rs"
+required-features = ["tools"]
 
 [lib]
 name = "survival"

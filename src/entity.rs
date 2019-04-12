@@ -7,6 +7,10 @@ use amethyst::renderer::Sprite;
 use amethyst::renderer::Texture;
 use derivative::Derivative;
 use log::warn;
+use ncollide2d::shape::{Ball, ShapeHandle};
+use ncollide2d::world::CollisionGroups;
+use nphysics2d::math::{Inertia, Velocity};
+use nphysics2d::object::{BodyStatus, ColliderDesc, RigidBodyDesc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Derivative)]
@@ -16,6 +20,21 @@ pub struct WorldEntity {
     #[derivative(Debug = "ignore")]
     display: EntityGraphics,
     pub pos: Vector2<f64>,
+}
+
+impl WorldEntity {
+    pub fn new(pos: Vector2<f64>) -> Self {
+        //        let collider = ColliderDesc::new();
+        //        let physics = RigidBodyDesc::new()
+        //            .translation(pos)
+        //            .gravity_enabled(false)
+        //            .status(BodyStatus::Static);
+
+        Self {
+            display: EntityGraphics::None,
+            pos: Vector2::new(0.0, 0.0),
+        }
+    }
 }
 
 pub enum EntityGraphics {

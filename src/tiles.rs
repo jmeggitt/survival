@@ -85,63 +85,8 @@ impl Tiles {
         )
     }
 
-    pub fn world_to_id(
-        self,
-        vector: &Vector3<f32>,
-        game_settings: &crate::settings::Config,
-    ) -> TileId {
-        self.id_from_vector(Vector2::new(
-            (vector.x / 20. / game_settings.graphics.scale) as u32,
-            (vector.y / 20. / game_settings.graphics.scale).abs() as u32,
-        ))
-    }
-
-    pub fn iter_all(self) -> impl Iterator<Item = TileId> {
-        (0..self.dimensions.x * self.dimensions.y - 1).map(TileId)
-    }
-
-    pub fn iter_region(self, region: Vector4<u32>) -> impl Iterator<Item = TileId> {
-        RegionIter::new(self, region)
-    }
-
     pub fn dimensions(self) -> Vector2<u32> {
         self.dimensions
-    }
-}
-
-pub struct RegionIter {
-    region: Vector4<u32>,
-    tiles: Tiles,
-    cur: Vector2<u32>,
-    stride: u32,
-}
-
-impl RegionIter {
-    pub fn new(tiles: Tiles, region: Vector4<u32>) -> Self {
-        Self {
-            stride: 1,
-            region,
-            tiles,
-            cur: Vector2::new(region.x, region.y),
-        }
-    }
-}
-
-impl Iterator for RegionIter {
-    type Item = TileId;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.cur.x += self.stride;
-        if self.cur.x > self.region.z {
-            self.cur.x = self.region.x;
-            self.cur.y += self.stride;
-        }
-
-        if self.cur.y > self.region.w {
-            return None;
-        }
-
-        Some(self.tiles.id_from_vector(self.cur))
     }
 }
 

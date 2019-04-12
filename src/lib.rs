@@ -18,7 +18,7 @@ pub use game_data::{GameDispatchers, SurvivalDataBuilder};
 use systems::chunk::ChunkLoadSystem;
 
 mod entity;
-#[allow(dead_code)]
+#[cfg(feature = "mapgen")]
 pub mod mapgen;
 
 pub mod assets;
@@ -79,11 +79,11 @@ pub fn run() -> amethyst::Result<()> {
             "chunk_loader",
             &[],
         )
-        .with_level(
-            systems::entity_chunk::EntityChunkSystem::new(),
-            "entity_chunk",
-            &[],
-        )
+                .with_level(
+                    systems::entity_chunk::EntityChunkSystem::new(),
+                    "entity_chunk",
+                    &[],
+                )
         .with_core_bundle(render_bundle)?;
 
     let mut game = Application::build(root, crate::events::FirstLoad::default())?

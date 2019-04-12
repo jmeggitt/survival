@@ -1,6 +1,3 @@
-[submodule "dep/amethyst"]
-	path = dep/amethyst
-	url = https://github.com/jaynus/amethyst.git
 [submodule "dep/termpix"]
 	path = dep/termpix
 	url = https://github.com/hopey-dishwasher/termpix.git

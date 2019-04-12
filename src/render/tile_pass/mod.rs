@@ -21,21 +21,7 @@ pub struct TextureUsage {
     data: Vec<f32>,
     len: u32,
 }
-
-pub type WriteChunkRender<'a> =
-    Write<'a, Storage<ChunkRender, <ChunkRender as Component>::Storage, (i32, i32)>>;
-
-// TODO: Expand to include full i32 range
-impl Id for (i32, i32) {
-    fn from_u32(value: u32) -> Self {
-        ((value & 0xFF) as i8 as i32, (value >> 8) as i8 as i32)
-    }
-
-    fn id(&self) -> u32 {
-        use rand::{rngs::StdRng, RngCore, SeedableRng};
-        unsafe { StdRng::from_seed(::std::mem::transmute_copy(self)).next_u32() >> 8 }
-    }
-}
+pub type WriteChunkRender<'a> = WriteExpect<'a, HashMap<(i32, i32), ChunkRender>>;
 
 #[derive(Debug, Component)]
 #[storage(HashMapStorage)]

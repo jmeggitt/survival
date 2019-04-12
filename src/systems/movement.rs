@@ -82,21 +82,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                             _ => error!("Unsupported direction!"),
                         }
 
-                        // Can we actually go to the target?
-                        let target_tile = tiles.world_to_tile(target.translation(), &game_config);
-
-                        if tile_impassable
-                            .get(tiles.id_from_vector(target_tile))
-                            .is_some()
-                        {
-                            // We cant do the move!
-                            warn!(
-                                "Attempted to move to impassable tile: ({},{})",
-                                target_tile.x, target_tile.y
-                            );
-                            continue;
-                        }
-
+                        // TODO add collider checks
                         *transform = target;
 
                         if players.get(entity).is_some() {

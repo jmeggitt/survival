@@ -15,6 +15,7 @@ use crate::settings;
 use crate::specs_static::WorldExt;
 use crate::tiles::TileAssets;
 use crate::GameDispatchers;
+use hashbrown::HashMap;
 
 fn load_sprite_sheet(
     world: &mut World,
@@ -77,7 +78,7 @@ impl<'a, 'b> amethyst::State<GameDispatchers<'a, 'b>, StateEvent> for FirstLoad 
             .register_tile_comp::<amethyst::core::transform::GlobalTransform, crate::tiles::TileId>(
             );
         world.register_tile_comp::<crate::tiles::TileEntities, crate::tiles::TileId>();
-        world.register_tile_comp::<ChunkRender, (i32, i32)>();
+        world.add_resource(HashMap::<(i32, i32), ChunkRender>::new());
         world.add_resource(TileAssets(Vec::new()));
         world.add_resource(progress);
 

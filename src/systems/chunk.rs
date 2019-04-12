@@ -27,6 +27,8 @@ use crate::events::SHEET_INIT;
 use crate::render::tile_pass::{compile_chunk, WriteChunkRender};
 use crate::tiles::TileId;
 use crate::tiles::{TileAsset, TileAssets};
+use array_init::array_init;
+use rand::Rng;
 
 #[derive(Serialize, Deserialize, Derivative)]
 #[derivative(Debug)]
@@ -47,6 +49,7 @@ impl Chunk {
     /// Save this chunk to the previous file
     #[cfg(not(feature = "no-save"))]
     fn save(&self) {
+        #[cfg(not(feature = "silent-load"))]
         info!("Saving and unloading {:?}", self);
 
         if self.path.exists() && !self.path.is_file() {
@@ -98,9 +101,7 @@ impl Chunk {
             return None;
         }
 
-        let file_name = Chunk::file_name(path, pos);
-
-        let file = match File::open(&*file_name.as_path()) {
+        let file = match File::open(path.as_ref()) {
             Ok(v) => v,
             Err(e) => {
                 error!("Unable to open file to read chunk: {}", e);
@@ -113,18 +114,18 @@ impl Chunk {
 
     /// Generate a new chunk from its coords and possibly more information in future.
     fn generate(pos: (i32, i32)) -> [[TileId; 16]; 16] {
+        #[cfg(not(feature = "silent-load"))]
         info!("Generating new chunk at {:?}", pos);
-        let mut tiles = [[TileId(25); 16]; 16];
 
-        for i in 0..16 {
-            match i {
-                0 | 15 => tiles[i] = [TileId(11); 16],
-                _ => {
-                    tiles[i][0] = TileId(11);
-                    tiles[i][15] = TileId(11);
-                }
-            }
-        }
+        let mut rng = rand::thread_rng();
+        let mut tiles: [[TileId; 16]; 16] = array_init(|i| {
+            array_init(|j| match rng.gen_range(0, 4) {
+                0 => TileId(153),
+                1 => TileId(154),
+                2 => TileId(129),
+                _ => TileId(130),
+            })
+        });
         tiles
     }
 
@@ -179,6 +180,7 @@ impl WorldChunks {
         assets: &[TileAsset],
         renders: &mut WriteChunkRender,
     ) {
+        #[cfg(not(feature = "silent-load"))]
         info!("Performing chunk refresh");
         // TODO add to config
         const CHUNK_RADIUS: i32 = 4;
@@ -187,16 +189,24 @@ impl WorldChunks {
         let player_chunk_y = (player.y / 16.0).floor() as i32;
 
         self.inner.retain(|&(x, y), _| {
-            (player_chunk_x - x).abs() <= CHUNK_RADIUS && (player_chunk_y - y).abs() <= CHUNK_RADIUS
+            if (player_chunk_x - x).abs() <= CHUNK_RADIUS
+                && (player_chunk_y - y).abs() <= CHUNK_RADIUS
+            {
+                true
+            } else {
+                renders.remove(&(x, y));
+                false
+            }
         });
 
         for x in player_chunk_x - CHUNK_RADIUS..player_chunk_x + CHUNK_RADIUS {
             for y in player_chunk_y - CHUNK_RADIUS..player_chunk_y + CHUNK_RADIUS {
                 let chunk_pos = (x, y);
                 if !self.inner.contains_key(&chunk_pos) {
+                    #[cfg(not(feature = "silent-load"))]
                     log::debug!("Creating and adding chunk!");
                     let chunk = Chunk::load(save_path, chunk_pos);
-                    renders.insert(chunk.pos, compile_chunk(&chunk, assets));
+                    renders.insert(chunk_pos, compile_chunk(&chunk, assets));
                     self.inner.insert(chunk_pos, chunk);
                 }
             }

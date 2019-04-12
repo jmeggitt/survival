@@ -13,7 +13,7 @@ use crate::components;
 use crate::components::PlayerPosition;
 use crate::settings::Config;
 use crate::tiles::{ReadTiles, Tiles};
-use crate::utils::ComponentEventReader;
+use crate::utils::{ComponentEventReader, TILE_SIZE};
 
 #[derive(Default)]
 pub struct System {
@@ -86,7 +86,7 @@ impl<'s> amethyst::ecs::System<'s> for System {
                         *transform = target;
 
                         if players.get(entity).is_some() {
-                            player_position.0 = transform.translation().xy() / 16.0;
+                            player_position.0 = transform.translation().xy() / TILE_SIZE;
                         }
                     }
                 }

@@ -38,8 +38,8 @@ pub fn compile_chunk(chunk: &Chunk, tile_specs: &[TileAsset]) -> ChunkRender {
             let texture_id = chunk.tiles[x][y].0 as usize;
             let asset = &tile_specs[texture_id];
             let slice = [
-                (x as f32 + 16. * chunk_x as f32) * TILE_SIZE,
-                (y as f32 + 16. * chunk_y as f32) * TILE_SIZE,
+                (x as f32 + TILE_SIZE * chunk_x as f32) * TILE_SIZE,
+                (y as f32 + TILE_SIZE * chunk_y as f32) * TILE_SIZE,
                 asset.sprite.tex_coords.left,
                 asset.sprite.tex_coords.right,
                 asset.sprite.tex_coords.bottom,

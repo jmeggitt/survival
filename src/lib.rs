@@ -79,11 +79,11 @@ pub fn run() -> amethyst::Result<()> {
             "chunk_loader",
             &[],
         )
-                .with_level(
-                    systems::entity_chunk::EntityChunkSystem::new(),
-                    "entity_chunk",
-                    &[],
-                )
+        .with_level(
+            systems::entity_chunk::EntityChunkSystem::new(),
+            "entity_chunk",
+            &[],
+        )
         .with_core_bundle(render_bundle)?;
 
     let mut game = Application::build(root, crate::events::FirstLoad::default())?

@@ -29,6 +29,7 @@ use crate::tiles::TileId;
 use crate::tiles::{TileAsset, TileAssets};
 use array_init::array_init;
 use rand::Rng;
+use crate::utils::TILE_SIZE;
 
 #[derive(Serialize, Deserialize, Derivative)]
 #[derivative(Debug)]
@@ -185,9 +186,10 @@ impl WorldChunks {
         // TODO add to config
         const CHUNK_RADIUS: i32 = 4;
 
-        let player_chunk_x = (player.x / 16.0).floor() as i32;
-        let player_chunk_y = (player.y / 16.0).floor() as i32;
+        let player_chunk_x = (player.x / TILE_SIZE).floor() as i32;
+        let player_chunk_y = (player.y / TILE_SIZE).floor() as i32;
 
+        use log::debug;
         self.inner.retain(|&(x, y), _| {
             if (player_chunk_x - x).abs() <= CHUNK_RADIUS
                 && (player_chunk_y - y).abs() <= CHUNK_RADIUS

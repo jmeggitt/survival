@@ -3,6 +3,7 @@ use log::debug;
 
 use crate::entity::WorldEntity;
 use crate::systems::chunk::WorldChunks;
+use crate::utils::TILE_SIZE;
 
 // TODO offload out of bounds entities
 pub struct EntityChunkSystem {
@@ -26,16 +27,16 @@ impl<'a> System<'a> for EntityChunkSystem {
         // Remove all entities that are in the wrong chunk
         for ((chunk_x, chunk_y), ref mut chunk) in data.inner.iter_mut() {
             self.transfer.extend(chunk.entities.drain_filter(|e| {
-                (e.pos.x / 16.0).floor() as i32 != *chunk_x
-                    || (e.pos.y / 16.0).floor() as i32 != *chunk_y
+                (e.pos.x / TILE_SIZE as f64).floor() as i32 != *chunk_x
+                    || (e.pos.y / TILE_SIZE as f64).floor() as i32 != *chunk_y
             }));
         }
 
         // Re-add them to either the correct chunk or offload queue
         for entity in self.transfer.drain(..) {
             let chunk_pos = (
-                (entity.pos.x / 16.0).floor() as i32,
-                (entity.pos.y / 16.0).floor() as i32,
+                (entity.pos.x / TILE_SIZE as f64).floor() as i32,
+                (entity.pos.y / TILE_SIZE as f64).floor() as i32,
             );
             match data.inner.get_mut(&chunk_pos) {
                 Some(v) => v.entities.push(entity),
